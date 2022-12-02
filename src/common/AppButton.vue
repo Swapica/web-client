@@ -271,7 +271,7 @@ const buttonClasses = computed(() =>
     grid-gap: toRem(10);
     font-size: toRem(14);
     line-height: 1.45;
-    font-weight: 500;
+    font-weight: 400;
 
     &.app-button--icon-only {
       padding: toRem(18);
@@ -282,7 +282,7 @@ const buttonClasses = computed(() =>
     padding: toRem(12) toRem(24);
     font-size: toRem(12);
     line-height: 1.3;
-    font-weight: 500;
+    font-weight: 400;
     grid-gap: toRem(10);
 
     &.app-button--icon-only {
@@ -294,7 +294,7 @@ const buttonClasses = computed(() =>
     padding: toRem(8) toRem(16);
     font-size: toRem(12);
     line-height: 1.45;
-    font-weight: 500;
+    font-weight: 400;
     grid-gap: toRem(10);
 
     &.app-button--icon-only {

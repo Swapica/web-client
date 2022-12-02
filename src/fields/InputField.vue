@@ -241,7 +241,7 @@ $z-index-side-nodes: 1;
   /* stylelint-disable-next-line */
   .input-field__input:not([disabled]):focus ~ & {
     color: var(--field-label-focus);
-    font-weight: 700;
+    font-weight: 400;
 
     .input-field--secondary & {
       transform: translateY(25%);

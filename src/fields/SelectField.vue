@@ -262,7 +262,7 @@ $z-local-index: 2;
     top: 0;
     font-size: toRem(12);
     line-height: 1.3;
-    font-weight: 700;
+    font-weight: 400;
   }
 
   .select-field--open & {

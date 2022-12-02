@@ -122,7 +122,7 @@ const setHeightCSSVar = (element: HTMLElement) => {
   left: var(--field-padding-left);
   font-size: toRem(12);
   line-height: 1.3;
-  font-weight: 700;
+  font-weight: 400;
   transform: translateY(-50%);
   background: var(--field-bg-primary);
 
@@ -162,7 +162,7 @@ const setHeightCSSVar = (element: HTMLElement) => {
   /* stylelint-disable-next-line */
   .textarea-field__textarea:not([disabled]):focus ~ & {
     color: var(--field-label-focus);
-    font-weight: 700;
+    font-weight: 400;
 
     .textarea-field--secondary & {
       transform: translateY(25%);
