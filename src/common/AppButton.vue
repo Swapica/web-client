@@ -113,7 +113,7 @@ const buttonClasses = computed(() =>
   align-items: center;
   justify-content: center;
   transition: var(--button-transition-duration) ease-in;
-  transition-property: all;
+  transition-property: padding;
   text-decoration: none;
   color: var(--text-primary-dark);
 
