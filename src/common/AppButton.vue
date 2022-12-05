@@ -113,15 +113,14 @@ const buttonClasses = computed(() =>
   align-items: center;
   justify-content: center;
   transition: var(--button-transition-duration) ease-in;
-  transition-property: background-color, color;
+  transition-property: all;
   text-decoration: none;
-  color: var(--app-button-text);
+  color: var(--text-primary-dark);
 
   &:disabled,
   &--disabled {
     cursor: not-allowed;
     pointer-events: none;
-    filter: grayscale(0.75);
     opacity: 0.5;
   }
 
@@ -129,12 +128,46 @@ const buttonClasses = computed(() =>
   &:not([disabled]):focus {
     text-decoration: none;
     transition-timing-function: ease-out;
-    color: var(--app-button-text-hover);
   }
 
-  &:not([disabled]):active {
-    text-decoration: none;
-    transition-timing-function: ease-out;
+  &--primary {
+    background: url('/fields/button-primary-bg.svg') no-repeat;
+    padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
+    min-width: toRem(180);
+    background-size: 100% 100%;
+
+    &:disabled,
+    &--disabled {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/fields/button-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    &:not([disabled]):hover {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/fields/button-primary-hover-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+
+  &--secondary {
+    background: url('/fields/button-secondary-bg.svg') no-repeat;
+    padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
+    min-width: toRem(180);
+    background-size: 100% 100%;
+
+    &:disabled,
+    &--disabled {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/fields/button-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    &:not([disabled]):hover {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/fields/button-secondary-hover-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
   }
 }
 

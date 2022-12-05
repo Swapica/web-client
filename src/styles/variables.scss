@@ -41,45 +41,27 @@
   --primary-main-rgb: #{$primary-main-rgb};
   --primary-dark-rgb: #{$primary-dark-rgb};
 
-  --secondary-light: #{$secondary-light};
-  --secondary-main: #{$secondary-main};
-  --secondary-dark: #{$secondary-dark};
-
-  --tertiary-light: #{$tertiary-light};
-  --tertiary-main: #{$tertiary-main};
-  --tertiary-dark: #{$tertiary-dark};
-
   /* typography colors */
   --text-primary-light: #{$text-primary-light};
   --text-primary-main: #{$text-primary-main};
   --text-primary-dark: #{$text-primary-dark};
 
-  --text-secondary-light: #{$text-secondary-light};
-  --text-secondary-main: #{$text-secondary-main};
-  --text-secondary-dark: #{$text-secondary-dark};
-
   --text-primary-invert-light: #{$text-primary-invert-light};
   --text-primary-invert-main: #{$text-primary-invert-main};
   --text-primary-invert-dark: #{$text-primary-invert-dark};
 
-  --text-secondary-invert-light: #{$text-secondary-invert-light};
-  --text-secondary-invert-main: #{$text-secondary-invert-main};
-  --text-secondary-invert-dark: #{$text-secondary-invert-dark};
-
   /* border colors */
-  --border-primary-light: #{$border-primary-light};
   --border-primary-main: #{$border-primary-main};
-  --border-primary-dark: #{$border-primary-dark};
 
   /* App variables */
   --app-txt: #{$text-primary-main};
   --app-font-family: 'Coffe Break', 'Arial', sans-serif;
-  --app-padding-right: #{toRem(92)};
-  --app-padding-left: #{toRem(92)};
+  --app-padding-right: #{toRem(80)};
+  --app-padding-left: #{toRem(80)};
 
   @include respond-to(small) {
-    --app-padding-right: #{toRem(24)};
-    --app-padding-left: #{toRem(24)};
+    --app-padding-right: #{toRem(32)};
+    --app-padding-left: #{toRem(32)};
   }
 
   /* --------------------------------------- */
@@ -95,12 +77,12 @@
   --field-label-hover: var(--text-primary-main);
   --field-label-focus: var(--text-primary-main);
   --field-label-font-size: #{toRem(14)};
-  --field-label-line-height: 1.4;
+  --field-label-line-height: 1;
 
   /* text */
   --field-text: var(--text-primary-main);
-  --field-text-font-size: #{toRem(14)};
-  --field-text-line-height: 1.4;
+  --field-text-font-size: #{toRem(16)};
+  --field-text-line-height: 1;
   --field-placeholder: #{rgba($text-primary-main, 0.35)};
 
   /* border */
@@ -112,9 +94,9 @@
   --field-transition-duration: 0.2s;
 
   /* paddings */
-  --field-padding-top: #{toRem(14)};
+  --field-padding-top: #{toRem(5)};
   --field-padding-right: #{toRem(16)};
-  --field-padding-bottom: #{toRem(18)};
+  --field-padding-bottom: #{toRem(5)};
   --field-padding-left: #{toRem(14)};
   --field-padding:
     var(--field-padding-top)

@@ -8,7 +8,7 @@ import {
   Icon,
   Collapse,
 } from '@/common'
-import { CheckboxField, InputField, SelectField, TextareaField } from '@/fields'
+import { InputField, SelectField } from '@/fields'
 import LoginForm from '@/forms/LoginForm.vue'
 
 import { reactive, ref } from 'vue'
@@ -54,11 +54,13 @@ const throwBusInfo = () => {
       />
       <app-button
         modification="border-circle"
+        scheme="secondary"
         :text="'href, border-circle'"
         href="https://www.youtube.com/"
         target="_blank"
       />
       <app-button
+        scheme="secondary"
         :text="'Alert, icon-first'"
         :icon-left="$icons.academicCap"
         @click="handleClick"
@@ -129,6 +131,7 @@ const throwBusInfo = () => {
       />
       <app-button
         scheme="primary"
+        disabled
         modification="border-circle"
         :icon-left="$icons.academicCap"
         :text="'flat'"
@@ -359,43 +362,6 @@ const throwBusInfo = () => {
         :label="$t('ui-kit-page.some-label')"
         :error-message="$t('ui-kit-page.some-error-message')"
         :placeholder="$t('ui-kit-page.some-placeholder')"
-        disabled
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-        disabled
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-        :error-message="form.textareaValue"
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-        :error-message="form.textareaValue ? 'form.textareaValue' : ''"
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-        :error-message="form.textareaValue"
         disabled
       />
     </section>
