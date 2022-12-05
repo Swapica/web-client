@@ -48,6 +48,7 @@ const throwBusInfo = () => {
     <section class="ui-kit-page__buttons">
       <app-button
         :icon-right="$icons.academicCap"
+        scheme="primary"
         :text="'router, border-rounded, icon'"
         :route="{ name: $routes.uiKit }"
       />
@@ -92,55 +93,55 @@ const throwBusInfo = () => {
       />
       <app-button color="warning" size="large" :text="'large, warning'" />
       <app-button color="info" size="small" :text="'small, info'" />
-      <app-button scheme="flat" :text="'flat'" />
+      <app-button scheme="primary" :text="'flat'" />
       <app-button
-        scheme="flat"
+        scheme="primary"
         modification="border-circle"
         :text="'flat, border-circle'"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         :icon-left="$icons.academicCap"
         :text="'flat'"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         size="large"
         :text="'flat, large'"
         :icon-right="$icons.academicCap"
       />
-      <app-button scheme="flat" size="small" :text="'flat, small'" />
-      <app-button scheme="flat" color="success" :text="'flat, success'" />
-      <app-button scheme="flat" color="error" :text="'flat, error'" />
-      <app-button scheme="flat" color="warning" :text="'flat, warning'" />
-      <app-button scheme="flat" color="info" :text="'flat, info'" />
+      <app-button scheme="primary" size="small" :text="'flat, small'" />
+      <app-button scheme="primary" color="success" :text="'flat, success'" />
+      <app-button scheme="primary" color="error" :text="'flat, error'" />
+      <app-button scheme="primary" color="warning" :text="'flat, warning'" />
+      <app-button scheme="primary" color="info" :text="'flat, info'" />
       <app-button
-        scheme="flat"
+        scheme="primary"
         modification="border-circle"
         color="success"
         :text="'flat, border-circle, success'"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         modification="border-circle"
         color="error"
         :text="'flat, border-circle, error'"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         modification="border-circle"
         :icon-left="$icons.academicCap"
         :text="'flat'"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         modification="border-circle"
         color="warning"
         size="large"
         :text="'flat, border-circle, large, warning'"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         modification="border-circle"
         size="small"
         color="info"
@@ -164,30 +165,42 @@ const throwBusInfo = () => {
       <app-button :icon-right="$icons.academicCap" color="error" />
       <app-button :icon-right="$icons.academicCap" color="warning" />
       <app-button :icon-right="$icons.academicCap" color="info" />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" />
+      <app-button scheme="primary" :icon-right="$icons.academicCap" />
       <app-button
-        scheme="flat"
+        scheme="primary"
         :icon-right="$icons.academicCap"
         modification="border-circle"
       />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" size="large" />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" size="small" />
       <app-button
-        scheme="flat"
+        scheme="primary"
+        :icon-right="$icons.academicCap"
+        size="large"
+      />
+      <app-button
+        scheme="primary"
+        :icon-right="$icons.academicCap"
+        size="small"
+      />
+      <app-button
+        scheme="primary"
         :icon-right="$icons.academicCap"
         color="success"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         :icon-right="$icons.academicCap"
         color="error"
       />
       <app-button
-        scheme="flat"
+        scheme="primary"
         :icon-right="$icons.academicCap"
         color="warning"
       />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" color="info" />
+      <app-button
+        scheme="primary"
+        :icon-right="$icons.academicCap"
+        color="info"
+      />
       <app-button
         scheme="default"
         :icon-right="$icons.academicCap"
@@ -550,7 +563,7 @@ const throwBusInfo = () => {
         <template #head="{ collapse }">
           <app-button
             class="ui-kit-page__collapse-btn"
-            scheme="flat"
+            scheme="primary"
             :text="$t('ui-kit-page.collapse-btn')"
             @click="collapse.toggle"
           >
