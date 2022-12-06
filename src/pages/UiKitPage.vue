@@ -273,7 +273,7 @@ const throwBusInfo = () => {
         v-model="form.inputValue"
         scheme="secondary"
         :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
+        placeholder="$t('ui-kit-page.some-placeholder')"
       />
       <input-field
         v-model="form.inputValue"
