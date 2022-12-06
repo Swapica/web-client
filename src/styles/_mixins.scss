@@ -70,3 +70,20 @@ $media-breakpoints: (
   transition-property: opacity, color, font-size, transform;
   margin-top: toRem(4);
 }
+
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: toRem(1);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--primary-light);
+    margin-top: toRem(3);
+    margin-bottom: toRem(7);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-main);
+    border-radius: toRem(50);
+  }
+}

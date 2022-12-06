@@ -164,35 +164,37 @@ watch(
         </button>
       </div>
       <transition name="select-field__select-dropdown">
-        <div v-if="isDropdownOpen" class="select-field__select-dropdown">
-          <template v-if="$slots.default">
-            <slot
-              :select-field="{
-                select,
-                isOpen: isDropdownOpen,
-                close: closeDropdown,
-                open: openDropdown,
-                toggle: toggleDropdown,
-              }"
-            />
-          </template>
-          <template v-else-if="valueOptions.length">
-            <button
-              :class="[
-                'select-field__select-dropdown-item',
-                {
-                  'select-field__select-dropdown-item--active':
-                    modelValue === option,
-                },
-              ]"
-              type="button"
-              v-for="(option, idx) in valueOptions"
-              :key="`[${idx}] ${option}`"
-              @click="select(option)"
-            >
-              {{ option }}
-            </button>
-          </template>
+        <div v-if="isDropdownOpen" class="select-field__select-dropdown-wrp">
+          <div class="select-field__select-dropdown">
+            <template v-if="$slots.default">
+              <slot
+                :select-field="{
+                  select,
+                  isOpen: isDropdownOpen,
+                  close: closeDropdown,
+                  open: openDropdown,
+                  toggle: toggleDropdown,
+                }"
+              />
+            </template>
+            <template v-else-if="valueOptions.length">
+              <button
+                :class="[
+                  'select-field__select-dropdown-item',
+                  {
+                    'select-field__select-dropdown-item--active':
+                      modelValue === option,
+                  },
+                ]"
+                type="button"
+                v-for="(option, idx) in valueOptions"
+                :key="`[${idx}] ${option}`"
+                @click="select(option)"
+              >
+                {{ option }}
+              </button>
+            </template>
+          </div>
         </div>
       </transition>
     </div>
@@ -254,6 +256,7 @@ $z-local-index: 2;
 
 .select-field__select-head {
   background: url('/fields/select-field-bg.svg') no-repeat;
+  background-size: 100% 100%;
   padding: toRem(10) toRem(16);
   padding-right: toRem(40);
   text-align: left;
@@ -264,14 +267,16 @@ $z-local-index: 2;
 
   @include field-text;
 
-  transition-property: all;
+  transition-property: color;
 
   .select-field--open.select-field--primary & {
     background: url('/fields/select-field-hover-bg.svg') no-repeat;
+    background-size: 100% 100%;
   }
 
   .select-field--error.select-field--primary & {
     background: url('/fields/select-field-error-bg.svg') no-repeat;
+    background-size: 100% 100%;
     color: var(--field-error);
     -webkit-text-fill-color: var(--field-error);
   }
@@ -304,18 +309,25 @@ $z-local-index: 2;
   }
 }
 
-.select-field__select-dropdown {
+.select-field__select-dropdown-wrp {
   display: flex;
   flex-direction: column;
   position: absolute;
-  overflow: hidden auto;
   top: 105%;
   right: 0;
   width: 100%;
   max-height: 500%;
   z-index: $z-local-index;
   background: url('/fields/select-field-dropdown-bg.svg') no-repeat;
+  background-size: 100% 100%;
   padding: toRem(6);
+}
+
+.select-field__select-dropdown {
+  overflow: hidden auto;
+  width: calc(100% - #{toRem(5)});
+
+  @include scrollbar;
 }
 
 .select-field__select-dropdown-enter-active {
@@ -344,6 +356,18 @@ $z-local-index: 2;
   text-align: left;
   width: 100%;
   padding: toRem(8) toRem(12);
+  color: var(--text-primary-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    color: var(--text-primary-dark);
+  }
+
+  &--active {
+    color: var(--text-primary-dark);
+  }
 }
 
 .select-field__err-msg {
