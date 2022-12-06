@@ -1,12 +1,9 @@
 <template>
   <div class="error-message">
-    <icon class="error-message__icon" :name="iconName" />
-    <h3 v-if="title" class="error-message__title">
-      {{ title }}
-    </h3>
     <p class="error-message__message">
       {{ message }}
     </p>
+    <icon class="error-message__icon" :name="iconName" />
   </div>
 </template>
 
@@ -20,17 +17,13 @@ export default defineComponent({
   name: 'error-message',
   components: { Icon },
   props: {
-    title: {
-      type: String,
-      default: '',
-    },
     message: {
       type: String,
       required: true,
     },
     iconName: {
       type: String as PropType<ICON_NAMES>,
-      default: ICON_NAMES.user,
+      default: ICON_NAMES.cry,
     },
   },
 })
@@ -40,21 +33,33 @@ export default defineComponent({
 .error-message {
   display: grid;
   place-items: center;
-  grid-gap: toRem(12);
+  grid-gap: toRem(32);
+  max-width: toRem(353);
+
+  @include respond-to(tablet) {
+    grid-gap: toRem(16);
+  }
 }
 
 .error-message__icon {
-  color: var(--error-main);
-  font-size: toRem(48);
-}
+  color: var(--text-primary-dark);
+  width: toRem(88);
+  height: toRem(68);
 
-.error-message__title {
-  color: var(--error-main);
-  font-size: toRem(24);
+  @include respond-to(tablet) {
+    width: toRem(61);
+    height: toRem(47);
+  }
 }
 
 .error-message__message {
-  color: var(--error-main);
-  font-size: toRem(18);
+  color: var(--text-primary-dark);
+  font-size: toRem(32);
+  line-height: 1;
+  text-align: center;
+
+  @include respond-to(tablet) {
+    font-size: toRem(20);
+  }
 }
 </style>

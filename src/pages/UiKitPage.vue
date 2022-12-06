@@ -490,7 +490,14 @@ const throwBusInfo = () => {
     </section>
     <section class="ui-kit-page__common">
       <error-message :message="$t('ui-kit-page.loading-error-msg')" />
-      <no-data-message :message="$t('ui-kit-page.no-data-msg')" />
+      <no-data-message :message="$t('ui-kit-page.no-data-msg')">
+        <app-button
+          :icon-right="$icons.user"
+          scheme="primary"
+          :text="'router'"
+          :route="{ name: $routes.uiKit }"
+        />
+      </no-data-message>
       <loader />
       <collapse class="ui-kit-page__collapse">
         <template #head="{ collapse }">

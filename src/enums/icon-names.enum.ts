@@ -13,4 +13,5 @@ export enum ICON_NAMES {
   link = 'link',
   check = 'check',
   error = 'error',
+  cry = 'cry',
 }
