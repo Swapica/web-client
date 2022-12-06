@@ -28,7 +28,6 @@ export default defineComponent({
   display: grid;
   place-items: center;
   grid-gap: toRem(24);
-  max-width: toRem(417);
 
   @include respond-to(tablet) {
     grid-gap: toRem(16);
