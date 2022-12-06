@@ -175,7 +175,8 @@ const buttonClasses = computed(() =>
     &:after {
       content: '';
       position: absolute;
-      background: url('/fields/button-underline.svg');
+      background: url('/fields/button-underline.svg') no-repeat;
+      background-size: 100% 100%;
       width: 0;
       height: toRem(6.5);
       left: 0;
