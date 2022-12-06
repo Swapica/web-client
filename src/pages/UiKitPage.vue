@@ -47,7 +47,7 @@ const throwBusInfo = () => {
   <div class="ui-kit-page">
     <section class="ui-kit-page__buttons">
       <app-button
-        :icon-right="$icons.academicCap"
+        :icon-right="$icons.user"
         scheme="primary"
         :text="'router, border-rounded, icon'"
         :route="{ name: $routes.uiKit }"
@@ -62,7 +62,7 @@ const throwBusInfo = () => {
       <app-button
         scheme="secondary"
         :text="'Alert, icon-first'"
-        :icon-left="$icons.academicCap"
+        :icon-left="$icons.user"
         @click="handleClick"
       />
       <app-button size="large" :text="'large'" />
@@ -102,16 +102,12 @@ const throwBusInfo = () => {
         modification="border-circle"
         :text="'flat, border-circle'"
       />
-      <app-button
-        scheme="primary"
-        :icon-left="$icons.academicCap"
-        :text="'flat'"
-      />
+      <app-button scheme="primary" :icon-left="$icons.user" :text="'flat'" />
       <app-button
         scheme="primary"
         size="large"
         :text="'flat, large'"
-        :icon-right="$icons.academicCap"
+        :icon-right="$icons.user"
       />
       <app-button scheme="primary" size="small" :text="'flat, small'" />
       <app-button scheme="primary" color="success" :text="'flat, success'" />
@@ -134,7 +130,7 @@ const throwBusInfo = () => {
         scheme="primary"
         disabled
         modification="border-circle"
-        :icon-left="$icons.academicCap"
+        :icon-left="$icons.user"
         :text="'flat'"
       />
       <app-button
@@ -158,61 +154,30 @@ const throwBusInfo = () => {
         color="default"
         :text="'default'"
       />
-      <app-button :icon-right="$icons.academicCap" />
+      <app-button :icon-right="$icons.user" />
+      <app-button :icon-right="$icons.user" modification="border-circle" />
+      <app-button :icon-right="$icons.user" size="large" />
+      <app-button :icon-right="$icons.user" size="small" />
+      <app-button :icon-right="$icons.user" color="success" />
+      <app-button :icon-right="$icons.user" color="error" />
+      <app-button :icon-right="$icons.user" color="warning" />
+      <app-button :icon-right="$icons.user" color="info" />
+      <app-button scheme="primary" :icon-right="$icons.user" />
       <app-button
-        :icon-right="$icons.academicCap"
+        scheme="primary"
+        :icon-right="$icons.user"
         modification="border-circle"
       />
-      <app-button :icon-right="$icons.academicCap" size="large" />
-      <app-button :icon-right="$icons.academicCap" size="small" />
-      <app-button :icon-right="$icons.academicCap" color="success" />
-      <app-button :icon-right="$icons.academicCap" color="error" />
-      <app-button :icon-right="$icons.academicCap" color="warning" />
-      <app-button :icon-right="$icons.academicCap" color="info" />
-      <app-button scheme="primary" :icon-right="$icons.academicCap" />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.academicCap"
-        modification="border-circle"
-      />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.academicCap"
-        size="large"
-      />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.academicCap"
-        size="small"
-      />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.academicCap"
-        color="success"
-      />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.academicCap"
-        color="error"
-      />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.academicCap"
-        color="warning"
-      />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.academicCap"
-        color="info"
-      />
+      <app-button scheme="primary" :icon-right="$icons.user" size="large" />
+      <app-button scheme="primary" :icon-right="$icons.user" size="small" />
+      <app-button scheme="primary" :icon-right="$icons.user" color="success" />
+      <app-button scheme="primary" :icon-right="$icons.user" color="error" />
+      <app-button scheme="primary" :icon-right="$icons.user" color="warning" />
+      <app-button scheme="primary" :icon-right="$icons.user" color="info" />
+      <app-button scheme="default" :icon-right="$icons.user" color="default" />
       <app-button
         scheme="default"
-        :icon-right="$icons.academicCap"
-        color="default"
-      />
-      <app-button
-        scheme="default"
-        :icon-right="$icons.academicCap"
+        :icon-right="$icons.user"
         color="default"
         size="default"
       />
@@ -247,7 +212,7 @@ const throwBusInfo = () => {
             :text="items.label"
             :style="{ width: '100%', hoverOpacity: '0.5' }"
             scheme="default"
-            :icon-left="$icons.academicCap"
+            :icon-left="$icons.user"
             @click="selectField.select(items.value)"
           />
         </template>
@@ -268,7 +233,7 @@ const throwBusInfo = () => {
             }"
           >
             <icon
-              :name="$icons.academicCap"
+              :name="$icons.user"
               :style="{ width: '18px', height: '18px' }"
             />
             {{
@@ -299,7 +264,7 @@ const throwBusInfo = () => {
             :text="items.label"
             :style="{ width: '100%', hoverOpacity: '0.5' }"
             scheme="default"
-            :icon-left="$icons.academicCap"
+            :icon-left="$icons.user"
             @click="selectField.select(items.value)"
           />
         </template>
@@ -317,7 +282,7 @@ const throwBusInfo = () => {
         :placeholder="$t('ui-kit-page.some-placeholder')"
       >
         <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
       </input-field>
       <input-field
@@ -327,7 +292,7 @@ const throwBusInfo = () => {
         :placeholder="$t('ui-kit-page.some-placeholder')"
       >
         <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
       </input-field>
       <input-field
@@ -345,10 +310,10 @@ const throwBusInfo = () => {
         :placeholder="$t('ui-kit-page.some-placeholder')"
       >
         <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
         <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
       </input-field>
       <input-field
@@ -395,7 +360,7 @@ const throwBusInfo = () => {
             :text="items.label"
             :style="{ width: '100%', hoverOpacity: '0.5' }"
             scheme="default"
-            :icon-left="$icons.academicCap"
+            :icon-left="$icons.user"
             @click="selectField.select(items.value)"
           />
         </template>
@@ -414,7 +379,7 @@ const throwBusInfo = () => {
             }"
           >
             <icon
-              :name="$icons.academicCap"
+              :name="$icons.user"
               :style="{ width: '18px', height: '18px' }"
             />
             {{
@@ -445,7 +410,7 @@ const throwBusInfo = () => {
             :text="items.label"
             :style="{ width: '100%', hoverOpacity: '0.5' }"
             scheme="default"
-            :icon-left="$icons.academicCap"
+            :icon-left="$icons.user"
             @click="selectField.select(items.value)"
           />
         </template>
@@ -461,7 +426,7 @@ const throwBusInfo = () => {
         :placeholder="$t('ui-kit-page.some-placeholder')"
       >
         <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
       </input-field>
       <input-field
@@ -470,7 +435,7 @@ const throwBusInfo = () => {
         :placeholder="$t('ui-kit-page.some-placeholder')"
       >
         <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
       </input-field>
       <input-field
@@ -486,10 +451,10 @@ const throwBusInfo = () => {
         :placeholder="$t('ui-kit-page.some-placeholder')"
       >
         <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
         <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
+          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
       </input-field>
       <input-field
@@ -549,7 +514,7 @@ const throwBusInfo = () => {
         <template #default="{ modal }">
           <app-button
             @click="modal.close"
-            :icon-right="$icons.academicCap"
+            :icon-right="$icons.user"
             scheme="default"
             modification="default"
             size="default"
@@ -558,7 +523,20 @@ const throwBusInfo = () => {
         </template>
       </modal>
       <div class="ui-kit-page__icons">
-        <icon :name="$icons.academicCap" />
+        <icon :name="$icons.user" />
+        <icon :name="$icons.arrowDown" />
+        <icon :name="$icons.arrowLeft" />
+        <icon :name="$icons.arrowRight" />
+        <icon :name="$icons.arrowUp" />
+        <icon :name="$icons.arrowDownFilled" />
+        <icon :name="$icons.arrowLeftFilled" />
+        <icon :name="$icons.arrowRightFilled" />
+        <icon :name="$icons.arrowUpFilled" />
+        <icon :name="$icons.close" />
+        <icon :name="$icons.menu" />
+        <icon :name="$icons.link" />
+        <icon :name="$icons.check" />
+        <icon :name="$icons.error" />
       </div>
     </section>
   </div>

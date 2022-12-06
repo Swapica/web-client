@@ -40,11 +40,11 @@ export const useNotifications = (): void => {
       [TYPE.WARNING]: t('notification.default-message-warning'),
     }
     const defaultIconNames = {
-      [TYPE.DEFAULT]: ICON_NAMES.academicCap,
-      [TYPE.INFO]: ICON_NAMES.academicCap,
-      [TYPE.SUCCESS]: ICON_NAMES.academicCap,
-      [TYPE.ERROR]: ICON_NAMES.academicCap,
-      [TYPE.WARNING]: ICON_NAMES.academicCap,
+      [TYPE.DEFAULT]: ICON_NAMES.user,
+      [TYPE.INFO]: ICON_NAMES.user,
+      [TYPE.SUCCESS]: ICON_NAMES.user,
+      [TYPE.ERROR]: ICON_NAMES.user,
+      [TYPE.WARNING]: ICON_NAMES.user,
     }
 
     if (isObject(payload)) {

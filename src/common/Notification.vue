@@ -32,7 +32,7 @@ export default defineComponent({
     },
     iconName: {
       type: String as PropType<ICON_NAMES>,
-      default: ICON_NAMES.academicCap,
+      default: ICON_NAMES.user,
     },
   },
   setup() {

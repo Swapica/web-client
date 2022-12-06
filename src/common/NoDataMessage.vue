@@ -19,7 +19,7 @@ export default defineComponent({
   props: {
     iconName: {
       type: String as PropType<ICON_NAMES>,
-      default: ICON_NAMES.academicCap,
+      default: ICON_NAMES.user,
     },
     message: {
       type: String,
