@@ -66,14 +66,14 @@ export default defineComponent({
   left: 0;
   width: 100vw;
   height: vh(100);
-  background: rgba(var(--black-rgb), 0.5);
+  background: rgba(var(--black-rgb), 0.12);
 }
 
 .modal__pane {
   position: relative;
-  background: var(--background-primary-main);
-  padding: toRem(50) toRem(100);
-  border-radius: toRem(10);
+  background: url('/backgrounds/modal-bg.svg') no-repeat;
+  background-size: 100% 100%;
+  padding: toRem(24) toRem(48) toRem(50);
 }
 
 .modal-enter-active,
