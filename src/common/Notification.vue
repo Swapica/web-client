@@ -32,11 +32,8 @@ export default defineComponent({
     },
     iconName: {
       type: String as PropType<ICON_NAMES>,
-      default: ICON_NAMES.user,
+      default: ICON_NAMES.check,
     },
-  },
-  setup() {
-    return {}
   },
 })
 </script>
@@ -45,12 +42,20 @@ export default defineComponent({
 @import 'vue-toastification/src/scss/index';
 
 .Vue-Toastification__toast {
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: toRem(13) toRem(66) toRem(13) toRem(17);
+  min-width: toRem(345);
+
   &--success {
-    background: var(--success-dark);
+    background: url('/backgrounds/notification-success-bg.svg') no-repeat;
+    background-size: 100% 100%;
   }
 
   &--error {
-    background: var(--error-dark);
+    background: url('/backgrounds/notification-error-bg.svg') no-repeat;
+    background-size: 100% 100%;
   }
 
   &--warning {
@@ -62,29 +67,36 @@ export default defineComponent({
   }
 }
 
+.Vue-Toastification__container.top-right {
+  padding: 0;
+  right: toRem(-50);
+}
+
 .notification {
   display: grid;
-  place-items: center;
   grid-template-columns: max-content 1fr;
-  grid-gap: toRem(16);
+  grid-gap: toRem(8);
 }
 
 .notification .notification__icon {
-  max-width: toRem(48);
-  max-height: toRem(48);
+  max-width: toRem(24);
+  max-height: toRem(24);
 }
 
 .notification__details {
   display: grid;
   grid-gap: toRem(4);
   width: 100%;
+  margin-top: toRem(4);
 }
 
 .notification__title {
-  color: var(--text-primary-invert-main);
+  color: var(--text-primary-dark);
 }
 
 .notification__message {
-  color: var(--text-primary-invert-main);
+  color: var(--text-primary-main);
+  font-size: toRem(12);
+  line-height: 1;
 }
 </style>

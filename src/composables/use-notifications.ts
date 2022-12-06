@@ -40,10 +40,10 @@ export const useNotifications = (): void => {
       [TYPE.WARNING]: t('notification.default-message-warning'),
     }
     const defaultIconNames = {
-      [TYPE.DEFAULT]: ICON_NAMES.user,
+      [TYPE.DEFAULT]: ICON_NAMES.check,
       [TYPE.INFO]: ICON_NAMES.user,
-      [TYPE.SUCCESS]: ICON_NAMES.user,
-      [TYPE.ERROR]: ICON_NAMES.user,
+      [TYPE.SUCCESS]: ICON_NAMES.check,
+      [TYPE.ERROR]: ICON_NAMES.error,
       [TYPE.WARNING]: ICON_NAMES.user,
     }
 
@@ -78,6 +78,8 @@ export const useNotifications = (): void => {
       {
         icon: false,
         type: messageType,
+        closeButton: false,
+        hideProgressBar: true,
       },
     )
   }

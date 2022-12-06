@@ -131,39 +131,39 @@ const buttonClasses = computed(() =>
   }
 
   &--primary {
-    background: url('/fields/button-primary-bg.svg') no-repeat;
+    background: url('/backgrounds/button-primary-bg.svg') no-repeat;
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
     background-size: 100% 100%;
 
     &:disabled,
     &--disabled {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
-      background: url('/fields/button-disabled-bg.svg') no-repeat;
+      background: url('/backgrounds/button-disabled-bg.svg') no-repeat;
       background-size: 100% 100%;
     }
 
     &:not([disabled]):hover {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
-      background: url('/fields/button-primary-hover-bg.svg') no-repeat;
+      background: url('/backgrounds/button-primary-hover-bg.svg') no-repeat;
       background-size: 100% 100%;
     }
   }
 
   &--secondary {
-    background: url('/fields/button-secondary-bg.svg') no-repeat;
+    background: url('/backgrounds/button-secondary-bg.svg') no-repeat;
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
     background-size: 100% 100%;
 
     &:disabled,
     &--disabled {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
-      background: url('/fields/button-disabled-bg.svg') no-repeat;
+      background: url('/backgrounds/button-disabled-bg.svg') no-repeat;
       background-size: 100% 100%;
     }
 
     &:not([disabled]):hover {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
-      background: url('/fields/button-secondary-hover-bg.svg') no-repeat;
+      background: url('/backgrounds/button-secondary-hover-bg.svg') no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -175,7 +175,7 @@ const buttonClasses = computed(() =>
     &:after {
       content: '';
       position: absolute;
-      background: url('/fields/button-underline.svg') no-repeat;
+      background: url('/backgrounds/button-underline.svg') no-repeat;
       background-size: 100% 100%;
       width: 0;
       height: toRem(6.5);

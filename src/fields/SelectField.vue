@@ -255,7 +255,7 @@ $z-local-index: 2;
 }
 
 .select-field__select-head {
-  background: url('/fields/select-field-bg.svg') no-repeat;
+  background: url('/backgrounds/select-field-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(10) toRem(16);
   padding-right: toRem(40);
@@ -270,12 +270,12 @@ $z-local-index: 2;
   transition-property: color;
 
   .select-field--open.select-field--primary & {
-    background: url('/fields/select-field-hover-bg.svg') no-repeat;
+    background: url('/backgrounds/select-field-hover-bg.svg') no-repeat;
     background-size: 100% 100%;
   }
 
   .select-field--error.select-field--primary & {
-    background: url('/fields/select-field-error-bg.svg') no-repeat;
+    background: url('/backgrounds/select-field-error-bg.svg') no-repeat;
     background-size: 100% 100%;
     color: var(--field-error);
     -webkit-text-fill-color: var(--field-error);
@@ -318,7 +318,7 @@ $z-local-index: 2;
   width: 100%;
   max-height: 500%;
   z-index: $z-local-index;
-  background: url('/fields/select-field-dropdown-bg.svg') no-repeat;
+  background: url('/backgrounds/select-field-dropdown-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(6);
 }

@@ -224,18 +224,18 @@ $z-index-side-nodes: 1;
 
   .input-field--primary & {
     padding: toRem(5) toRem(8);
-    background: url('/fields/input-bg.svg');
+    background: url('/backgrounds/input-bg.svg');
     background-size: 100% 100%;
   }
 
   .input-field--error.input-field--primary & {
-    background: url('/fields/input-error-bg.svg');
+    background: url('/backgrounds/input-error-bg.svg');
     background-size: 100% 100%;
   }
 
   &:not([disabled]):focus {
     .input-field--primary & {
-      background: url('/fields/input-hover-bg.svg');
+      background: url('/backgrounds/input-hover-bg.svg');
       background-size: 100% 100%;
     }
   }
