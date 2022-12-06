@@ -61,7 +61,7 @@ import { computed, useAttrs } from 'vue'
 import { LocationAsRelativeRaw } from 'vue-router'
 import { ICON_NAMES } from '@/enums'
 
-type SCHEMES = 'primary' | 'secondary' | 'icon' | 'default'
+type SCHEMES = 'primary' | 'secondary' | 'flat' | 'icon' | 'default'
 
 const props = withDefaults(
   defineProps<{
@@ -112,7 +112,7 @@ const buttonClasses = computed(() =>
   grid: auto / auto-flow max-content;
   align-items: center;
   justify-content: center;
-  transition: var(--button-transition-duration) ease-in;
+  transition: var(--button-transition-duration) ease-out;
   transition-property: padding;
   text-decoration: none;
   color: var(--text-primary-dark);
@@ -133,7 +133,6 @@ const buttonClasses = computed(() =>
   &--primary {
     background: url('/fields/button-primary-bg.svg') no-repeat;
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
-    min-width: toRem(180);
     background-size: 100% 100%;
 
     &:disabled,
@@ -153,7 +152,6 @@ const buttonClasses = computed(() =>
   &--secondary {
     background: url('/fields/button-secondary-bg.svg') no-repeat;
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
-    min-width: toRem(180);
     background-size: 100% 100%;
 
     &:disabled,
@@ -167,6 +165,28 @@ const buttonClasses = computed(() =>
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
       background: url('/fields/button-secondary-hover-bg.svg') no-repeat;
       background-size: 100% 100%;
+    }
+  }
+
+  &--flat {
+    padding: toRem(11.5) toRem(12);
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      background: url('/fields/button-underline.svg');
+      width: 0;
+      height: toRem(6.5);
+      left: 0;
+      bottom: 0;
+      transition: width 0.2s ease-in-out;
+    }
+
+    &:not([disabled]):hover {
+      &:after {
+        width: 100%;
+      }
     }
   }
 }

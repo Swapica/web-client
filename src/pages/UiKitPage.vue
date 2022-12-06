@@ -69,6 +69,7 @@ const throwBusInfo = () => {
       <app-button size="small" :text="'small'" />
       <app-button
         color="success"
+        scheme="flat"
         :text="'Bus.success, success'"
         @click="throwBusSuccess"
       />
