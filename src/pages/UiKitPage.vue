@@ -220,7 +220,7 @@ const throwBusInfo = () => {
     <section class="ui-kit-page__inputs">
       <select-field
         v-model="form.selectValue"
-        scheme="secondary"
+        scheme="primary"
         :label="'Label'"
         :placeholder="'select placeholder'"
         :value-options="['1', '2', '3', '4', '5', '6', '7']"
@@ -228,7 +228,7 @@ const throwBusInfo = () => {
       />
       <select-field
         v-model="form.selectValue"
-        scheme="secondary"
+        scheme="primary"
         :label="'Custom select'"
         :placeholder="'select placeholder'"
       >
@@ -254,7 +254,8 @@ const throwBusInfo = () => {
       </select-field>
       <select-field
         v-model="form.selectValue"
-        scheme="secondary"
+        scheme="primary"
+        :error-message="$t('ui-kit-page.some-error-message')"
         :label="'Custom select'"
         :placeholder="'select placeholder'"
       >

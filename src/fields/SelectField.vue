@@ -12,7 +12,7 @@ import {
 import { useRouter } from '@/router'
 import { onClickOutside } from '@vueuse/core'
 
-type SCHEMES = 'primary' | 'secondary'
+type SCHEMES = 'primary'
 
 const props = withDefaults(
   defineProps<{
@@ -116,6 +116,13 @@ watch(
 
 <template>
   <div :class="selectFieldClasses">
+    <label
+      v-if="label"
+      class="select-field__label"
+      :for="`select-field--${uid}`"
+    >
+      {{ label }}
+    </label>
     <div ref="selectElement" class="select-field__select-wrp">
       <div class="select-field__select-head-wrp">
         <button
@@ -152,20 +159,9 @@ watch(
                 'select-field__select-head-indicator--open': isDropdownOpen,
               },
             ]"
-            :name="$icons.chevronDown"
+            :name="$icons.arrowDown"
           />
         </button>
-        <span
-          class="select-field__focus-indicator"
-          v-if="scheme === 'secondary'"
-        />
-        <label
-          v-if="label"
-          class="select-field__label"
-          :for="`select-field--${uid}`"
-        >
-          {{ label }}
-        </label>
       </div>
       <transition name="select-field__select-dropdown">
         <div v-if="isDropdownOpen" class="select-field__select-dropdown">
@@ -234,43 +230,13 @@ $z-local-index: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   pointer-events: none;
-  position: absolute;
-  padding: toRem(4);
-  top: 50%;
-  left: var(--field-padding-left);
-  transform: translateY(-50%);
-  color: var(--field-label);
-  font-size: toRem(16);
-  font-weight: 400;
-  line-height: 1.3;
-  background: var(--field-bg-primary);
 
   @include field-label;
 
   transition-property: all;
 
-  .select-field--secondary & {
-    background: none;
-    padding: 0;
-  }
-
   .select-field--error & {
     color: var(--field-error);
-  }
-
-  .select-field--label-active & {
-    top: 0;
-    font-size: toRem(12);
-    line-height: 1.3;
-    font-weight: 400;
-  }
-
-  .select-field--open & {
-    color: var(--primary-main);
-  }
-
-  .select-field--label-active.select-field--secondary & {
-    transform: translateY(50%);
   }
 }
 
@@ -287,87 +253,27 @@ $z-local-index: 2;
 }
 
 .select-field__select-head {
-  background: var(--field-bg-primary);
-  padding: var(--field-padding);
-  padding-right: calc(var(--field-padding-right) + #{toRem(24)});
+  background: url('/fields/select-field-bg.svg') no-repeat;
+  padding: toRem(10) toRem(16);
+  padding-right: toRem(40);
   text-align: left;
   width: 100%;
   height: 100%;
-
-  $field-text-height: calc(
-    var(--field-text-font-size) * var(--field-text-line-height)
-  );
-
-  min-height: calc(
-    $field-text-height + var(--field-padding-top) + var(--field-padding-bottom)
-  );
+  min-height: toRem(44);
+  position: relative;
 
   @include field-text;
 
   transition-property: all;
 
-  & + .select-field__focus-indicator {
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: toRem(-2);
-      left: 50%;
-      transform: translateX(-50%);
-      height: toRem(2);
-      width: 0;
-      background: var(--primary-main);
-      transition: width calc(var(--field-transition-duration) + 0.3s);
-
-      .select-field--error & {
-        background: var(--field-error);
-      }
-    }
-  }
-
-  .select-field--primary & {
-    @include field-border;
-  }
-
-  .select-field--secondary & {
-    position: relative;
-    background: var(--background-secondary-main);
-    box-shadow: inset 0 0 0 toRem(50) var(--field-bg-secondary),
-      0 toRem(2) 0 0 var(--field-border);
-    padding: calc(var(--field-padding-top) + #{toRem(12)})
-      var(--field-padding-right) var(--field-padding-bottom)
-      var(--field-padding-left);
+  .select-field--open.select-field--primary & {
+    background: url('/fields/select-field-hover-bg.svg') no-repeat;
   }
 
   .select-field--error.select-field--primary & {
-    box-shadow: inset 0 0 0 toRem(50) var(--field-bg-primary),
-      0 0 0 toRem(1) var(--field-error);
-    border-color: var(--field-error);
-  }
-
-  .select-field--error.select-field--secondary & {
-    box-shadow: inset 0 0 0 toRem(50) var(--field-bg-secondary),
-      0 toRem(2) 0 0 var(--field-error);
-  }
-
-  .select-field--open.select-field--primary & {
-    box-shadow: inset 0 0 0 toRem(50) var(--field-bg-primary),
-      0 0 0 toRem(2) var(--primary-main);
-    border-color: var(--primary-main);
-  }
-
-  .select-field--open.select-field--secondary & {
-    & + .select-field__focus-indicator {
-      &:after {
-        width: 100%;
-      }
-    }
+    background: url('/fields/select-field-error-bg.svg') no-repeat;
+    color: var(--field-error);
+    -webkit-text-fill-color: var(--field-error);
   }
 }
 
@@ -382,15 +288,19 @@ $z-local-index: 2;
   pointer-events: none;
   position: absolute;
   top: 50%;
-  right: var(--field-padding-right);
+  right: toRem(16);
   transform: translateY(-50%);
   transition: transform 0.1s ease-in-out;
-  width: toRem(18);
-  height: toRem(18);
+  width: toRem(20);
+  height: toRem(20);
   color: var(--field-text);
 
   &--open {
     transform: translateY(-50%) rotate(180deg);
+  }
+
+  .select-field--error.select-field--primary & {
+    color: var(--field-error);
   }
 }
 
@@ -404,10 +314,8 @@ $z-local-index: 2;
   width: 100%;
   max-height: 500%;
   z-index: $z-local-index;
-  background: var(--field-bg-secondary);
-  box-shadow: 0 toRem(1) toRem(2) rgba(var(--black-rgb), 0.3),
-    0 toRem(2) toRem(6) toRem(2) rgba(var(--black-rgb), 0.15);
-  border-radius: toRem(4);
+  background: url('/fields/select-field-dropdown-bg.svg') no-repeat;
+  padding: toRem(6);
 }
 
 .select-field__select-dropdown-enter-active {
@@ -435,16 +343,7 @@ $z-local-index: 2;
 .select-field__select-dropdown-item {
   text-align: left;
   width: 100%;
-  padding: toRem(8) var(--field-padding-right) toRem(8)
-    var(--field-padding-left);
-
-  &:hover {
-    background: rgba(var(--primary-dark-rgb), 0.15);
-  }
-
-  &--active {
-    background: rgba(var(--primary-main-rgb), 0.25);
-  }
+  padding: toRem(8) toRem(12);
 }
 
 .select-field__err-msg {

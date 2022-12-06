@@ -306,10 +306,6 @@ $z-index-side-nodes: 1;
     }
   }
 
-  .input-field--primary & {
-    @include field-border;
-  }
-
   .input-field--secondary & {
     position: relative;
     background: var(--field-bg-secondary);

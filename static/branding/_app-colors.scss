@@ -3,13 +3,7 @@ $white-rgb: hexToRGB($white);
 $black: #000000;
 $black-rgb: hexToRGB($black);
 
-$background-primary-light: #ffffff;
-$background-primary-main: #fffbfe;
-$background-primary-dark: #f8f5ff;
-
-$background-secondary-light: #f4efff;
-$background-secondary-main: #e6ddfb;
-$background-secondary-dark: #d6caf5;
+$background-primary-main: #fffefb;
 
 /* status colors */
 
@@ -48,7 +42,3 @@ $text-primary-dark: #666562;
 $text-primary-invert-light: #ffffff;
 $text-primary-invert-main: #ffffff;
 $text-primary-invert-dark: #ffffff;
-
-/* border colors */
-
-$border-primary-main: #9e9e9e;
