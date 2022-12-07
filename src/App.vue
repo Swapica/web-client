@@ -44,7 +44,9 @@ init()
 }
 
 .app__main {
-  padding: 0 var(--app-padding-right) 0 var(--app-padding-left);
+  padding: toRem(24) var(--app-padding-right) toRem(24) var(--app-padding-left);
+  max-width: toRem(887);
+  margin: 0 auto;
 }
 
 .fade-enter-active {

@@ -100,6 +100,7 @@ const buttonClasses = computed(() =>
 <style lang="scss" scoped>
 .app-button {
   --button-transition-duration: 0.2s;
+  --button-icon-size: 1.2em;
 
   outline: 0;
   font-family: var(--app-font-family);
@@ -194,8 +195,8 @@ const buttonClasses = computed(() =>
 
 .app-button__icon-left,
 .app-button__icon-right {
-  height: 1.2em;
-  width: 1.2em;
+  height: var(--button-icon-size);
+  width: var(--button-icon-size);
 }
 
 .app-button__text {

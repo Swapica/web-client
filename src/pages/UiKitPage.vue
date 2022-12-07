@@ -71,7 +71,7 @@ const throwBusError = () => {
       />
 
       <app-button scheme="primary" disabled :text="'flat, small'" />
-      <app-button scheme="primary" :icon-right="$icons.user" />
+      <app-button :icon-right="$icons.user" />
     </section>
     <section class="ui-kit-page__inputs">
       <select-field
@@ -167,38 +167,6 @@ const throwBusError = () => {
       />
       <input-field
         v-model="form.inputValue"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-      </input-field>
-
-      <input-field
-        v-model="form.inputValue"
-        :label="$t('ui-kit-page.some-label')"
-        :error-message="$t('ui-kit-page.some-error-message')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
         :label="$t('ui-kit-page.some-label')"
         :placeholder="$t('ui-kit-page.some-placeholder')"
         disabled
@@ -208,7 +176,6 @@ const throwBusError = () => {
         :label="$t('ui-kit-page.some-label')"
         :error-message="$t('ui-kit-page.some-error-message')"
         :placeholder="$t('ui-kit-page.some-placeholder')"
-        disabled
       />
     </section>
     <section class="ui-kit-page__form">
