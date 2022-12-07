@@ -11,6 +11,7 @@ import {
 } from 'vue'
 import { useRouter } from '@/router'
 import { onClickOutside } from '@vueuse/core'
+import { ICON_NAMES } from '@/enums'
 
 type SCHEMES = 'primary'
 
@@ -18,7 +19,11 @@ const props = withDefaults(
   defineProps<{
     scheme?: SCHEMES
     modelValue: string | number
-    valueOptions?: string[] | number[]
+    valueOptions?: {
+      label: string
+      icon?: ICON_NAMES
+      value: number | string
+    }[]
     label?: string
     placeholder?: string
     errorMessage?: string
@@ -59,6 +64,10 @@ const isReadonly = computed(() =>
 )
 
 const isLabelActive = computed(() => isDropdownOpen.value || !!props.modelValue)
+
+const selectedOption = computed(() =>
+  props.valueOptions.find(i => i.value === props.modelValue),
+)
 
 const selectFieldClasses = computed(() => ({
   'select-field': true,
@@ -144,7 +153,14 @@ watch(
           </template>
           <template v-else>
             <template v-if="modelValue">
-              {{ modelValue }}
+              <div class="select-field__select-head-value">
+                <icon
+                  v-if="selectedOption?.icon"
+                  class="select-field__select-head-value-icon"
+                  :name="selectedOption?.icon"
+                />
+                {{ selectedOption?.label }}
+              </div>
             </template>
             <template v-else-if="!label">
               <span class="select-field__placeholder">
@@ -183,15 +199,20 @@ watch(
                   'select-field__select-dropdown-item',
                   {
                     'select-field__select-dropdown-item--active':
-                      modelValue === option,
+                      modelValue === option.value,
                   },
                 ]"
                 type="button"
                 v-for="(option, idx) in valueOptions"
-                :key="`[${idx}] ${option}`"
-                @click="select(option)"
+                :key="`[${idx}] ${option.value}`"
+                @click="select(option.value)"
               >
-                {{ option }}
+                <icon
+                  v-if="option.icon"
+                  class="select-field__select-dropdown-item-icon"
+                  :name="option.icon"
+                />
+                {{ option.label }}
               </button>
             </template>
           </div>
@@ -360,6 +381,8 @@ $z-local-index: 2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
 
   &:hover {
     color: var(--text-primary-dark);
@@ -368,6 +391,21 @@ $z-local-index: 2;
   &--active {
     color: var(--text-primary-dark);
   }
+}
+
+.select-field__select-dropdown-item-icon {
+  width: toRem(24);
+  height: toRem(24);
+}
+
+.select-field__select-head-value {
+  display: flex;
+  align-items: center;
+}
+
+.select-field__select-head-value-icon {
+  width: toRem(24);
+  height: toRem(24);
 }
 
 .select-field__err-msg {

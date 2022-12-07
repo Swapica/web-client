@@ -13,6 +13,7 @@ import LoginForm from '@/forms/LoginForm.vue'
 
 import { reactive, ref } from 'vue'
 import { Bus } from '@/helpers'
+import { ICON_NAMES } from '@/enums'
 
 const isModalShown = ref<boolean>(false)
 const form = reactive({
@@ -32,14 +33,6 @@ const throwBusSuccess = () => {
 
 const throwBusError = () => {
   Bus.error('Error')
-}
-
-const throwBusWarning = () => {
-  Bus.warning('Warning')
-}
-
-const throwBusInfo = () => {
-  Bus.info('Info')
 }
 </script>
 
@@ -64,123 +57,21 @@ const throwBusInfo = () => {
         :text="'Alert, icon-first'"
         :icon-left="$icons.user"
         @click="handleClick"
+        disabled
       />
-      <app-button size="large" :text="'large'" />
-      <app-button size="small" :text="'small'" />
       <app-button
-        color="success"
         scheme="flat"
         :text="'Bus.success, success'"
         @click="throwBusSuccess"
       />
       <app-button
-        color="error"
+        scheme="flat"
         :text="'Bus.error, error'"
         @click="throwBusError"
       />
-      <app-button
-        color="warning"
-        :text="'Bus.warning, warning'"
-        @click="throwBusWarning"
-      />
-      <app-button color="info" :text="'Bus.info, info'" @click="throwBusInfo" />
-      <app-button
-        modification="border-circle"
-        color="success"
-        :text="'border-circle, success'"
-      />
-      <app-button
-        modification="border-rounded"
-        color="error"
-        :text="'border-rounded, error'"
-      />
-      <app-button color="warning" size="large" :text="'large, warning'" />
-      <app-button color="info" size="small" :text="'small, info'" />
-      <app-button scheme="primary" :text="'flat'" />
-      <app-button
-        scheme="primary"
-        modification="border-circle"
-        :text="'flat, border-circle'"
-      />
-      <app-button scheme="primary" :icon-left="$icons.user" :text="'flat'" />
-      <app-button
-        scheme="primary"
-        size="large"
-        :text="'flat, large'"
-        :icon-right="$icons.user"
-      />
-      <app-button scheme="primary" size="small" :text="'flat, small'" />
-      <app-button scheme="primary" color="success" :text="'flat, success'" />
-      <app-button scheme="primary" color="error" :text="'flat, error'" />
-      <app-button scheme="primary" color="warning" :text="'flat, warning'" />
-      <app-button scheme="primary" color="info" :text="'flat, info'" />
-      <app-button
-        scheme="primary"
-        modification="border-circle"
-        color="success"
-        :text="'flat, border-circle, success'"
-      />
-      <app-button
-        scheme="primary"
-        modification="border-circle"
-        color="error"
-        :text="'flat, border-circle, error'"
-      />
-      <app-button
-        scheme="primary"
-        disabled
-        modification="border-circle"
-        :icon-left="$icons.user"
-        :text="'flat'"
-      />
-      <app-button
-        scheme="primary"
-        modification="border-circle"
-        color="warning"
-        size="large"
-        :text="'flat, border-circle, large, warning'"
-      />
-      <app-button
-        scheme="primary"
-        modification="border-circle"
-        size="small"
-        color="info"
-        :text="'flat, border-circle, small, info'"
-      />
-      <app-button
-        scheme="default"
-        modification="default"
-        size="default"
-        color="default"
-        :text="'default'"
-      />
-      <app-button :icon-right="$icons.user" />
-      <app-button :icon-right="$icons.user" modification="border-circle" />
-      <app-button :icon-right="$icons.user" size="large" />
-      <app-button :icon-right="$icons.user" size="small" />
-      <app-button :icon-right="$icons.user" color="success" />
-      <app-button :icon-right="$icons.user" color="error" />
-      <app-button :icon-right="$icons.user" color="warning" />
-      <app-button :icon-right="$icons.user" color="info" />
+
+      <app-button scheme="primary" disabled :text="'flat, small'" />
       <app-button scheme="primary" :icon-right="$icons.user" />
-      <app-button
-        scheme="primary"
-        :icon-right="$icons.user"
-        modification="border-circle"
-      />
-      <app-button scheme="primary" :icon-right="$icons.user" size="large" />
-      <app-button scheme="primary" :icon-right="$icons.user" size="small" />
-      <app-button scheme="primary" :icon-right="$icons.user" color="success" />
-      <app-button scheme="primary" :icon-right="$icons.user" color="error" />
-      <app-button scheme="primary" :icon-right="$icons.user" color="warning" />
-      <app-button scheme="primary" :icon-right="$icons.user" color="info" />
-      <app-button scheme="default" :icon-right="$icons.user" color="default" />
-      <app-button
-        scheme="default"
-        :icon-right="$icons.user"
-        color="default"
-        size="default"
-      />
     </section>
     <section class="ui-kit-page__inputs">
       <select-field
@@ -188,7 +79,15 @@ const throwBusInfo = () => {
         scheme="primary"
         :label="'Label'"
         :placeholder="'select placeholder'"
-        :value-options="['1', '2', '3', '4', '5', '6', '7']"
+        :value-options="[
+          { label: 'Value 1', value: '1' },
+          { label: 'Value 2', value: '2' },
+          { label: 'Value 3', value: '3' },
+          { label: 'Value 4', value: '4' },
+          { label: 'Value 5', value: '5' },
+          { label: 'Value 6', value: '6' },
+          { label: 'Value 7', value: '7' },
+        ]"
         :error-message="form.selectValue === '7' ? 'error for number 7' : ''"
       />
       <select-field
@@ -196,26 +95,16 @@ const throwBusInfo = () => {
         scheme="primary"
         :label="'Custom select'"
         :placeholder="'select placeholder'"
+        :value-options="[
+          { label: 'Value 1', value: '1', icon: ICON_NAMES.arrowDown },
+          { label: 'Value 2', value: '2' },
+          { label: 'Value 3', value: '3' },
+          { label: 'Value 4', value: '4' },
+          { label: 'Value 5', value: '5' },
+          { label: 'Value 6', value: '6' },
+          { label: 'Value 7', value: '7' },
+        ]"
       >
-        <template #default="{ selectField }">
-          <app-button
-            v-for="(items, idx) in [
-              { label: 'Value 1', value: '1' },
-              { label: 'Value 2', value: '2' },
-              { label: 'Value 3', value: '3' },
-              { label: 'Value 4', value: '4' },
-              { label: 'Value 5', value: '5' },
-              { label: 'Value 6', value: '6' },
-              { label: 'Value 7', value: '7' },
-            ]"
-            :key="idx"
-            :text="items.label"
-            :style="{ width: '100%', hoverOpacity: '0.5' }"
-            scheme="default"
-            :icon-left="$icons.user"
-            @click="selectField.select(items.value)"
-          />
-        </template>
       </select-field>
       <select-field
         v-model="form.selectValue"
@@ -269,152 +158,8 @@ const throwBusInfo = () => {
           />
         </template>
       </select-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="'label'"
-        placeholder="$t('ui-kit-page.some-placeholder')"
-      />
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        type="password"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      />
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="$t('ui-kit-page.some-label')"
-        :error-message="$t('ui-kit-page.some-error-message')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.user" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="$t('ui-kit-page.some-label')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-        disabled
-      />
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="$t('ui-kit-page.some-label')"
-        :error-message="$t('ui-kit-page.some-error-message')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-        disabled
-      />
     </section>
     <section class="ui-kit-page__inputs">
-      <select-field
-        v-model="form.selectValue"
-        :label="'Label'"
-        :placeholder="'select placeholder'"
-        :value-options="['1', '2', '3', '4', '5', '6', '7']"
-        :error-message="form.selectValue === '7' ? 'error for number 7' : ''"
-      />
-      <select-field
-        v-model="form.selectValue"
-        :label="'Custom select'"
-        :placeholder="'select placeholder'"
-      >
-        <template #default="{ selectField }">
-          <app-button
-            v-for="(items, idx) in [
-              { label: 'Value 1', value: '1' },
-              { label: 'Value 2', value: '2' },
-              { label: 'Value 3', value: '3' },
-              { label: 'Value 4', value: '4' },
-              { label: 'Value 5', value: '5' },
-              { label: 'Value 6', value: '6' },
-              { label: 'Value 7', value: '7' },
-            ]"
-            :key="idx"
-            :text="items.label"
-            :style="{ width: '100%', hoverOpacity: '0.5' }"
-            scheme="default"
-            :icon-left="$icons.user"
-            @click="selectField.select(items.value)"
-          />
-        </template>
-      </select-field>
-      <select-field
-        v-model="form.selectValue"
-        :label="'Custom select'"
-        :placeholder="'select placeholder'"
-      >
-        <template #head>
-          <div
-            :style="{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-            }"
-          >
-            <icon
-              :name="$icons.user"
-              :style="{ width: '18px', height: '18px' }"
-            />
-            {{
-              [
-                { label: 'Value 1', value: '1' },
-                { label: 'Value 2', value: '2' },
-                { label: 'Value 3', value: '3' },
-                { label: 'Value 4', value: '4' },
-                { label: 'Value 5', value: '5' },
-                { label: 'Value 6', value: '6' },
-                { label: 'Value 7', value: '7' },
-              ].find(item => item.value === form.selectValue)?.label
-            }}
-          </div>
-        </template>
-        <template #default="{ selectField }">
-          <app-button
-            v-for="(items, idx) in [
-              { label: 'Value 1', value: '1' },
-              { label: 'Value 2', value: '2' },
-              { label: 'Value 3', value: '3' },
-              { label: 'Value 4', value: '4' },
-              { label: 'Value 5', value: '5' },
-              { label: 'Value 6', value: '6' },
-              { label: 'Value 7', value: '7' },
-            ]"
-            :key="idx"
-            :text="items.label"
-            :style="{ width: '100%', hoverOpacity: '0.5' }"
-            scheme="default"
-            :icon-left="$icons.user"
-            @click="selectField.select(items.value)"
-          />
-        </template>
-      </select-field>
       <input-field
         v-model="form.inputValue"
         :label="'label'"
@@ -438,12 +183,7 @@ const throwBusInfo = () => {
           <icon class="ui-kit-page__input-icon" :name="$icons.user" />
         </template>
       </input-field>
-      <input-field
-        v-model="form.inputValue"
-        type="password"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      />
+
       <input-field
         v-model="form.inputValue"
         :label="$t('ui-kit-page.some-label')"
@@ -469,20 +209,6 @@ const throwBusInfo = () => {
         :error-message="$t('ui-kit-page.some-error-message')"
         :placeholder="$t('ui-kit-page.some-placeholder')"
         disabled
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-        disabled
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        :label="'textarea'"
-        :placeholder="'textarea'"
       />
     </section>
     <section class="ui-kit-page__form">

@@ -214,18 +214,18 @@ $z-index-side-nodes: 1;
     }
   }
 
-  .input-field--node-left & {
-    padding-left: calc(#{toRem(8)} * 3);
-  }
-
-  .input-field--node-right & {
-    padding-right: calc(#{toRem(8)} * 3);
-  }
-
   .input-field--primary & {
     padding: toRem(5) toRem(8);
     background: url('/backgrounds/input-bg.svg');
     background-size: 100% 100%;
+  }
+
+  .input-field--node-left & {
+    padding-left: toRem(32);
+  }
+
+  .input-field--node-right & {
+    padding-right: toRem(32);
   }
 
   .input-field--error.input-field--primary & {
@@ -245,7 +245,7 @@ $z-index-side-nodes: 1;
   overflow: hidden;
   position: absolute;
   top: 50%;
-  left: var(--field-padding-left);
+  left: toRem(8);
   transform: translateY(-50%);
   color: inherit;
   max-height: 100%;
@@ -255,7 +255,7 @@ $z-index-side-nodes: 1;
 .input-field__node-right-wrp {
   position: absolute;
   top: 50%;
-  right: var(--field-padding-right);
+  right: toRem(8);
   transform: translateY(-50%);
   color: inherit;
   z-index: $z-index-side-nodes;
