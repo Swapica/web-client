@@ -215,7 +215,7 @@ $z-index-side-nodes: 1;
   }
 
   .input-field--primary & {
-    padding: toRem(5) toRem(8);
+    padding: toRem(5) toRem(8) toRem(4);
     background: url('/backgrounds/input-bg.svg');
     background-size: 100% 100%;
   }

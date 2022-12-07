@@ -81,9 +81,7 @@ ul {
 }
 
 p {
-  line-height: 2;
-
-  @include respond-to(tablet) { line-height: 1.6; }
+  line-height: 1.2;
 }
 
 h1,

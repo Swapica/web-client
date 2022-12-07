@@ -41,6 +41,9 @@ $media-breakpoints: (
   color: var(--field-text);
   transition: color var(--field-transition-duration) ease;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @mixin field-label {

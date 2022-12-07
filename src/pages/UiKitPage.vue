@@ -225,19 +225,11 @@ const throwBusError = () => {
         />
       </no-data-message>
       <loader />
-      <collapse class="ui-kit-page__collapse">
-        <template #head="{ collapse }">
-          <app-button
-            class="ui-kit-page__collapse-btn"
-            scheme="primary"
-            :text="$t('ui-kit-page.collapse-btn')"
-            @click="collapse.toggle"
-          >
-          </app-button>
-        </template>
-        <div class="ui-kit-page__collapse-body">
-          {{ $t('ui-kit-page.collapse-text') }}
-        </div>
+      <collapse
+        class="ui-kit-page__collapse"
+        title="ewfewfefew"
+        description="elkwfjelwkjfelkwjfklewjflkwjfl"
+      >
       </collapse>
       <app-button
         :text="$t('ui-kit-page.modal-btn')"
