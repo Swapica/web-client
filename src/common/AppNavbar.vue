@@ -14,17 +14,12 @@
         @click="isMobileNavigationShown = !isMobileNavigationShown"
       />
     </div>
-
-    <transition name="app-navigation-mobile-transition">
-      <div class="nav-mob" v-if="isMobileNavigationShown">
-        <!-- {{ 'wfewfew' }} -->
-      </div>
-    </transition>
+    <app-navigation-mobile :is-shown="isMobileNavigationShown" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { AppLogo, AppButton } from '@/common'
+import { AppLogo, AppButton, AppNavigationMobile } from '@/common'
 import { computed, ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
@@ -46,11 +41,14 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
   transition: background-color 0.3s;
 
   &--opened {
-    background: #fcf9f2;
+    background: var(--background-primary-light);
   }
 
   @include respond-to(tablet) {
     flex-wrap: wrap;
+    height: toRem(80);
+    padding: toRem(20) var(--app-padding-right) toRem(20)
+      var(--app-padding-left);
   }
 }
 
@@ -62,33 +60,5 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 
 .app-navbar__toogle-btn {
   --button-icon-size: #{toRem(40)};
-}
-
-.nav-mob {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: #fcf9f2;
-}
-
-.app-navigation-mobile-transition-enter-active {
-  animation: app-navigation-mobile-keyframes 0.3s ease-in-out;
-}
-
-.app-navigation-mobile-transition-leave-active {
-  animation: app-navigation-mobile-keyframes 0.3s ease-in-out reverse;
-}
-
-@keyframes app-navigation-mobile-keyframes {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 </style>
