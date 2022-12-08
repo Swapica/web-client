@@ -110,12 +110,15 @@ $z-index-negative: -1;
   align-items: center;
   flex-direction: column;
   overflow: auto;
+  gap: toRem(32);
   height: 100%;
 
   @include scrollbar;
 }
 
 .app-navigation-mobile__wrapper {
+  max-height: toRem(521);
+  height: 100%;
   background: linear-gradient(
     var(--background-primary-light) 90%,
     rgba(var(--white-rgb), 0) 10%
@@ -126,12 +129,10 @@ $z-index-negative: -1;
   padding: toRem(24) toRem(24) toRem(40);
   background: url('/backgrounds/navbar-bg.svg') no-repeat;
   background-size: 100% 100%;
-  max-height: toRem(440);
-  height: 100%;
+  height: calc(100% - #{toRem(80)});
 }
 
 .app-navigation-mobile__nav {
-  margin-bottom: toRem(130);
   display: flex;
   flex-direction: column;
   gap: toRem(24);
