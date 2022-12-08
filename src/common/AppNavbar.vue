@@ -14,7 +14,10 @@
         @click="isMobileNavigationShown = !isMobileNavigationShown"
       />
     </div>
-    <app-navigation-mobile :is-shown="isMobileNavigationShown" />
+    <app-navigation-mobile
+      :is-shown="isMobileNavigationShown"
+      @close-nav="isMobileNavigationShown = false"
+    />
   </div>
 </template>
 
@@ -39,6 +42,7 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
     var(--app-padding-left);
   position: relative;
   transition: background-color 0.3s;
+  width: 100vw;
 
   &--opened {
     background: var(--background-primary-light);
@@ -53,9 +57,8 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 }
 
 .app-navbar__logo {
-  @include respond-to(xsmall) {
-    width: 100%;
-  }
+  width: toRem(95);
+  height: toRem(37);
 }
 
 .app-navbar__toogle-btn {

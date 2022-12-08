@@ -66,5 +66,8 @@
     "balance-lbl": "Balance",
     "transfer-lbl": "Transfer",
     "mint-lbl": "Mint"
+  },
+  "app-navigation-mobile": {
+    "dashboard-link": "Dashboard"
   }
 }
