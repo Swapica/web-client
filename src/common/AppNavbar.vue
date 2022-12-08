@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="app-navbar"
-    :class="{ 'app-navbar--opened': isMobileNavigationShown }"
-  >
+  <div class="app-navbar">
     <div class="app-navbar__content">
       <app-logo class="app-navbar__logo" />
 
@@ -16,8 +13,8 @@
       <app-button
         v-if="isMobile"
         class="app-navbar__toogle-btn"
-        :icon-right="isMobileNavigationShown ? $icons.close : $icons.menu"
-        @click="isMobileNavigationShown = !isMobileNavigationShown"
+        :icon-right="$icons.menu"
+        @click="isMobileNavigationShown = true"
       />
     </div>
     <app-navigation-mobile
@@ -49,10 +46,6 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
   position: relative;
   transition: background-color 0.3s;
   width: 100vw;
-
-  &--opened {
-    background: var(--background-primary-light);
-  }
 
   @include respond-to(tablet) {
     flex-wrap: wrap;
