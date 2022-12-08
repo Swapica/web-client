@@ -3,8 +3,14 @@
     class="app-navbar"
     :class="{ 'app-navbar--opened': isMobileNavigationShown }"
   >
-    <div>
+    <div class="app-navbar__content">
       <app-logo class="app-navbar__logo" />
+
+      <div v-if="!isMobile" class="app-navbar__nav">
+        <router-link class="app-navbar__link" :to="{ name: $routes.uiKit }">
+          {{ $t('app-navbar.dashboard-link') }}
+        </router-link>
+      </div>
     </div>
     <div>
       <app-button
@@ -53,6 +59,49 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
     height: toRem(80);
     padding: toRem(20) var(--app-padding-right) toRem(20)
       var(--app-padding-left);
+  }
+}
+
+.app-navbar__content {
+  display: flex;
+  gap: toRem(32);
+  align-items: center;
+}
+
+.app-navbar__nav {
+  display: flex;
+  gap: toRem(32);
+}
+
+.app-navbar__link {
+  padding: toRem(11.5) toRem(12);
+  position: relative;
+  color: var(--text-primary-dark);
+  opacity: 0.5;
+  transition: color 0.3s;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    background: url('/backgrounds/button-underline.svg') no-repeat;
+    background-size: 100% 100%;
+    width: 0;
+    height: toRem(6.5);
+    left: 0;
+    bottom: 0;
+    transition: width 0.2s ease-in-out;
+  }
+
+  &.router-link-active {
+    opacity: 1;
+
+    &:after {
+      width: 100%;
+    }
   }
 }
 

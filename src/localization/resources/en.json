@@ -69,5 +69,8 @@
   },
   "app-navigation-mobile": {
     "dashboard-link": "Dashboard"
+  },
+  "app-navbar": {
+    "dashboard-link": "Dashboard"
   }
 }
