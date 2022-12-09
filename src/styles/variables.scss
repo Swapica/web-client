@@ -51,7 +51,7 @@
   --app-padding-right: #{toRem(80)};
   --app-padding-left: #{toRem(80)};
 
-  @include respond-to(small) {
+  @include respond-to(tablet) {
     --app-padding-right: #{toRem(32)};
     --app-padding-left: #{toRem(32)};
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-navbar">
+  <div class="app-navbar" :class="{ 'app-navbar--mobile': isMobile }">
     <div class="app-navbar__content">
       <app-logo class="app-navbar__logo" />
 
@@ -10,6 +10,13 @@
       </div>
     </div>
     <div>
+      <app-button
+        v-if="!isMobile"
+        scheme="primary"
+        text="Connect"
+        class="app-navbar__action-btn"
+        @click="isMobileNavigationShown = true"
+      />
       <app-button
         v-if="isMobile"
         class="app-navbar__toogle-btn"
@@ -41,16 +48,15 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: toRem(29.5) var(--app-padding-right) toRem(29.5)
-    var(--app-padding-left);
+  padding: toRem(24) var(--app-padding-right) toRem(24) var(--app-padding-left);
   position: relative;
   transition: background-color 0.3s;
   width: 100vw;
 
   @include respond-to(tablet) {
     flex-wrap: wrap;
-    height: toRem(80);
-    padding: toRem(20) var(--app-padding-right) toRem(20)
+    height: toRem(88);
+    padding: toRem(24) var(--app-padding-right) toRem(24)
       var(--app-padding-left);
   }
 }
@@ -99,8 +105,13 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 }
 
 .app-navbar__logo {
-  width: toRem(95);
-  height: toRem(37);
+  width: toRem(40);
+  height: toRem(40);
+
+  .app-navbar--mobile & {
+    width: toRem(120);
+    height: toRem(23);
+  }
 }
 
 .app-navbar__toogle-btn {

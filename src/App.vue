@@ -35,7 +35,7 @@ init()
 .app__container {
   overflow: hidden;
   display: grid;
-  grid-template-rows: toRem(85) 1fr max-content;
+  grid-template-rows: toRem(96) 1fr max-content;
   flex: 1;
 
   @include respond-to(small) {

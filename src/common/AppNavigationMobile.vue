@@ -93,12 +93,12 @@ $z-index-negative: -1;
   width: 100vw;
   flex-wrap: wrap;
   height: toRem(80);
-  padding: toRem(20) var(--app-padding-right) toRem(20) var(--app-padding-left);
+  padding: toRem(24) var(--app-padding-right) toRem(24) var(--app-padding-left);
 }
 
 .app-navigation-mobile__logo {
-  width: toRem(95);
-  height: toRem(37);
+  width: toRem(120);
+  height: toRem(23);
 }
 
 .app-navigation-mobile__toogle-btn {
