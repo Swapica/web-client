@@ -45,7 +45,7 @@ init()
 
 .app__main {
   padding: toRem(24) var(--app-padding-right) toRem(24) var(--app-padding-left);
-  max-width: toRem(887);
+  max-width: calc(#{toRem(887)} + var(--app-padding-right) * 2);
   margin: 0 auto;
 }
 
