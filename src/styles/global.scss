@@ -17,8 +17,13 @@ body, #app {
   flex-direction: column;
   flex: 1;
   background: url('/backgrounds/app-bg.svg') repeat var(--background-primary-main);
+  background-position: toRem(15);
   background-attachment: fixed;
   color: var(--text-primary-main);
+
+  @include respond-to(tablet) {
+    background-position: 0 toRem(-1);
+  }
 }
 
 input,
