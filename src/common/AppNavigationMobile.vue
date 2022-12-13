@@ -21,6 +21,20 @@
               >
                 {{ $t('app-navigation-mobile.dashboard-link') }}
               </router-link>
+              <router-link
+                class="app-navigation-mobile__link"
+                :to="{ name: $routes.myOrders }"
+                @click="closeNav"
+              >
+                {{ $t('app-navigation-mobile.my-orders-link') }}
+              </router-link>
+              <router-link
+                class="app-navigation-mobile__link"
+                :to="{ name: $routes.claim }"
+                @click="closeNav"
+              >
+                {{ $t('app-navigation-mobile.claim-link') }}
+              </router-link>
             </div>
             <div class="app-navigation-mobile__actions">
               <app-button scheme="primary" :text="'Connect'" />
@@ -135,6 +149,7 @@ $z-index-negative: -1;
 .app-navigation-mobile__nav {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: toRem(24);
   flex: 1;
 }
@@ -145,6 +160,7 @@ $z-index-negative: -1;
   color: var(--text-primary-dark);
   opacity: 0.5;
   transition: color 0.3s;
+  text-align: center;
 
   &:hover {
     opacity: 1;

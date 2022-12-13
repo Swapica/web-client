@@ -14,8 +14,18 @@ const routes: Array<RouteRecordRaw> = [
     redirect: { name: ROUTE_NAMES.dashboard },
   },
   {
-    path: '/',
+    path: '/dashboard',
     name: ROUTE_NAMES.dashboard,
+    component: () => import('@/pages/UiKitPage.vue'),
+  },
+  {
+    path: '/my-orders',
+    name: ROUTE_NAMES.myOrders,
+    component: () => import('@/pages/UiKitPage.vue'),
+  },
+  {
+    path: '/claim',
+    name: ROUTE_NAMES.claim,
     component: () => import('@/pages/UiKitPage.vue'),
   },
 ]

@@ -7,6 +7,12 @@
         <router-link class="app-navbar__link" :to="{ name: $routes.dashboard }">
           {{ $t('app-navbar.dashboard-link') }}
         </router-link>
+        <router-link class="app-navbar__link" :to="{ name: $routes.myOrders }">
+          {{ $t('app-navbar.my-orders-link') }}
+        </router-link>
+        <router-link class="app-navbar__link" :to="{ name: $routes.claim }">
+          {{ $t('app-navbar.claim-link') }}
+        </router-link>
       </div>
     </div>
     <div>

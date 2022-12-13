@@ -43,10 +43,14 @@
     "submit-btn": "Submit"
   },
   "app-navigation-mobile": {
-    "dashboard-link": "Dashboard"
+    "dashboard-link": "Dashboard",
+    "my-orders-link": "My Orders",
+    "claim-link": "Claim"
   },
   "app-navbar": {
-    "dashboard-link": "Dashboard"
+    "dashboard-link": "Dashboard",
+    "my-orders-link": "My Orders",
+    "claim-link": "Claim"
   },
   "connect-wallet-btn": {
     "connect-provider-button": "Connect Wallet",
