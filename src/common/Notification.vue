@@ -93,6 +93,8 @@ export default defineComponent({
 
 .notification__title {
   color: var(--text-primary-dark);
+  font-size: toRem(16);
+  line-height: 1;
 }
 
 .notification__message {
