@@ -4,19 +4,13 @@
       <app-logo class="app-navbar__logo" />
 
       <div v-if="!isMobile" class="app-navbar__nav">
-        <router-link class="app-navbar__link" :to="{ name: $routes.uiKit }">
+        <router-link class="app-navbar__link" :to="{ name: $routes.dashboard }">
           {{ $t('app-navbar.dashboard-link') }}
         </router-link>
       </div>
     </div>
     <div>
-      <app-button
-        v-if="!isMobile"
-        scheme="primary"
-        text="Connect"
-        class="app-navbar__action-btn"
-        @click="isMobileNavigationShown = true"
-      />
+      <connect-wallet-btn v-if="!isMobile" />
       <app-button
         v-if="isMobile"
         class="app-navbar__toogle-btn"
@@ -32,7 +26,12 @@
 </template>
 
 <script lang="ts" setup>
-import { AppLogo, AppButton, AppNavigationMobile } from '@/common'
+import {
+  AppLogo,
+  AppButton,
+  AppNavigationMobile,
+  ConnectWalletBtn,
+} from '@/common'
 import { computed, ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'

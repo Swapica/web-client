@@ -47,6 +47,7 @@ export default defineComponent({
   margin-bottom: 0;
   padding: toRem(13) toRem(66) toRem(13) toRem(17);
   min-width: toRem(345);
+  max-width: toRem(345);
 
   &--success {
     background: url('/backgrounds/notification-success-bg.svg') no-repeat;

@@ -43,7 +43,7 @@ const throwBusError = () => {
         :icon-right="$icons.user"
         scheme="primary"
         :text="'router, border-rounded, icon'"
-        :route="{ name: $routes.uiKit }"
+        :route="{ name: $routes.dashboard }"
       />
       <app-button
         modification="border-circle"
@@ -188,7 +188,7 @@ const throwBusError = () => {
           :icon-right="$icons.user"
           scheme="primary"
           :text="'router'"
-          :route="{ name: $routes.uiKit }"
+          :route="{ name: $routes.dashboard }"
         />
       </no-data-message>
       <loader />

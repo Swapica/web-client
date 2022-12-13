@@ -16,7 +16,7 @@
             <div class="app-navigation-mobile__nav">
               <router-link
                 class="app-navigation-mobile__link"
-                :to="{ name: $routes.uiKit }"
+                :to="{ name: $routes.dashboard }"
                 @click="closeNav"
               >
                 {{ $t('app-navigation-mobile.dashboard-link') }}

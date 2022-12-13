@@ -61,7 +61,7 @@ import { computed, useAttrs } from 'vue'
 import { LocationAsRelativeRaw } from 'vue-router'
 import { ICON_NAMES } from '@/enums'
 
-type SCHEMES = 'primary' | 'secondary' | 'flat' | 'icon' | 'default'
+type SCHEMES = 'primary' | 'secondary' | 'flat' | 'icon' | 'raised' | 'default'
 
 const props = withDefaults(
   defineProps<{
@@ -190,6 +190,12 @@ const buttonClasses = computed(() =>
         width: 100%;
       }
     }
+  }
+
+  &--raised {
+    background: url('/backgrounds/button-raised-bg.svg') no-repeat;
+    padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+    background-size: 100% 100%;
   }
 }
 
