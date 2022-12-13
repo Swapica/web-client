@@ -3,35 +3,33 @@
     class="connect-wallet-btn"
     :text="connectProviderButtonText"
     :scheme="provider.isConnected ? 'raised' : 'primary'"
-    @focus="isHovered = true"
-    @blur="isHovered = false"
-    @click="connect"
-  >
-  </app-button>
+    @mouseover="isHovered = true"
+    @mouseleave="isHovered = false"
+    @click="handleBtn"
+  />
+
+  <connect-wallet-modal v-model:is-shown="isConnectWalletModalShown" />
 </template>
 <script lang="ts" setup>
-import { AppButton } from '@/common'
+import { AppButton, ConnectWalletModal } from '@/common'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import { cropAddress, ErrorHandler } from '@/helpers'
+import { cropAddress } from '@/helpers'
 import { useI18n } from 'vue-i18n'
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { t } = useI18n({ useScope: 'global' })
 
 const isHovered = ref(false)
+const isConnectWalletModalShown = ref(false)
 
-const connect = async () => {
-  try {
-    if (provider.value.isConnected) {
-      provider.value.disconnect()
-      return
-    }
-    await provider.value.connect()
-  } catch (e) {
-    ErrorHandler.process(e)
+const handleBtn = async () => {
+  if (provider.value.isConnected) {
+    provider.value.disconnect()
+    return
   }
+  isConnectWalletModalShown.value = true
 }
 
 const connectProviderButtonText = computed(() => {

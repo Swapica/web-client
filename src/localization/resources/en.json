@@ -55,5 +55,11 @@
   "connect-wallet-btn": {
     "connect-provider-button": "Connect Wallet",
     "disconnect-provider-button": "Disconnect"
+  },
+  "connect-wallet-modal": {
+    "title": "Connect Wallet",
+    "desc": "Connect your wallet to be able to match and create orders",
+    "wallet-connect": "WalletConnect",
+    "metamask": "MetaMask"
   }
 }

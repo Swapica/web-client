@@ -1,13 +1,11 @@
 <template>
-  <teleport to="#modal">
-    <transition name="modal">
-      <div v-show="isShown" class="modal">
-        <div class="modal__pane" ref="modalPane">
-          <slot :modal="{ close: closeModal }" />
-        </div>
+  <transition name="modal">
+    <div v-show="isShown" class="modal">
+      <div class="modal__pane" ref="modalPane">
+        <slot :modal="{ close: closeModal }" />
       </div>
-    </transition>
-  </teleport>
+    </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -67,6 +65,7 @@ export default defineComponent({
   width: 100vw;
   height: vh(100);
   background: rgba(var(--black-rgb), 0.12);
+  z-index: var(--z-index-modal);
 }
 
 .modal__pane {

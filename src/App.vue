@@ -6,7 +6,6 @@ import { ref } from 'vue'
 import { useNotifications } from '@/composables'
 import { config } from '@config'
 import { useWeb3ProvidersStore } from '@/store'
-import { PROVIDERS } from '@/enums'
 
 const web3Store = useWeb3ProvidersStore()
 const isAppInitialized = ref(false)
@@ -14,15 +13,6 @@ const init = async () => {
   try {
     useNotifications()
     await web3Store.detectProviders()
-
-    // temporary
-    const metamaskProvider = web3Store.providers.find(
-      provider => provider.name === PROVIDERS.metamask,
-    )
-
-    if (metamaskProvider) {
-      await web3Store.provider.init(metamaskProvider)
-    }
 
     document.title = config.APP_NAME
   } catch (error) {
