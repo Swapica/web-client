@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import { Icon } from '@/common'
-
 import { BN } from '@/utils'
-import { computed, getCurrentInstance, ref, useAttrs, useSlots } from 'vue'
+import { computed, getCurrentInstance, useAttrs, useSlots } from 'vue'
 
 type INPUT_TYPES = 'text' | 'number' | 'password'
 
@@ -36,10 +34,7 @@ const slots = useSlots()
 
 const uid = getCurrentInstance()?.uid
 
-const isPasswordShown = ref(false)
-
 const isNumberType = computed(() => props.type === 'number')
-const isPasswordType = computed(() => props.type === 'password')
 
 const min = computed((): string => (attrs?.min as string) || '')
 const max = computed((): string => (attrs?.max as string) || '')
@@ -67,9 +62,7 @@ const listeners = computed(() => ({
 const inputClasses = computed(() =>
   [
     ...(slots.nodeLeft ? ['input-field--node-left'] : []),
-    ...(slots.nodeRight || isPasswordType.value || props.errorMessage
-      ? ['input-field--node-right']
-      : []),
+    ...(slots.nodeRight ? ['input-field--node-right'] : []),
     ...(isDisabled.value ? ['input-field--disabled'] : []),
     ...(isReadonly.value ? ['input-field--readonly'] : []),
     ...(props.errorMessage ? ['input-field--error'] : []),
@@ -78,9 +71,6 @@ const inputClasses = computed(() =>
 )
 
 const inputType = computed(() => {
-  if (isPasswordType.value) {
-    return isPasswordShown.value ? 'text' : 'password'
-  }
   return 'text'
 })
 
@@ -110,6 +100,9 @@ const setHeightCSSVar = (element: HTMLElement) => {
 
 <template>
   <div class="input-field" :class="inputClasses">
+    <label v-if="label" :for="`input-field--${uid}`" class="input-field__label">
+      {{ label }}
+    </label>
     <div class="input-field__input-wrp">
       <div v-if="$slots.nodeLeft" class="input-field__node-left-wrp">
         <slot name="nodeLeft" />
@@ -119,45 +112,18 @@ const setHeightCSSVar = (element: HTMLElement) => {
         :id="`input-field--${uid}`"
         v-bind="$attrs"
         v-on="listeners"
+        autocomplete="off"
         :value="modelValue"
-        :placeholder="!label ? placeholder : ' '"
+        :placeholder="placeholder || ' '"
         :tabindex="isDisabled || isReadonly ? -1 : $attrs.tabindex"
         :type="inputType"
         :min="min"
         :max="max"
         :disabled="isDisabled || isReadonly"
       />
-      <span
-        class="input-field__focus-indicator"
-        v-if="scheme === 'secondary'"
-      />
-      <label
-        v-if="label"
-        :for="`input-field--${uid}`"
-        class="input-field__label"
-      >
-        {{ label }}
-      </label>
-      <div
-        v-if="$slots.nodeRight || isPasswordType || props.errorMessage"
-        class="input-field__node-right-wrp"
-      >
-        <button
-          v-if="isPasswordType"
-          type="button"
-          @click="isPasswordShown = !isPasswordShown"
-        >
-          <icon
-            class="input-field__password-icon"
-            :name="isPasswordShown ? $icons.eye : $icons.eyeOff"
-          />
-        </button>
-        <icon
-          v-else-if="props.errorMessage"
-          class="input-field__error-icon"
-          :name="$icons.exclamation"
-        />
-        <slot v-else name="nodeRight" />
+
+      <div v-if="$slots.nodeRight" class="input-field__node-right-wrp">
+        <slot name="nodeRight" />
       </div>
     </div>
     <transition
@@ -189,81 +155,17 @@ $z-index-side-nodes: 1;
 }
 
 .input-field__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   pointer-events: none;
-  position: absolute;
-  padding: toRem(4);
-  top: 0;
-  left: var(--field-padding-left);
-  font-size: toRem(12);
-  line-height: 1.3;
-  font-weight: 700;
-  background: var(--field-bg-primary);
-  transform: translateY(-50%);
 
   @include field-label;
 
   transition-property: all;
 
-  .input-field--secondary & {
-    padding: 0;
-  }
-
-  .input-field--secondary.input-field--node-left & {
-    left: calc(var(--field-padding-left) * 3);
-  }
-
-  .input-field__input:not(:placeholder-shown) ~ & {
-    top: 0;
-    color: var(--field-text);
-    border-color: var(--field-border-hover);
-
-    .input-field--secondary & {
-      transform: translateY(25%);
-    }
-  }
-
-  .input-field__input:not(:focus):placeholder-shown ~ & {
-    top: 50%;
-    color: var(--field-label);
-    font-size: toRem(16);
-    font-weight: 400;
-    line-height: 1.3;
-
-    .input-field--node-left & {
-      left: calc(var(--field-padding-left) * 3);
-    }
-  }
-
-  .input-field--error .input-field__input:not(:focus):placeholder-shown ~ & {
+  .select-field--error & {
     color: var(--field-error);
-  }
-
-  /* stylelint-disable-next-line */
-  .input-field__input:not([disabled]):focus ~ & {
-    color: var(--field-label-focus);
-    font-weight: 700;
-
-    .input-field--secondary & {
-      transform: translateY(25%);
-      color: var(--primary-main);
-    }
-  }
-
-  .input-field__input:not(:focus):placeholder-shown:-webkit-autofill ~ & {
-    top: 50%;
-    color: var(--field-label);
-    font-size: toRem(16);
-    font-weight: 400;
-    line-height: 1.3;
-
-    .input-field--node-left & {
-      left: calc(var(--field-padding-left) * 3);
-    }
-  }
-
-  /* stylelint-disable-next-line */
-  .input-field--secondary & {
-    background: var(--field-bg-secondary);
   }
 }
 
@@ -274,53 +176,11 @@ $z-index-side-nodes: 1;
 }
 
 .input-field__input {
-  padding: var(--field-padding);
-  background: var(--field-bg-primary);
-  box-shadow: inset 0 0 0 toRem(50) var(--field-bg-primary);
   border: none;
 
   @include field-text;
 
-  & + .input-field__focus-indicator {
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: toRem(-2);
-      left: 50%;
-      transform: translateX(-50%);
-      height: toRem(2);
-      width: 0;
-      background: var(--primary-main);
-      transition: width calc(var(--field-transition-duration) + 0.3s);
-
-      .input-field--error & {
-        background: var(--field-error);
-      }
-    }
-  }
-
-  .input-field--primary & {
-    @include field-border;
-  }
-
-  .input-field--secondary & {
-    position: relative;
-    background: var(--field-bg-secondary);
-    box-shadow: inset 0 0 0 toRem(50) var(--field-bg-secondary),
-      0 toRem(2) 0 0 var(--field-border);
-    padding: calc(var(--field-padding-top) + #{toRem(12)})
-      var(--field-padding-right) var(--field-padding-bottom)
-      var(--field-padding-left);
-  }
-
-  transition-property: all;
+  transition-property: color;
 
   &::-webkit-input-placeholder {
     @include field-placeholder;
@@ -354,52 +214,29 @@ $z-index-side-nodes: 1;
     }
   }
 
+  .input-field--primary & {
+    padding: toRem(5) toRem(8) toRem(4);
+    background: url('/backgrounds/input-bg.svg');
+    background-size: 100% 100%;
+  }
+
   .input-field--node-left & {
-    padding-left: calc(var(--field-padding-left) * 3);
+    padding-left: toRem(32);
   }
 
   .input-field--node-right & {
-    padding-right: calc(var(--field-padding-right) * 3);
-  }
-
-  &:not(:placeholder-shown) {
-    .input-field--secondary & {
-      & + .input-field__focus-indicator:after {
-        width: 100%;
-      }
-    }
+    padding-right: toRem(32);
   }
 
   .input-field--error.input-field--primary & {
-    border-color: var(--field-error);
-    box-shadow: inset 0 0 0 toRem(50) var(--field-bg-primary),
-      0 0 0 toRem(1) var(--field-error);
-  }
-
-  .input-field--error.input-field--secondary & {
-    border-color: var(--field-error);
-    box-shadow: inset 0 0 0 toRem(50) var(--field-bg-secondary),
-      0 toRem(2) 0 0 var(--field-error);
+    background: url('/backgrounds/input-error-bg.svg');
+    background-size: 100% 100%;
   }
 
   &:not([disabled]):focus {
     .input-field--primary & {
-      box-sizing: border-box;
-      box-shadow: inset 0 0 0 toRem(50) var(--field-bg-primary),
-        0 0 0 toRem(1) var(--field-border-focus);
-      border-color: var(--field-border-focus);
-    }
-
-    .input-field--secondary & {
-      & + .input-field__focus-indicator:after {
-        width: 100%;
-      }
-    }
-  }
-
-  &:not([disabled]):not(:focus):hover {
-    .input-field--primary & {
-      border-color: var(--field-border-hover);
+      background: url('/backgrounds/input-hover-bg.svg');
+      background-size: 100% 100%;
     }
   }
 }
@@ -408,7 +245,7 @@ $z-index-side-nodes: 1;
   overflow: hidden;
   position: absolute;
   top: 50%;
-  left: var(--field-padding-left);
+  left: toRem(8);
   transform: translateY(-50%);
   color: inherit;
   max-height: 100%;
@@ -418,21 +255,10 @@ $z-index-side-nodes: 1;
 .input-field__node-right-wrp {
   position: absolute;
   top: 50%;
-  right: var(--field-padding-right);
+  right: toRem(8);
   transform: translateY(-50%);
   color: inherit;
   z-index: $z-index-side-nodes;
-}
-
-.input-field__password-icon {
-  max-width: toRem(24);
-  max-height: toRem(24);
-}
-
-.input-field__error-icon {
-  max-width: toRem(24);
-  max-height: toRem(24);
-  color: var(--field-error);
 }
 
 .input-field__icon {

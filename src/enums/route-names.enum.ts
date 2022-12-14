@@ -1,4 +1,6 @@
 export enum ROUTE_NAMES {
   app = 'app',
-  uiKit = 'ui-kit',
+  dashboard = 'dashboard',
+  myOrders = 'my-orders',
+  claim = 'claim',
 }

@@ -18,7 +18,8 @@
       "vite/client",
       "@types/lodash-es",
       "jsona",
-      "vitest/globals"
+      "vitest/globals",
+      "body-scroll-lock",
     ],
     "paths": {
       "@/*": ["src/*"],

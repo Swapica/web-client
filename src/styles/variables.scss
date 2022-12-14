@@ -10,11 +10,6 @@
 
   --background-primary-light: #{$background-primary-light};
   --background-primary-main: #{$background-primary-main};
-  --background-primary-dark: #{$background-primary-dark};
-
-  --background-secondary-light: #{$background-secondary-light};
-  --background-secondary-main: #{$background-secondary-main};
-  --background-secondary-dark: #{$background-secondary-dark};
 
   /* status colors */
   --success-light: #{$success-light};
@@ -41,45 +36,24 @@
   --primary-main-rgb: #{$primary-main-rgb};
   --primary-dark-rgb: #{$primary-dark-rgb};
 
-  --secondary-light: #{$secondary-light};
-  --secondary-main: #{$secondary-main};
-  --secondary-dark: #{$secondary-dark};
-
-  --tertiary-light: #{$tertiary-light};
-  --tertiary-main: #{$tertiary-main};
-  --tertiary-dark: #{$tertiary-dark};
-
   /* typography colors */
   --text-primary-light: #{$text-primary-light};
   --text-primary-main: #{$text-primary-main};
   --text-primary-dark: #{$text-primary-dark};
 
-  --text-secondary-light: #{$text-secondary-light};
-  --text-secondary-main: #{$text-secondary-main};
-  --text-secondary-dark: #{$text-secondary-dark};
-
   --text-primary-invert-light: #{$text-primary-invert-light};
   --text-primary-invert-main: #{$text-primary-invert-main};
   --text-primary-invert-dark: #{$text-primary-invert-dark};
 
-  --text-secondary-invert-light: #{$text-secondary-invert-light};
-  --text-secondary-invert-main: #{$text-secondary-invert-main};
-  --text-secondary-invert-dark: #{$text-secondary-invert-dark};
-
-  /* border colors */
-  --border-primary-light: #{$border-primary-light};
-  --border-primary-main: #{$border-primary-main};
-  --border-primary-dark: #{$border-primary-dark};
-
   /* App variables */
   --app-txt: #{$text-primary-main};
-  --app-font-family: 'Roboto', 'Arial', sans-serif;
-  --app-padding-right: #{toRem(92)};
-  --app-padding-left: #{toRem(92)};
+  --app-font-family: 'Coffe Break', 'Arial', sans-serif;
+  --app-padding-right: #{toRem(80)};
+  --app-padding-left: #{toRem(80)};
 
-  @include respond-to(small) {
-    --app-padding-right: #{toRem(24)};
-    --app-padding-left: #{toRem(24)};
+  @include respond-to(tablet) {
+    --app-padding-right: #{toRem(32)};
+    --app-padding-left: #{toRem(32)};
   }
 
   /* --------------------------------------- */
@@ -87,40 +61,22 @@
   /* Field variables */
 
   /* --------------------------------------- */
-  --field-bg-primary: var(--background-primary-main);
-  --field-bg-secondary: var(--background-secondary-light);
 
   /* label */
-  --field-label: var(--text-primary-main);
-  --field-label-hover: var(--text-primary-main);
-  --field-label-focus: var(--text-primary-main);
+  --field-label: var(--text-primary-light);
   --field-label-font-size: #{toRem(14)};
-  --field-label-line-height: 1.4;
+  --field-label-line-height: 1;
 
   /* text */
-  --field-text: var(--text-primary-main);
-  --field-text-font-size: #{toRem(14)};
-  --field-text-line-height: 1.4;
-  --field-placeholder: #{rgba($text-primary-main, 0.35)};
-
-  /* border */
-  --field-border: var(--border-primary-main);
-  --field-border-hover: var(--primary-light);
-  --field-border-focus: var(--primary-main);
+  --field-text: var(--text-primary-dark);
+  --field-text-font-size: #{toRem(16)};
+  --field-text-line-height: 1;
+  --field-placeholder: var(--text-primary-light);
 
   /* transition duration */
   --field-transition-duration: 0.2s;
 
-  /* paddings */
-  --field-padding-top: #{toRem(14)};
-  --field-padding-right: #{toRem(16)};
-  --field-padding-bottom: #{toRem(18)};
-  --field-padding-left: #{toRem(14)};
-  --field-padding:
-    var(--field-padding-top)
-    var(--field-padding-right)
-    var(--field-padding-bottom)
-    var(--field-padding-left);
-
   --field-error: var(--error-main);
+
+  --z-index-modal: 100;
 }

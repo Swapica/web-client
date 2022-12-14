@@ -8,11 +8,12 @@ import {
   Icon,
   Collapse,
 } from '@/common'
-import { CheckboxField, InputField, SelectField, TextareaField } from '@/fields'
+import { InputField, SelectField } from '@/fields'
 import LoginForm from '@/forms/LoginForm.vue'
 
 import { reactive, ref } from 'vue'
 import { Bus } from '@/helpers'
+import { ICON_NAMES } from '@/enums'
 
 const isModalShown = ref<boolean>(false)
 const form = reactive({
@@ -33,211 +34,82 @@ const throwBusSuccess = () => {
 const throwBusError = () => {
   Bus.error('Error')
 }
-
-const throwBusWarning = () => {
-  Bus.warning('Warning')
-}
-
-const throwBusInfo = () => {
-  Bus.info('Info')
-}
 </script>
 
 <template>
   <div class="ui-kit-page">
     <section class="ui-kit-page__buttons">
       <app-button
-        :icon-right="$icons.academicCap"
+        :icon-right="$icons.user"
+        scheme="primary"
         :text="'router, border-rounded, icon'"
-        :route="{ name: $routes.uiKit }"
+        :route="{ name: $routes.dashboard }"
       />
       <app-button
         modification="border-circle"
+        scheme="secondary"
         :text="'href, border-circle'"
         href="https://www.youtube.com/"
         target="_blank"
       />
       <app-button
+        scheme="secondary"
         :text="'Alert, icon-first'"
-        :icon-left="$icons.academicCap"
+        :icon-left="$icons.user"
         @click="handleClick"
+        disabled
       />
-      <app-button size="large" :text="'large'" />
-      <app-button size="small" :text="'small'" />
       <app-button
-        color="success"
+        scheme="flat"
         :text="'Bus.success, success'"
         @click="throwBusSuccess"
       />
       <app-button
-        color="error"
+        scheme="flat"
         :text="'Bus.error, error'"
         @click="throwBusError"
       />
-      <app-button
-        color="warning"
-        :text="'Bus.warning, warning'"
-        @click="throwBusWarning"
-      />
-      <app-button color="info" :text="'Bus.info, info'" @click="throwBusInfo" />
-      <app-button
-        modification="border-circle"
-        color="success"
-        :text="'border-circle, success'"
-      />
-      <app-button
-        modification="border-rounded"
-        color="error"
-        :text="'border-rounded, error'"
-      />
-      <app-button color="warning" size="large" :text="'large, warning'" />
-      <app-button color="info" size="small" :text="'small, info'" />
-      <app-button scheme="flat" :text="'flat'" />
-      <app-button
-        scheme="flat"
-        modification="border-circle"
-        :text="'flat, border-circle'"
-      />
-      <app-button
-        scheme="flat"
-        :icon-left="$icons.academicCap"
-        :text="'flat'"
-      />
-      <app-button
-        scheme="flat"
-        size="large"
-        :text="'flat, large'"
-        :icon-right="$icons.academicCap"
-      />
-      <app-button scheme="flat" size="small" :text="'flat, small'" />
-      <app-button scheme="flat" color="success" :text="'flat, success'" />
-      <app-button scheme="flat" color="error" :text="'flat, error'" />
-      <app-button scheme="flat" color="warning" :text="'flat, warning'" />
-      <app-button scheme="flat" color="info" :text="'flat, info'" />
-      <app-button
-        scheme="flat"
-        modification="border-circle"
-        color="success"
-        :text="'flat, border-circle, success'"
-      />
-      <app-button
-        scheme="flat"
-        modification="border-circle"
-        color="error"
-        :text="'flat, border-circle, error'"
-      />
-      <app-button
-        scheme="flat"
-        modification="border-circle"
-        :icon-left="$icons.academicCap"
-        :text="'flat'"
-      />
-      <app-button
-        scheme="flat"
-        modification="border-circle"
-        color="warning"
-        size="large"
-        :text="'flat, border-circle, large, warning'"
-      />
-      <app-button
-        scheme="flat"
-        modification="border-circle"
-        size="small"
-        color="info"
-        :text="'flat, border-circle, small, info'"
-      />
-      <app-button
-        scheme="default"
-        modification="default"
-        size="default"
-        color="default"
-        :text="'default'"
-      />
-      <app-button :icon-right="$icons.academicCap" />
-      <app-button
-        :icon-right="$icons.academicCap"
-        modification="border-circle"
-      />
-      <app-button :icon-right="$icons.academicCap" size="large" />
-      <app-button :icon-right="$icons.academicCap" size="small" />
-      <app-button :icon-right="$icons.academicCap" color="success" />
-      <app-button :icon-right="$icons.academicCap" color="error" />
-      <app-button :icon-right="$icons.academicCap" color="warning" />
-      <app-button :icon-right="$icons.academicCap" color="info" />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" />
-      <app-button
-        scheme="flat"
-        :icon-right="$icons.academicCap"
-        modification="border-circle"
-      />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" size="large" />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" size="small" />
-      <app-button
-        scheme="flat"
-        :icon-right="$icons.academicCap"
-        color="success"
-      />
-      <app-button
-        scheme="flat"
-        :icon-right="$icons.academicCap"
-        color="error"
-      />
-      <app-button
-        scheme="flat"
-        :icon-right="$icons.academicCap"
-        color="warning"
-      />
-      <app-button scheme="flat" :icon-right="$icons.academicCap" color="info" />
-      <app-button
-        scheme="default"
-        :icon-right="$icons.academicCap"
-        color="default"
-      />
-      <app-button
-        scheme="default"
-        :icon-right="$icons.academicCap"
-        color="default"
-        size="default"
-      />
+
+      <app-button scheme="primary" disabled :text="'flat, small'" />
+      <app-button :icon-right="$icons.user" />
     </section>
     <section class="ui-kit-page__inputs">
       <select-field
         v-model="form.selectValue"
-        scheme="secondary"
+        scheme="primary"
         :label="'Label'"
         :placeholder="'select placeholder'"
-        :value-options="['1', '2', '3', '4', '5', '6', '7']"
+        :value-options="[
+          { label: 'Value 1', value: '1' },
+          { label: 'Value 2', value: '2' },
+          { label: 'Value 3', value: '3' },
+          { label: 'Value 4', value: '4' },
+          { label: 'Value 5', value: '5' },
+          { label: 'Value 6', value: '6' },
+          { label: 'Value 7', value: '7' },
+        ]"
         :error-message="form.selectValue === '7' ? 'error for number 7' : ''"
       />
       <select-field
         v-model="form.selectValue"
-        scheme="secondary"
+        scheme="primary"
         :label="'Custom select'"
         :placeholder="'select placeholder'"
+        :value-options="[
+          { label: 'Value 1', value: '1', icon: ICON_NAMES.arrowDown },
+          { label: 'Value 2', value: '2' },
+          { label: 'Value 3', value: '3' },
+          { label: 'Value 4', value: '4' },
+          { label: 'Value 5', value: '5' },
+          { label: 'Value 6', value: '6' },
+          { label: 'Value 7', value: '7' },
+        ]"
       >
-        <template #default="{ selectField }">
-          <app-button
-            v-for="(items, idx) in [
-              { label: 'Value 1', value: '1' },
-              { label: 'Value 2', value: '2' },
-              { label: 'Value 3', value: '3' },
-              { label: 'Value 4', value: '4' },
-              { label: 'Value 5', value: '5' },
-              { label: 'Value 6', value: '6' },
-              { label: 'Value 7', value: '7' },
-            ]"
-            :key="idx"
-            :text="items.label"
-            :style="{ width: '100%', hoverOpacity: '0.5' }"
-            scheme="default"
-            :icon-left="$icons.academicCap"
-            @click="selectField.select(items.value)"
-          />
-        </template>
       </select-field>
       <select-field
         v-model="form.selectValue"
-        scheme="secondary"
+        scheme="primary"
+        :error-message="$t('ui-kit-page.some-error-message')"
         :label="'Custom select'"
         :placeholder="'select placeholder'"
       >
@@ -250,7 +122,7 @@ const throwBusInfo = () => {
             }"
           >
             <icon
-              :name="$icons.academicCap"
+              :name="$icons.user"
               :style="{ width: '18px', height: '18px' }"
             />
             {{
@@ -281,236 +153,18 @@ const throwBusInfo = () => {
             :text="items.label"
             :style="{ width: '100%', hoverOpacity: '0.5' }"
             scheme="default"
-            :icon-left="$icons.academicCap"
+            :icon-left="$icons.user"
             @click="selectField.select(items.value)"
           />
         </template>
       </select-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      />
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        type="password"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      />
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="$t('ui-kit-page.some-label')"
-        :error-message="$t('ui-kit-page.some-error-message')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="$t('ui-kit-page.some-label')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-        disabled
-      />
-      <input-field
-        v-model="form.inputValue"
-        scheme="secondary"
-        :label="$t('ui-kit-page.some-label')"
-        :error-message="$t('ui-kit-page.some-error-message')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-        disabled
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-        disabled
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-        :error-message="form.textareaValue"
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-        :error-message="form.textareaValue ? 'form.textareaValue' : ''"
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        scheme="secondary"
-        :label="'textarea'"
-        :placeholder="'textarea'"
-        :error-message="form.textareaValue"
-        disabled
-      />
     </section>
     <section class="ui-kit-page__inputs">
-      <select-field
-        v-model="form.selectValue"
-        :label="'Label'"
-        :placeholder="'select placeholder'"
-        :value-options="['1', '2', '3', '4', '5', '6', '7']"
-        :error-message="form.selectValue === '7' ? 'error for number 7' : ''"
-      />
-      <select-field
-        v-model="form.selectValue"
-        :label="'Custom select'"
-        :placeholder="'select placeholder'"
-      >
-        <template #default="{ selectField }">
-          <app-button
-            v-for="(items, idx) in [
-              { label: 'Value 1', value: '1' },
-              { label: 'Value 2', value: '2' },
-              { label: 'Value 3', value: '3' },
-              { label: 'Value 4', value: '4' },
-              { label: 'Value 5', value: '5' },
-              { label: 'Value 6', value: '6' },
-              { label: 'Value 7', value: '7' },
-            ]"
-            :key="idx"
-            :text="items.label"
-            :style="{ width: '100%', hoverOpacity: '0.5' }"
-            scheme="default"
-            :icon-left="$icons.academicCap"
-            @click="selectField.select(items.value)"
-          />
-        </template>
-      </select-field>
-      <select-field
-        v-model="form.selectValue"
-        :label="'Custom select'"
-        :placeholder="'select placeholder'"
-      >
-        <template #head>
-          <div
-            :style="{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-            }"
-          >
-            <icon
-              :name="$icons.academicCap"
-              :style="{ width: '18px', height: '18px' }"
-            />
-            {{
-              [
-                { label: 'Value 1', value: '1' },
-                { label: 'Value 2', value: '2' },
-                { label: 'Value 3', value: '3' },
-                { label: 'Value 4', value: '4' },
-                { label: 'Value 5', value: '5' },
-                { label: 'Value 6', value: '6' },
-                { label: 'Value 7', value: '7' },
-              ].find(item => item.value === form.selectValue)?.label
-            }}
-          </div>
-        </template>
-        <template #default="{ selectField }">
-          <app-button
-            v-for="(items, idx) in [
-              { label: 'Value 1', value: '1' },
-              { label: 'Value 2', value: '2' },
-              { label: 'Value 3', value: '3' },
-              { label: 'Value 4', value: '4' },
-              { label: 'Value 5', value: '5' },
-              { label: 'Value 6', value: '6' },
-              { label: 'Value 7', value: '7' },
-            ]"
-            :key="idx"
-            :text="items.label"
-            :style="{ width: '100%', hoverOpacity: '0.5' }"
-            scheme="default"
-            :icon-left="$icons.academicCap"
-            @click="selectField.select(items.value)"
-          />
-        </template>
-      </select-field>
       <input-field
         v-model="form.inputValue"
         :label="'label'"
         :placeholder="$t('ui-kit-page.some-placeholder')"
       />
-      <input-field
-        v-model="form.inputValue"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-      </input-field>
-      <input-field
-        v-model="form.inputValue"
-        type="password"
-        :label="'label'"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      />
-      <input-field
-        v-model="form.inputValue"
-        :label="$t('ui-kit-page.some-label')"
-        :error-message="$t('ui-kit-page.some-error-message')"
-        :placeholder="$t('ui-kit-page.some-placeholder')"
-      >
-        <template #nodeLeft>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-        <template #nodeRight>
-          <icon class="ui-kit-page__input-icon" :name="$icons.academicCap" />
-        </template>
-      </input-field>
       <input-field
         v-model="form.inputValue"
         :label="$t('ui-kit-page.some-label')"
@@ -522,21 +176,6 @@ const throwBusInfo = () => {
         :label="$t('ui-kit-page.some-label')"
         :error-message="$t('ui-kit-page.some-error-message')"
         :placeholder="$t('ui-kit-page.some-placeholder')"
-        disabled
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-      />
-      <checkbox-field
-        v-model="form.chbValue"
-        :label="$t('ui-kit-page.some-label')"
-        disabled
-      />
-      <textarea-field
-        v-model="form.textareaValue"
-        :label="'textarea'"
-        :placeholder="'textarea'"
       />
     </section>
     <section class="ui-kit-page__form">
@@ -544,21 +183,20 @@ const throwBusInfo = () => {
     </section>
     <section class="ui-kit-page__common">
       <error-message :message="$t('ui-kit-page.loading-error-msg')" />
-      <no-data-message :message="$t('ui-kit-page.no-data-msg')" />
+      <no-data-message :message="$t('ui-kit-page.no-data-msg')">
+        <app-button
+          :icon-right="$icons.user"
+          scheme="primary"
+          :text="'router'"
+          :route="{ name: $routes.dashboard }"
+        />
+      </no-data-message>
       <loader />
-      <collapse class="ui-kit-page__collapse">
-        <template #head="{ collapse }">
-          <app-button
-            class="ui-kit-page__collapse-btn"
-            scheme="flat"
-            :text="$t('ui-kit-page.collapse-btn')"
-            @click="collapse.toggle"
-          >
-          </app-button>
-        </template>
-        <div class="ui-kit-page__collapse-body">
-          {{ $t('ui-kit-page.collapse-text') }}
-        </div>
+      <collapse
+        class="ui-kit-page__collapse"
+        title="ewfewfefew"
+        description="elkwfjelwkjfelkwjfklewjflkwjfl"
+      >
       </collapse>
       <app-button
         :text="$t('ui-kit-page.modal-btn')"
@@ -568,7 +206,7 @@ const throwBusInfo = () => {
         <template #default="{ modal }">
           <app-button
             @click="modal.close"
-            :icon-right="$icons.academicCap"
+            :icon-right="$icons.user"
             scheme="default"
             modification="default"
             size="default"
@@ -577,7 +215,20 @@ const throwBusInfo = () => {
         </template>
       </modal>
       <div class="ui-kit-page__icons">
-        <icon :name="$icons.academicCap" />
+        <icon :name="$icons.user" />
+        <icon :name="$icons.arrowDown" />
+        <icon :name="$icons.arrowLeft" />
+        <icon :name="$icons.arrowRight" />
+        <icon :name="$icons.arrowUp" />
+        <icon :name="$icons.arrowDownFilled" />
+        <icon :name="$icons.arrowLeftFilled" />
+        <icon :name="$icons.arrowRightFilled" />
+        <icon :name="$icons.arrowUpFilled" />
+        <icon :name="$icons.close" />
+        <icon :name="$icons.menu" />
+        <icon :name="$icons.link" />
+        <icon :name="$icons.check" />
+        <icon :name="$icons.error" />
       </div>
     </section>
   </div>

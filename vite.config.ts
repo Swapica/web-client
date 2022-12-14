@@ -2,7 +2,6 @@ import checker from 'vite-plugin-checker'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
 import { visualizer } from 'rollup-plugin-visualizer'
-import NodeGlobalsPolyfillPlugin from '@esbuild-plugins/node-globals-polyfill'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 import fs from 'fs'
@@ -13,13 +12,10 @@ const resolveApp = (relative: string) => path.resolve(appDirectory, relative)
 const root = path.resolve(__dirname, resolveApp('src'))
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
-  const isProduction = env.VITE_APP_ENVIRONMENT === 'production'
-  const isDevelopment = env.VITE_APP_ENVIRONMENT === 'development'
   const isAnalyze = env.VITE_APP_ENVIRONMENT === 'analyze'
-  const buildVersion = env.VITE_APP_BUILD_VERSION
 
   return {
     server: {
@@ -67,18 +63,6 @@ export default defineConfig(({ command, mode }) => {
         '@': `${root}/`,
         '@config': `${root}/config.ts`,
         '@static': `${root}/../static`,
-      },
-    },
-    optimizeDeps: {
-      esbuildOptions: {
-        define: {
-          global: 'globalThis',
-        },
-        plugins: [
-          NodeGlobalsPolyfillPlugin({
-            buffer: true,
-          }),
-        ],
       },
     },
   }

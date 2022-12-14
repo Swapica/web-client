@@ -1,26 +1,20 @@
 <template>
   <div class="no-data-message">
-    <icon class="no-data-message__icon" :name="iconName" />
     <span class="no-data-message__message">
       {{ message }}
     </span>
+    <template v-if="$slots.default">
+      <slot />
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { Icon } from '@/common'
-
-import { defineComponent, PropType } from 'vue'
-import { ICON_NAMES } from '@/enums'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'no-data-message',
-  components: { Icon },
   props: {
-    iconName: {
-      type: String as PropType<ICON_NAMES>,
-      default: ICON_NAMES.academicCap,
-    },
     message: {
       type: String,
       required: true,
@@ -33,16 +27,21 @@ export default defineComponent({
 .no-data-message {
   display: grid;
   place-items: center;
-  grid-gap: toRem(12);
-}
+  grid-gap: toRem(24);
 
-.no-data-message__icon {
-  color: var(--text-primary-light);
-  font-size: toRem(48);
+  @include respond-to(tablet) {
+    grid-gap: toRem(16);
+  }
 }
 
 .no-data-message__message {
-  color: var(--text-primary-light);
-  font-size: toRem(18);
+  color: var(--text-primary-dark);
+  font-size: toRem(32);
+  line-height: 1;
+  text-align: center;
+
+  @include respond-to(tablet) {
+    font-size: toRem(20);
+  }
 }
 </style>

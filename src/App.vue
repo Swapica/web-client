@@ -1,18 +1,54 @@
+<template>
+  <div v-if="isAppInitialized" class="app__container">
+    <template v-if="isAppLoadFailed">
+      <error-message class="app__error-msg" :message="$t('app.error-msg')" />
+    </template>
+    <template v-else>
+      <app-navbar class="app__navbar" />
+      <router-view v-slot="{ Component, route }">
+        <transition :name="route.meta.transition || 'fade'" mode="out-in">
+          <component class="app__main" :is="Component" />
+        </transition>
+      </router-view>
+    </template>
+  </div>
+  <template v-else>
+    <loader class="app__loader" />
+  </template>
+</template>
+
 <script lang="ts" setup>
-import { AppNavbar } from '@/common'
+import { AppNavbar, Loader, ErrorMessage } from '@/common'
 
 import { ErrorHandler } from '@/helpers/error-handler'
 import { ref } from 'vue'
 import { useNotifications } from '@/composables'
 import { config } from '@config'
+import { useWeb3ProvidersStore, useChainsStore } from '@/store'
+import { PROVIDERS } from './enums'
 
+const web3Store = useWeb3ProvidersStore()
+const chainStore = useChainsStore()
 const isAppInitialized = ref(false)
+const isAppLoadFailed = ref(false)
 const init = async () => {
   try {
     useNotifications()
+    await chainStore.loadChains()
+
+    await web3Store.detectProviders()
+
+    const provider = web3Store.providers.find(
+      provider => provider.name === PROVIDERS.metamask,
+    )
+
+    if (provider) {
+      await web3Store.provider.init(provider)
+    }
     document.title = config.APP_NAME
   } catch (error) {
-    ErrorHandler.process(error)
+    isAppLoadFailed.value = true
+    ErrorHandler.processWithoutFeedback(error)
   }
   isAppInitialized.value = true
 }
@@ -20,31 +56,29 @@ const init = async () => {
 init()
 </script>
 
-<template>
-  <div v-if="isAppInitialized" class="app__container">
-    <app-navbar class="app__navbar" />
-    <router-view v-slot="{ Component, route }">
-      <transition :name="route.meta.transition || 'fade'" mode="out-in">
-        <component class="app__main" :is="Component" />
-      </transition>
-    </router-view>
-  </div>
-</template>
-
 <style lang="scss" scoped>
 .app__container {
   overflow: hidden;
-  display: grid;
-  grid-template-rows: toRem(85) 1fr max-content;
+  display: flex;
+  flex-direction: column;
   flex: 1;
-
-  @include respond-to(small) {
-    grid-template-rows: max-content 1fr max-content;
-  }
 }
 
 .app__main {
-  padding: 0 var(--app-padding-right) 0 var(--app-padding-left);
+  padding: toRem(24) var(--app-padding-right) toRem(24) var(--app-padding-left);
+  max-width: calc(#{toRem(887)} + var(--app-padding-right) * 2);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.app__loader,
+.app__error-msg {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  flex-direction: column;
+  padding: toRem(24) var(--app-padding-right) toRem(24) var(--app-padding-left);
 }
 
 .fade-enter-active {

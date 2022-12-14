@@ -1,72 +1,3 @@
-<script lang="ts" setup>
-import { Icon } from '@/common'
-
-import { computed, useAttrs, useSlots } from 'vue'
-import { LocationAsRelativeRaw } from 'vue-router'
-import { ICON_NAMES } from '@/enums'
-
-type SCHEMES = 'filled' | 'flat' | 'default'
-
-type MODIFICATIONS = 'border-circle' | 'border-rounded' | 'default'
-
-type COLORS =
-  | 'primary'
-  | 'secondary'
-  | 'success'
-  | 'error'
-  | 'warning'
-  | 'info'
-  | 'default'
-
-type SIZES = 'large' | 'medium' | 'small' | 'x-small' | 'default'
-
-const props = withDefaults(
-  defineProps<{
-    text?: string
-    scheme?: SCHEMES
-    modification?: MODIFICATIONS
-    color?: COLORS
-    size?: SIZES
-    route?: LocationAsRelativeRaw
-    href?: string
-    iconLeft?: ICON_NAMES
-    iconRight?: ICON_NAMES
-  }>(),
-  {
-    text: '',
-    scheme: 'filled',
-    modification: 'border-rounded',
-    color: 'primary',
-    size: 'medium',
-    route: undefined,
-    href: '',
-    iconLeft: undefined,
-    iconRight: undefined,
-  },
-)
-
-const attrs = useAttrs()
-const slots = useSlots()
-
-const isDisabled = computed((): boolean =>
-  ['', 'disabled', true].includes(attrs.disabled as string | boolean),
-)
-
-const buttonClasses = computed(() =>
-  [
-    'app-button',
-    `app-button--${props.scheme}`,
-    `app-button--${props.modification}`,
-    `app-button--${props.color}`,
-    `app-button--${props.size}`,
-    ...(isDisabled.value ? ['app-button--disabled'] : []),
-    ...((props.iconLeft || props.iconRight) && !props.text && !slots.default
-      ? ['app-button--icon-only']
-      : []),
-  ].join(' '),
-)
-</script>
-
 <template>
   <template v-if="route">
     <router-link
@@ -123,9 +54,60 @@ const buttonClasses = computed(() =>
   </template>
 </template>
 
+<script lang="ts" setup>
+import { Icon } from '@/common'
+
+import { computed, useAttrs } from 'vue'
+import { LocationAsRelativeRaw } from 'vue-router'
+import { ICON_NAMES } from '@/enums'
+
+type SCHEMES =
+  | 'primary'
+  | 'secondary'
+  | 'flat'
+  | 'icon'
+  | 'raised'
+  | 'select'
+  | 'default'
+
+const props = withDefaults(
+  defineProps<{
+    text?: string
+    scheme?: SCHEMES
+    route?: LocationAsRelativeRaw
+    href?: string
+    iconLeft?: ICON_NAMES
+    iconRight?: ICON_NAMES
+  }>(),
+  {
+    text: '',
+    scheme: 'default',
+    route: undefined,
+    href: '',
+    iconLeft: undefined,
+    iconRight: undefined,
+  },
+)
+
+const attrs = useAttrs()
+
+const isDisabled = computed((): boolean =>
+  ['', 'disabled', true].includes(attrs.disabled as string | boolean),
+)
+
+const buttonClasses = computed(() =>
+  [
+    'app-button',
+    `app-button--${props.scheme}`,
+    ...(isDisabled.value ? ['app-button--disabled'] : []),
+  ].join(' '),
+)
+</script>
+
 <style lang="scss" scoped>
 .app-button {
   --button-transition-duration: 0.2s;
+  --button-icon-size: 1.2em;
 
   outline: 0;
   font-family: var(--app-font-family);
@@ -138,18 +120,15 @@ const buttonClasses = computed(() =>
   grid: auto / auto-flow max-content;
   align-items: center;
   justify-content: center;
-  transition: var(--button-transition-duration) ease-in;
-  transition-property: background-color, color;
+  transition: var(--button-transition-duration) ease-out;
+  transition-property: padding;
   text-decoration: none;
-  border: var(--app-button-border);
-  background-color: var(--app-button-bg);
-  color: var(--app-button-text);
+  color: var(--text-primary-dark);
 
   &:disabled,
   &--disabled {
     cursor: not-allowed;
     pointer-events: none;
-    filter: grayscale(0.75);
     opacity: 0.5;
   }
 
@@ -157,156 +136,91 @@ const buttonClasses = computed(() =>
   &:not([disabled]):focus {
     text-decoration: none;
     transition-timing-function: ease-out;
-    color: var(--app-button-text-hover);
-    background-color: var(--app-button-bg-hover);
-    border-color: var(--app-button-border-hover);
-    border: var(--app-button-border-hover);
   }
 
-  &:not([disabled]):active {
-    text-decoration: none;
-    transition-timing-function: ease-out;
-    background-color: var(--app-button-bg-active);
-    border: var(--app-button-border-active);
+  &--primary {
+    background: url('/backgrounds/button-primary-bg.svg') no-repeat;
+    padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
+    background-size: 100% 100%;
+
+    &:disabled,
+    &--disabled {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/backgrounds/button-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    &:not([disabled]):hover {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/backgrounds/button-primary-hover-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
   }
 
-  &--filled {
-    --app-button-filled-bg: var(--primary-main);
-    --app-button-filled-bg-hover: var(--primary-dark);
-    --app-button-filled-bg-active: var(--primary-dark);
+  &--secondary {
+    background: url('/backgrounds/button-secondary-bg.svg') no-repeat;
+    padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
+    background-size: 100% 100%;
 
-    --app-button-filled-text: var(--text-primary-invert-main);
-    --app-button-filled-text-hover: var(--text-primary-invert-main);
+    &:disabled,
+    &--disabled {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/backgrounds/button-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
 
-    --app-button-bg: var(--app-button-filled-bg);
-    --app-button-bg-hover: var(--app-button-filled-bg-hover);
-    --app-button-bg-active: var(--app-button-filled-bg-active);
-
-    --app-button-text: var(--app-button-filled-text);
-    --app-button-text-hover: var(--app-button-filled-text-hover);
-
-    --app-button-border: 0;
-    --app-button-border-hover: 0;
-    --app-button-border-active: 0;
+    &:not([disabled]):hover {
+      padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+      background: url('/backgrounds/button-secondary-hover-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
   }
 
   &--flat {
-    --app-button-flat-text: var(--text-primary-main);
-    --app-button-flat-text-hover: var(--text-primary-dark);
+    padding: toRem(11.5) toRem(12);
+    position: relative;
 
-    --app-button-flat-border: #{toRem(2)} solid var(--text-primary-light);
-    --app-button-flat-border-hover: var(--app-button-flat-border);
-    --app-button-flat-border-active: var(--app-button-flat-border);
+    &:after {
+      content: '';
+      position: absolute;
+      background: url('/backgrounds/button-underline.svg') no-repeat;
+      background-size: 100% 100%;
+      width: 0;
+      height: toRem(6.5);
+      left: 0;
+      bottom: 0;
+      transition: width 0.2s ease-in-out;
+    }
 
-    --app-button-bg: transparent;
-    --app-button-bg-hover: transparent;
-    --app-button-bg-active: transparent;
-
-    --app-button-text: var(--app-button-flat-text);
-    --app-button-text-hover: var(--app-button-flat-text-hover);
-
-    --app-button-border: var(--app-button-flat-border);
-    --app-button-border-hover: var(--app-button-flat-border-hover);
-    --app-button-border-active: var(--app-button-flat-border-active);
-  }
-
-  &--success {
-    --app-button-flat-text: var(--success-main);
-    --app-button-flat-text-hover: var(--success-dark);
-    --app-button-flat-border: #{toRem(2)} solid var(--success-main);
-    --app-button-flat-border-hover: #{toRem(2)} solid var(--success-dark);
-    --app-button-flat-border-active: #{toRem(2)} solid var(--success-dark);
-
-    --app-button-filled-bg: var(--success-main);
-    --app-button-filled-bg-hover: var(--success-dark);
-    --app-button-filled-bg-active: var(--success-dark);
-  }
-
-  &--error {
-    --app-button-flat-text: var(--error-main);
-    --app-button-flat-text-hover: var(--error-dark);
-    --app-button-flat-border: #{toRem(2)} solid var(--error-main);
-    --app-button-flat-border-hover: #{toRem(2)} solid var(--error-dark);
-    --app-button-flat-border-active: #{toRem(2)} solid var(--error-dark);
-
-    --app-button-filled-bg: var(--error-main);
-    --app-button-filled-bg-hover: var(--error-dark);
-    --app-button-filled-bg-active: var(--error-dark);
-  }
-
-  &--warning {
-    --app-button-flat-text: var(--warning-main);
-    --app-button-flat-text-hover: var(--warning-dark);
-    --app-button-flat-border: #{toRem(2)} solid var(--warning-dark);
-    --app-button-flat-border-hover: #{toRem(2)} solid var(--warning-dark);
-    --app-button-flat-border-active: #{toRem(2)} solid var(--warning-dark);
-
-    --app-button-filled-bg: var(--warning-main);
-    --app-button-filled-bg-hover: var(--warning-dark);
-    --app-button-filled-bg-active: var(--warning-dark);
-  }
-
-  &--info {
-    --app-button-flat-text: var(--info-main);
-    --app-button-flat-text-hover: var(--info-dark);
-    --app-button-flat-border: #{toRem(2)} solid var(--info-main);
-    --app-button-flat-border-hover: #{toRem(2)} solid var(--info-dark);
-    --app-button-flat-border-active: #{toRem(2)} solid var(--info-dark);
-
-    --app-button-filled-bg: var(--info-main);
-    --app-button-filled-bg-hover: var(--info-dark);
-    --app-button-filled-bg-active: var(--info-dark);
-  }
-
-  &--border-circle {
-    border-radius: toRem(50);
-  }
-
-  &--border-rounded {
-    border-radius: toRem(4);
-  }
-
-  &--large {
-    padding: toRem(18) toRem(36);
-    grid-gap: toRem(10);
-    font-size: toRem(14);
-    line-height: 1.45;
-    font-weight: 500;
-
-    &.app-button--icon-only {
-      padding: toRem(18);
+    &:not([disabled]):hover {
+      &:after {
+        width: 100%;
+      }
     }
   }
 
-  &--medium {
-    padding: toRem(12) toRem(24);
-    font-size: toRem(12);
-    line-height: 1.3;
-    font-weight: 500;
-    grid-gap: toRem(10);
-
-    &.app-button--icon-only {
-      padding: toRem(12);
-    }
+  &--raised {
+    background: url('/backgrounds/button-raised-bg.svg') no-repeat;
+    padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
+    background-size: 100% 100%;
   }
 
-  &--small {
-    padding: toRem(8) toRem(16);
-    font-size: toRem(12);
-    line-height: 1.45;
-    font-weight: 500;
-    grid-gap: toRem(10);
+  &--select {
+    background: url('/backgrounds/button-select-bg.svg') no-repeat;
+    padding: toRem(6) toRem(16);
+    background-size: 100% 100%;
 
-    &.app-button--icon-only {
-      padding: toRem(8);
+    &:not([disabled]):hover {
+      background: url('/backgrounds/button-select-hover-bg.svg') no-repeat;
+      background-size: 100% 100%;
     }
   }
 }
 
 .app-button__icon-left,
 .app-button__icon-right {
-  height: 1.2em;
-  width: 1.2em;
+  height: var(--button-icon-size);
+  width: var(--button-icon-size);
 }
 
 .app-button__text {

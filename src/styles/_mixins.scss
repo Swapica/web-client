@@ -37,10 +37,13 @@ $media-breakpoints: (
 @mixin field-text {
   font-size: var(--field-text-font-size);
   line-height: var(--field-text-line-height);
-  -webkit-text-fill-color: var(--field-text-font-size);
-  color: var(--field-text-font-size);
+  -webkit-text-fill-color: var(--field-text);
+  color: var(--field-text);
   transition: color var(--field-transition-duration) ease;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @mixin field-label {
@@ -49,11 +52,6 @@ $media-breakpoints: (
   color: var(--field-label);
   transition: color var(--field-transition-duration) ease;
   margin-bottom: toRem(8);
-}
-
-@mixin field-border {
-  border: toRem(1) solid var(--field-border);
-  border-radius: toRem(4);
 }
 
 @mixin field-placeholder {
@@ -74,4 +72,21 @@ $media-breakpoints: (
   transition: var(--field-transition-duration) ease;
   transition-property: opacity, color, font-size, transform;
   margin-top: toRem(4);
+}
+
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: toRem(1);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--primary-light);
+    margin-top: toRem(3);
+    margin-bottom: toRem(7);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-main);
+    border-radius: toRem(50);
+  }
 }

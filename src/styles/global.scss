@@ -2,7 +2,6 @@
 /* stylelint-disable unit-disallowed-list */
 html {
   font-family: var(--app-font-family);
-  overflow: auto !important;
   -webkit-overflow-scrolling: touch !important;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -17,8 +16,14 @@ body, #app {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background-color: var(--background-primary-main);
+  background: url('/backgrounds/app-bg.svg') repeat var(--background-primary-main);
+  background-position: toRem(15);
+  background-attachment: fixed;
   color: var(--text-primary-main);
+
+  @include respond-to(tablet) {
+    background-position: 0 toRem(-1);
+  }
 }
 
 input,
@@ -50,10 +55,10 @@ button {
   user-select: none;
   background: transparent;
   font-family: var(--app-font-family);
-  font-size: toRem(16);
-  color: var(--text-primary-main);
-  line-height: 1.5;
-  font-weight: 600;
+  font-size: toRem(18);
+  color: var(--text-primary-dark);
+  line-height: 1;
+  font-weight: 400;
   outline: 0;
   margin: 0;
   padding: 0;
@@ -81,9 +86,7 @@ ul {
 }
 
 p {
-  line-height: 2;
-
-  @include respond-to(tablet) { line-height: 1.6; }
+  line-height: 1.2;
 }
 
 h1,
@@ -91,26 +94,38 @@ h2,
 h3,
 h4,
 h5 {
-  color: var(--text-primary-main);
+  color: var(--text-primary-dark);
   font-family: var(--app-font-family);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1;
 }
 
 h1 {
-  font-size: toRem(24);
+  font-size: toRem(60);
+
+  @include respond-to(tablet) {
+    font-size: toRem(48);
+  }
 }
 
 h2 {
-  font-size: toRem(24);
+  font-size: toRem(40);
+
+  @include respond-to(tablet) {
+    font-size: toRem(32);
+  }
 }
 
 h3 {
-  font-size: toRem(18);
+  font-size: toRem(32);
 }
 
 h4 {
-  font-size: toRem(16);
+  font-size: toRem(28);
+
+  @include respond-to(tablet) {
+    font-size: toRem(24);
+  }
 }
 
 h5 {
@@ -119,8 +134,8 @@ h5 {
 
 a {
   font-size: toRem(16);
-  line-height: 1.25;
-  font-weight: 600;
+  line-height: 1;
+  font-weight: 400;
   color: var(--primary-main);
   text-decoration: none;
   outline: none;
