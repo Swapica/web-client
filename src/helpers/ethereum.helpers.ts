@@ -23,12 +23,22 @@ export async function requestAddEthChain(
   chainId: number,
   chainName: string,
   chainRpcUrl: string,
+  currencySymbol: string,
+  currencyName: string,
+  currencyDecimal: number,
+  explorerUrl: string,
 ) {
   await provider.send('wallet_addEthereumChain', [
     {
       chainId: ethers.utils.hexValue(chainId),
       chainName,
       rpcUrls: [chainRpcUrl],
+      nativeCurrency: {
+        name: currencyName,
+        symbol: currencySymbol,
+        decimals: currencyDecimal,
+      },
+      blockExplorerUrls: [explorerUrl],
     },
   ])
 }

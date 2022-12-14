@@ -90,6 +90,10 @@ export const useCoinbase = (provider: ProviderInstance): ProviderWrapper => {
     chainId: ChainId,
     chainName: string,
     chainRpcUrl: string,
+    currencySymbol: string,
+    currencyName: string,
+    currencyDecimal: number,
+    explorerUrl: string,
   ) => {
     try {
       await requestAddEthChain(
@@ -97,6 +101,10 @@ export const useCoinbase = (provider: ProviderInstance): ProviderWrapper => {
         Number(chainId),
         chainName,
         chainRpcUrl,
+        currencySymbol,
+        currencyName,
+        currencyDecimal,
+        explorerUrl,
       )
     } catch (error) {
       handleEthError(error as EthProviderRpcError)

@@ -66,6 +66,10 @@ export interface ProviderWrapper {
     chainId: ChainId,
     chainName: string,
     chainRpcUrl: string,
+    currencySymbol: string,
+    currencyName: string,
+    currencyDecimal: number,
+    explorerUrl: string,
   ) => Promise<void>
   signAndSendTransaction: (
     txRequestBody: TxRequestBody,

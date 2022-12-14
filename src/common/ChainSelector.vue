@@ -55,10 +55,10 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { WINDOW_BREAKPOINTS } from '@/enums'
+import { EIP1474, WINDOW_BREAKPOINTS } from '@/enums'
 import { Dropdown, Icon } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { ChainResposne } from '@/types'
+import { ChainResposne, EthProviderRpcError } from '@/types'
 import { storeToRefs } from 'pinia'
 import { ErrorHandler } from '@/helpers'
 
@@ -79,10 +79,27 @@ const switchChain = async (
       await provider.value.switchChain(chain.chain_params.chain_id)
     }
     chainStore.selectChain(chain.chain_params.chain_id)
-    dropdown.close()
-  } catch (e) {
-    ErrorHandler.process(e)
+  } catch (error) {
+    const e = error as EthProviderRpcError
+    if (e?.code === 4902 || e?.code === EIP1474.internalError) {
+      try {
+        await provider.value.addChain(
+          chain.chain_params.chain_id,
+          chain.name,
+          chain.chain_params.rpc,
+          chain.chain_params.native_symbol + ' ',
+          chain.chain_params.native_symbol,
+          chain.chain_params.native_decimals,
+          chain.chain_params.explorer_url,
+        )
+      } catch (e) {
+        ErrorHandler.process(e)
+      }
+    } else {
+      ErrorHandler.process(e)
+    }
   }
+  dropdown.close()
 }
 
 if (!provider.value.currentProvider) {
