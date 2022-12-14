@@ -15,7 +15,8 @@
         </router-link>
       </div>
     </div>
-    <div>
+    <div class="app-navbar__actions">
+      <chain-selector />
       <connect-wallet-btn v-if="!isMobile" />
       <app-button
         v-if="isMobile"
@@ -37,6 +38,7 @@ import {
   AppButton,
   AppNavigationMobile,
   ConnectWalletBtn,
+  ChainSelector,
 } from '@/common'
 import { computed, ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
@@ -121,5 +123,15 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 
 .app-navbar__toogle-btn {
   --button-icon-size: #{toRem(40)};
+}
+
+.app-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: toRem(32);
+
+  @include respond-to(tablet) {
+    gap: toRem(8);
+  }
 }
 </style>

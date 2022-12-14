@@ -20,7 +20,7 @@ type ChainParams = {
   rpc: string
 }
 
-export type Chain = JsonApiRecordBase<'chain'> & {
+export type ChainResposne = JsonApiRecordBase<'chain'> & {
   chain_type: string
   icon: string
   name: string
