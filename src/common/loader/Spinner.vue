@@ -24,9 +24,8 @@ export default defineComponent({
   height: toRem(64);
   margin: toRem(8);
   border-radius: 50%;
-  border: toRem(6) solid var(--border-primary-main);
-  border-color: var(--border-primary-main) transparent
-    var(--border-primary-main) transparent;
+  border: toRem(6) solid var(--primary-main);
+  border-color: var(--primary-main) transparent var(--primary-main) transparent;
   animation: spinner 1.2s linear infinite;
 }
 

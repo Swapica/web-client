@@ -61,5 +61,8 @@
     "desc": "Connect your wallet to be able to match and create orders",
     "wallet-connect": "WalletConnect",
     "metamask": "MetaMask"
+  },
+  "app": {
+    "error-msg": "An error occurred. Please try again later or contact the owner"
   }
 }
