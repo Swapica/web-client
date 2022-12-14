@@ -19,6 +19,7 @@ import {
 } from '@/types'
 import { Deferrable } from '@ethersproject/properties'
 import { TransactionRequest } from '@ethersproject/abstract-provider'
+import { useChainsStore } from '@/store'
 
 export const useMetamask = (provider: ProviderInstance): ProviderWrapper => {
   const chainId = ref<ChainId>('')
@@ -36,10 +37,12 @@ export const useMetamask = (provider: ProviderInstance): ProviderWrapper => {
   const isConnected = computed(() =>
     Boolean(selectedAddress.value && chainId.value),
   )
+  const chainStore = useChainsStore()
 
   const init = async () => {
     _setListeners()
     await _updateProviderState()
+    chainStore.selectChain(chainId.value as number)
   }
 
   const _setListeners = () => {
@@ -50,8 +53,9 @@ export const useMetamask = (provider: ProviderInstance): ProviderWrapper => {
     tempProviderStub.on('accountsChanged', () => {
       _updateProviderState()
     })
-    tempProviderStub.on('chainChanged', () => {
-      _updateProviderState()
+    tempProviderStub.on('chainChanged', async () => {
+      await _updateProviderState()
+      chainStore.selectChain(chainId.value as number)
     })
     tempProviderStub.on('disconnect', () => {
       selectedAddress.value = ''

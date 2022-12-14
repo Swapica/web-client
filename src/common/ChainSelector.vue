@@ -57,19 +57,36 @@ import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { Dropdown, Icon } from '@/common'
-import { useChainsStore } from '@/store'
+import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { ChainResposne } from '@/types'
+import { storeToRefs } from 'pinia'
+import { ErrorHandler } from '@/helpers'
 
 const chainStore = useChainsStore()
+const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const { width: windowWidth } = useWindowSize()
 const isMediumWidth = computed(
   () => windowWidth.value < WINDOW_BREAKPOINTS.xMedium,
 )
 
-const switchChain = (chain: ChainResposne, dropdown: { close: () => void }) => {
-  chainStore.selectChain(chain.chain_params.chain_id)
-  dropdown.close()
+const switchChain = async (
+  chain: ChainResposne,
+  dropdown: { close: () => void },
+) => {
+  try {
+    if (provider.value.isConnected) {
+      await provider.value.switchChain(chain.chain_params.chain_id)
+    }
+    chainStore.selectChain(chain.chain_params.chain_id)
+    dropdown.close()
+  } catch (e) {
+    ErrorHandler.process(e)
+  }
+}
+
+if (!provider.value.currentProvider) {
+  chainStore.selectChain(chainStore.chains[0].chain_params.chain_id)
 }
 </script>
 <style lang="scss" scoped>

@@ -34,7 +34,10 @@ const isAppLoadFailed = ref(false)
 const init = async () => {
   try {
     useNotifications()
+    await chainStore.loadChains()
+
     await web3Store.detectProviders()
+
     const provider = web3Store.providers.find(
       provider => provider.name === PROVIDERS.metamask,
     )
@@ -42,8 +45,6 @@ const init = async () => {
     if (provider) {
       await web3Store.provider.init(provider)
     }
-    await chainStore.loadChains()
-
     document.title = config.APP_NAME
   } catch (error) {
     isAppLoadFailed.value = true
