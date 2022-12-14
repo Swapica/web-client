@@ -83,6 +83,9 @@ export class ErrorHandler {
         case errors.ProviderWrapperMethodNotFoundError:
           errorMessage = t('errors.provider-wrapper-method-not-found')
           break
+        case errors.MetamaskProviderNotFound:
+          errorMessage = t('errors.metamask-provider-not-found')
+          break
         default: {
           errorMessage = t('errors.default')
         }

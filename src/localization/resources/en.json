@@ -22,7 +22,8 @@
     "provider-method-not-supported": "Method is not implemented non-standard",
     "provider-limit-exceeded": "Request exceeds defined limit non-standard",
     "provider-json-rpc-version-not-supported": "Version of JSON-RPC protocol is not supported non-standard",
-    "provider-wrapper-method-not-found": "provider not exist or hasn't this method"
+    "provider-wrapper-method-not-found": "provider not exist or hasn't this method",
+    "metamask-provider-not-found": "Metamask provider not found"
   },
   "notification": {
     "default-title-success": "Action Compeleted",
@@ -53,8 +54,7 @@
     "claim-link": "Claim"
   },
   "connect-wallet-btn": {
-    "connect-provider-button": "Connect Wallet",
-    "disconnect-provider-button": "Disconnect"
+    "connect-provider-button": "Connect Wallet"
   },
   "connect-wallet-modal": {
     "title": "Connect Wallet",

@@ -37,7 +37,7 @@
               </router-link>
             </div>
             <div class="app-navigation-mobile__actions">
-              <app-button scheme="primary" :text="'Connect'" />
+              <connect-wallet-btn />
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { nextTick, watch, ref } from 'vue'
-import { AppButton, AppLogo } from '@/common'
+import { AppButton, AppLogo, ConnectWalletBtn } from '@/common'
 
 const emit = defineEmits<{
   (e: 'close-nav'): void

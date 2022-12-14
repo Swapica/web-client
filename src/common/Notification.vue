@@ -66,11 +66,21 @@ export default defineComponent({
   &--info {
     background: var(--primary-main);
   }
+
+  @include respond-to(tablet) {
+    margin-left: auto;
+  }
 }
 
 .Vue-Toastification__container.top-right {
   padding: 0;
   right: toRem(-50);
+  top: toRem(96);
+
+  @include respond-to(tablet) {
+    top: toRem(12);
+    width: auto;
+  }
 }
 
 .notification {
