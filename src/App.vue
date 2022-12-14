@@ -5,10 +5,11 @@ import { ErrorHandler } from '@/helpers/error-handler'
 import { ref } from 'vue'
 import { useNotifications } from '@/composables'
 import { config } from '@config'
-import { useWeb3ProvidersStore } from '@/store'
+import { useWeb3ProvidersStore, useChainsStore } from '@/store'
 import { PROVIDERS } from './enums'
 
 const web3Store = useWeb3ProvidersStore()
+const chainStore = useChainsStore()
 const isAppInitialized = ref(false)
 const init = async () => {
   try {
@@ -21,6 +22,7 @@ const init = async () => {
     if (provider) {
       await web3Store.provider.init(provider)
     }
+    await chainStore.loadChains()
 
     document.title = config.APP_NAME
   } catch (error) {
