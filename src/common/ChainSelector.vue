@@ -34,6 +34,10 @@
               :key="item.id"
               type="button"
               class="chain-selector__dropdown-item"
+              :class="{
+                'chain-selector__dropdown-item--selected':
+                  item.id === chainStore.selectedChain?.id,
+              }"
               @click="switchChain(item, dropdown)"
             >
               <img
@@ -130,6 +134,7 @@ if (!provider.value.currentProvider) {
   align-items: center;
   transition: color 0.3s;
 
+  &--selected,
   &:hover {
     color: var(--text-primary-dark);
   }
