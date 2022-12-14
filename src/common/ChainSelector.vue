@@ -87,7 +87,7 @@ const switchChain = async (
           chain.chain_params.chain_id,
           chain.name,
           chain.chain_params.rpc,
-          chain.chain_params.native_symbol + ' ',
+          chain.chain_params.native_symbol,
           chain.chain_params.native_symbol,
           chain.chain_params.native_decimals,
           chain.chain_params.explorer_url,
