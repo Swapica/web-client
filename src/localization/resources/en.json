@@ -67,5 +67,10 @@
   },
   "chain-selector": {
     "unsupported-chain": "Unsupported"
+  },
+  "created-orders": {
+    "title": "Created Orders",
+    "create-btn": "Create Order",
+    "connect-wallet-msg": "Connect wallet to see what u have here"
   }
 }

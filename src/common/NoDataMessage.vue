@@ -25,12 +25,15 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .no-data-message {
-  display: grid;
-  place-items: center;
-  grid-gap: toRem(24);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: toRem(24);
+  width: 100%;
 
   @include respond-to(tablet) {
-    grid-gap: toRem(16);
+    gap: toRem(16);
   }
 }
 
