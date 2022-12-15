@@ -19,7 +19,10 @@
       </template>
     </template>
     <template v-else>
-      <loader />
+      <loader
+        class="order-list__loader"
+        :message="$t('order-list.loading-msg')"
+      />
     </template>
   </div>
 </template>
@@ -28,7 +31,7 @@
 import { ErrorMessage, Loader } from '@/common'
 import { ref } from 'vue'
 const isLoadFailed = ref(false)
-const isLoaded = ref(true)
+const isLoaded = ref(false)
 const list = ref([])
 </script>
 
@@ -39,7 +42,16 @@ const list = ref([])
 }
 
 .order-list__error-msg {
-  max-width: toRem(417);
+  max-width: toRem(353);
+  margin: 0 auto;
+
+  @include respond-to(small) {
+    max-width: toRem(245);
+  }
+}
+
+.order-list__loader {
+  max-width: toRem(353);
   margin: 0 auto;
 
   @include respond-to(small) {

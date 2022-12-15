@@ -75,6 +75,7 @@
     "no-data-msg": "U have no orders created, let’s create your first order"
   },
   "order-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later"
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
+    "loading-msg": "Hold a sec, we’re trying to solve it."
   }
 }
