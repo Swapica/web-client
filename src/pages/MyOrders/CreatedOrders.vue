@@ -11,7 +11,20 @@
     />
     <div class="created-orders__content">
       <template v-if="provider.isConnected">
-        <!-- connected -->
+        <order-list>
+          <template #noDataMsg>
+            <no-data-message
+              class="created-orders__no-data-block"
+              :message="$t('created-orders.no-data-msg')"
+            >
+              <app-button
+                class="created-orders__no-data-create-btn"
+                scheme="primary"
+                :text="$t('created-orders.create-btn')"
+              />
+            </no-data-message>
+          </template>
+        </order-list>
       </template>
       <template v-else>
         <no-data-message
@@ -26,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AppButton, ConnectWalletBtn, NoDataMessage } from '@/common'
+import { AppButton, ConnectWalletBtn, NoDataMessage, OrderList } from '@/common'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
@@ -91,6 +104,19 @@ const { provider } = storeToRefs(useWeb3ProvidersStore())
   @include respond-to(xsmall) {
     max-width: toRem(232);
     margin: 0 auto;
+  }
+}
+
+.created-orders__no-data-create-btn {
+  width: toRem(181);
+}
+
+.created-orders__no-data-block {
+  max-width: toRem(417);
+  margin: 0 auto;
+
+  @include respond-to(small) {
+    max-width: toRem(245);
   }
 }
 </style>

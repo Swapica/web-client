@@ -63,7 +63,7 @@
     "metamask": "MetaMask"
   },
   "app": {
-    "error-msg": "An error occurred. Please try again later or contact the owner"
+    "error-msg": "Ooops, something went wrong, please reload page or try again later"
   },
   "chain-selector": {
     "unsupported-chain": "Unsupported"
@@ -71,6 +71,10 @@
   "created-orders": {
     "title": "Created Orders",
     "create-btn": "Create Order",
-    "connect-wallet-msg": "Connect wallet to see what u have here"
+    "connect-wallet-msg": "Connect wallet to see what u have here",
+    "no-data-msg": "U have no orders created, let’s create your first order"
+  },
+  "order-list": {
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later"
   }
 }
