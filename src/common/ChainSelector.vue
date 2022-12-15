@@ -3,16 +3,30 @@
     <dropdown class="chain-selector__dropdown">
       <template #head="{ dropdown }">
         <button class="chain-selector__header" @click="dropdown.toggle">
-          <img
-            class="chain-selector__dropdown-header-icon"
-            :src="chainStore.selectedChain?.icon"
-            :alt="chainStore.selectedChain?.name"
-          />
+          <template v-if="chainStore.selectedChain?.icon">
+            <img
+              class="chain-selector__dropdown-header-icon"
+              :src="chainStore.selectedChain?.icon"
+              :alt="chainStore.selectedChain?.name"
+            />
+          </template>
+          <template v-else>
+            <icon
+              class="chain-selector__dropdown-header-icon"
+              :name="$icons.user"
+            />
+          </template>
+
           <span
             v-if="!isMediumWidth"
             class="chain-selector__dropdown-header-text"
           >
-            {{ chainStore.selectedChain?.name || 'uknow' }}
+            <template v-if="chainStore.selectedChain?.name">
+              {{ chainStore.selectedChain?.name }}
+            </template>
+            <template v-else>
+              {{ $t('chain-selector.unsupported-chain') }}
+            </template>
           </span>
           <icon
             :class="[
@@ -175,6 +189,8 @@ if (!provider.value.currentProvider) {
 .chain-selector__dropdown-header-icon {
   width: toRem(24);
   height: toRem(24);
+  min-width: toRem(24);
+  min-height: toRem(24);
 }
 
 .chain-selector__header {

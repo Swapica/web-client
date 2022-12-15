@@ -64,5 +64,8 @@
   },
   "app": {
     "error-msg": "An error occurred. Please try again later or contact the owner"
+  },
+  "chain-selector": {
+    "unsupported-chain": "Unsupported"
   }
 }
