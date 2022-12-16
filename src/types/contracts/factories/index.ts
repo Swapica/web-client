@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { Erc20__factory } from "./Erc20__factory";
+export { Swapica__factory } from "./Swapica__factory";

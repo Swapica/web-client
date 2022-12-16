@@ -33,6 +33,12 @@ import { ref } from 'vue'
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref([])
+
+const loadList = () => {
+  isLoaded.value = true
+}
+
+loadList()
 </script>
 
 <style lang="scss" scoped>
