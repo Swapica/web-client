@@ -9,7 +9,7 @@
       </template>
       <template v-else>
         <template v-if="list.length">
-          <!-- data -->
+          <order-list-table />
         </template>
         <template v-else>
           <template v-if="$slots.noDataMsg">
@@ -34,22 +34,23 @@ import { ref } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
 import { ErrorHandler } from '@/helpers'
 import { storeToRefs } from 'pinia'
+import OrderListTable from '@/common/order-list/OrderListTable.vue'
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const swapicaContract = useSwapica(provider.value as unknown as UseProvider)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref([])
+const list = ref([{}])
 
 const loadList = async () => {
   try {
     swapicaContract.init('0x338662C6e113aD9CfA4E2e755931643D8Cf1884B')
     await swapicaContract.getOrders()
-    isLoaded.value = true
   } catch (e) {
     ErrorHandler.processWithoutFeedback(e)
   }
+  isLoaded.value = true
 }
 
 loadList()
