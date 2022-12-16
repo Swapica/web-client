@@ -15,37 +15,45 @@
         <span class="order-list-table__head-title">Network</span>
       </div>
     </div>
-    <div class="order-list-table__body">
-      <div class="order-list-table__body-item-info-wrp">
-        <!-- eslint-disable-next-line max-len -->
-        <div class="order-list-table__body-item-info order-list-table__body-item-info-buy">
-          <span class="order-list-table__body-item-amount"> 0.0045 </span>
-          <span class="order-list-table__body-item-code">WETH</span>
-          <span v-if="!isSmall" class="order-list-table__body-item-address">
-            (0x20...27c)
-          </span>
-          <icon class="order-list-table__body-item-icon" :name="$icons.link" />
+    <div class="order-list-table__body-wrp">
+      <div class="order-list-table__body" v-for="i in 5" :key="i">
+        <div class="order-list-table__body-item-info-wrp">
+          <!-- eslint-disable-next-line max-len -->
+          <div class="order-list-table__body-item-info order-list-table__body-item-info-buy">
+            <span class="order-list-table__body-item-amount"> 0.0045 </span>
+            <span class="order-list-table__body-item-code">WETH</span>
+            <span v-if="!isSmall" class="order-list-table__body-item-address">
+              (0x20...27c)
+            </span>
+            <icon
+              class="order-list-table__body-item-icon"
+              :name="$icons.link"
+            />
+          </div>
+          <!-- eslint-disable-next-line max-len -->
+          <div class="order-list-table__body-item-info order-list-table__body-item-info-sell">
+            <span class="order-list-table__body-item-amount"> 0.0045 </span>
+            <span class="order-list-table__body-item-code">SOL</span>
+            <span v-if="!isSmall" class="order-list-table__body-item-address">
+              (0x20...27c)
+            </span>
+            <icon
+              class="order-list-table__body-item-icon"
+              :name="$icons.link"
+            />
+          </div>
         </div>
-        <!-- eslint-disable-next-line max-len -->
-        <div class="order-list-table__body-item-info order-list-table__body-item-info-sell">
-          <span class="order-list-table__body-item-amount"> 0.0045 </span>
-          <span class="order-list-table__body-item-code">SOL</span>
-          <span v-if="!isSmall" class="order-list-table__body-item-address">
-            (0x20...27c)
+        <div class="order-list-table__body-item-network">
+          <span class="order-list-table__body-item-network-text">
+            Ethereum/BSC
           </span>
-          <icon class="order-list-table__body-item-icon" :name="$icons.link" />
         </div>
+        <app-button
+          class="order-list-table__body-item-cancel-btn"
+          scheme="secondary"
+          :text="isTablet? 'Cancel Order' : 'Cancel'"
+        />
       </div>
-      <div class="order-list-table__body-item-network">
-        <span class="order-list-table__body-item-network-text">
-          Ethereum/BSC
-        </span>
-      </div>
-      <app-button
-        class="order-list-table__body-item-cancel-btn"
-        scheme="secondary"
-        :text="isTablet? 'Cancel Order' : 'Cancel'"
-      />
     </div>
     <div class="order-list__pagination">
       pag
@@ -109,8 +117,11 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
 }
 
-.order-list-table__body {
+.order-list-table__body-wrp {
   grid-area: body;
+}
+
+.order-list-table__body {
   display: grid;
   grid-template-columns: minmax(toRem(150), 1fr) toRem(154) toRem(95);
   align-items: center;
