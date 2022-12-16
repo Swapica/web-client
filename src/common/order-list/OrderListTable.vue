@@ -74,6 +74,10 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   gap: toRem(24) toRem(32);
   grid-auto-rows: max-content;
 
+  @include respond-to(xmedium) {
+    gap: toRem(24) toRem(16);
+  }
+
   @include respond-to(tablet) {
     grid-template-columns: minmax(toRem(100), 1fr);
     grid-template-areas:
@@ -89,6 +93,10 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   grid-template-columns: minmax(toRem(150), 1fr) toRem(154);
   grid-area: head;
   gap: toRem(32);
+
+  @include respond-to(xmedium) {
+    gap: toRem(16);
+  }
 
   @include respond-to(tablet) {
     grid-template-columns: minmax(toRem(100), 1fr);
@@ -108,6 +116,10 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   align-items: center;
   gap: toRem(32);
 
+  @include respond-to(xmedium) {
+    gap: toRem(16);
+  }
+
   @include respond-to(tablet) {
     grid-template-columns: minmax(toRem(100), 1fr);
     gap: toRem(4);
@@ -125,6 +137,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
   @include respond-to(tablet) {
     font-size: toRem(18);
+    margin-left: toRem(9);
   }
 }
 
