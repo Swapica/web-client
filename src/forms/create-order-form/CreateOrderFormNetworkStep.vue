@@ -12,12 +12,16 @@
       scheme="primary"
       :label="$t('create-order-form-network-step.network-to-sell-lbl')"
       :value-options="chains"
+      :error-message="getFieldErrorMessage('networkSell')"
+      @blur="touchField('networkSell')"
     />
     <select-field
       v-model="form.networkBuy"
       scheme="primary"
       :value-options="chains"
       :label="$t('create-order-form-network-step.network-to-buy-lbl')"
+      :error-message="getFieldErrorMessage('networkBuy')"
+      @blur="touchField('networkBuy')"
     />
 
     <div class="create-order-form-network-step__actions">
@@ -31,6 +35,7 @@
         class="create-order-form-network-step__action"
         :text="$t('create-order-form-network-step.next-btn')"
         scheme="primary"
+        @click="handleNext"
       />
     </div>
   </form>
@@ -38,10 +43,12 @@
 
 <script lang="ts" setup>
 import { AppButton } from '@/common'
+import { useFormValidation } from '@/composables'
 import { SelectField } from '@/fields'
 import { useChainsStore } from '@/store'
 import { UseCreateOrderForm } from '@/types'
 import { computed, toRefs } from 'vue'
+import { required } from '@/validators'
 
 const props = defineProps<{
   former: UseCreateOrderForm
@@ -54,6 +61,14 @@ const emit = defineEmits<{
 
 const { form } = toRefs(props.former)
 
+const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
+  form,
+  {
+    networkSell: { required },
+    networkBuy: { required },
+  },
+)
+
 const chainStore = useChainsStore()
 const chains = computed(() =>
   chainStore.chains.map(i => ({
@@ -62,6 +77,11 @@ const chains = computed(() =>
     imageUrl: i.icon,
   })),
 )
+
+const handleNext = () => {
+  if (isFormValid()) return
+  emit('next')
+}
 </script>
 
 <style lang="scss" scoped>
