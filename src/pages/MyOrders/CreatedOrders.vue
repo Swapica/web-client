@@ -8,10 +8,14 @@
       class="created-orders__create-btn"
       :scheme="isTablet ? 'primary-mobile' : 'primary'"
       :text="$t('created-orders.create-btn')"
+      :disabled="isCreateOrderBtnDisabled"
     />
     <div class="created-orders__content">
       <template v-if="provider.isConnected">
-        <order-list @list-empty="isCreateOrderBtnShown = false">
+        <order-list
+          @list-empty="isCreateOrderBtnShown = false"
+          @load-failed="isCreateOrderBtnDisabled = true"
+        >
           <template #noDataMsg>
             <no-data-message
               class="created-orders__no-data-block"
@@ -52,6 +56,7 @@ const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const isCreateOrderBtnShown = ref(true)
+const isCreateOrderBtnDisabled = ref(false)
 </script>
 
 <style lang="scss" scoped>
