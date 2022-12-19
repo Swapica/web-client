@@ -32,11 +32,13 @@ export declare namespace Swapica {
   export type StatusStruct = {
     state: PromiseOrValue<BigNumberish>;
     executedBy: PromiseOrValue<BigNumberish>;
+    matchSwapica: PromiseOrValue<string>;
   };
 
-  export type StatusStructOutput = [number, BigNumber] & {
+  export type StatusStructOutput = [number, BigNumber, string] & {
     state: number;
     executedBy: BigNumber;
+    matchSwapica: string;
   };
 
   export type OrderStruct = {
@@ -95,6 +97,7 @@ export declare namespace Swapica {
 
 export interface SwapicaInterface extends utils.Interface {
   functions: {
+    "NATIVE()": FunctionFragment;
     "__Signers_init(address[],uint256)": FunctionFragment;
     "__Swapica_init(address[])": FunctionFragment;
     "addSigners(address[])": FunctionFragment;
@@ -126,6 +129,7 @@ export interface SwapicaInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "NATIVE"
       | "__Signers_init"
       | "__Swapica_init"
       | "addSigners"
@@ -155,6 +159,7 @@ export interface SwapicaInterface extends utils.Interface {
       | "upgradeToAndCall"
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: "NATIVE", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "__Signers_init",
     values: [PromiseOrValue<string>[], PromiseOrValue<BigNumberish>]
@@ -275,6 +280,7 @@ export interface SwapicaInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
   ): string;
 
+  decodeFunctionResult(functionFragment: "NATIVE", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "__Signers_init",
     data: BytesLike
@@ -478,6 +484,8 @@ export interface Swapica extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    NATIVE(overrides?: CallOverrides): Promise<[string]>;
+
     __Signers_init(
       signers_: PromiseOrValue<string>[],
       signaturesThreshold_: PromiseOrValue<BigNumberish>,
@@ -508,7 +516,7 @@ export interface Swapica extends BaseContract {
     createMatch(
       orderData: PromiseOrValue<BytesLike>,
       signatures: PromiseOrValue<BytesLike>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     createOrder(
@@ -517,7 +525,7 @@ export interface Swapica extends BaseContract {
       tokenToBuy: PromiseOrValue<string>,
       amountToBuy: PromiseOrValue<BigNumberish>,
       destChain: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     executeMatch(
@@ -569,7 +577,13 @@ export interface Swapica extends BaseContract {
     matchStatus(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[number, BigNumber] & { state: number; executedBy: BigNumber }>;
+    ): Promise<
+      [number, BigNumber, string] & {
+        state: number;
+        executedBy: BigNumber;
+        matchSwapica: string;
+      }
+    >;
 
     matches(
       arg0: PromiseOrValue<BigNumberish>,
@@ -588,7 +602,13 @@ export interface Swapica extends BaseContract {
     orderStatus(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[number, BigNumber] & { state: number; executedBy: BigNumber }>;
+    ): Promise<
+      [number, BigNumber, string] & {
+        state: number;
+        executedBy: BigNumber;
+        matchSwapica: string;
+      }
+    >;
 
     orders(
       arg0: PromiseOrValue<BigNumberish>,
@@ -642,6 +662,8 @@ export interface Swapica extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  NATIVE(overrides?: CallOverrides): Promise<string>;
+
   __Signers_init(
     signers_: PromiseOrValue<string>[],
     signaturesThreshold_: PromiseOrValue<BigNumberish>,
@@ -672,7 +694,7 @@ export interface Swapica extends BaseContract {
   createMatch(
     orderData: PromiseOrValue<BytesLike>,
     signatures: PromiseOrValue<BytesLike>[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   createOrder(
@@ -681,7 +703,7 @@ export interface Swapica extends BaseContract {
     tokenToBuy: PromiseOrValue<string>,
     amountToBuy: PromiseOrValue<BigNumberish>,
     destChain: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   executeMatch(
@@ -727,7 +749,13 @@ export interface Swapica extends BaseContract {
   matchStatus(
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<[number, BigNumber] & { state: number; executedBy: BigNumber }>;
+  ): Promise<
+    [number, BigNumber, string] & {
+      state: number;
+      executedBy: BigNumber;
+      matchSwapica: string;
+    }
+  >;
 
   matches(
     arg0: PromiseOrValue<BigNumberish>,
@@ -746,7 +774,13 @@ export interface Swapica extends BaseContract {
   orderStatus(
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<[number, BigNumber] & { state: number; executedBy: BigNumber }>;
+  ): Promise<
+    [number, BigNumber, string] & {
+      state: number;
+      executedBy: BigNumber;
+      matchSwapica: string;
+    }
+  >;
 
   orders(
     arg0: PromiseOrValue<BigNumberish>,
@@ -800,6 +834,8 @@ export interface Swapica extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    NATIVE(overrides?: CallOverrides): Promise<string>;
+
     __Signers_init(
       signers_: PromiseOrValue<string>[],
       signaturesThreshold_: PromiseOrValue<BigNumberish>,
@@ -885,7 +921,13 @@ export interface Swapica extends BaseContract {
     matchStatus(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[number, BigNumber] & { state: number; executedBy: BigNumber }>;
+    ): Promise<
+      [number, BigNumber, string] & {
+        state: number;
+        executedBy: BigNumber;
+        matchSwapica: string;
+      }
+    >;
 
     matches(
       arg0: PromiseOrValue<BigNumberish>,
@@ -904,7 +946,13 @@ export interface Swapica extends BaseContract {
     orderStatus(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[number, BigNumber] & { state: number; executedBy: BigNumber }>;
+    ): Promise<
+      [number, BigNumber, string] & {
+        state: number;
+        executedBy: BigNumber;
+        matchSwapica: string;
+      }
+    >;
 
     orders(
       arg0: PromiseOrValue<BigNumberish>,
@@ -1012,6 +1060,8 @@ export interface Swapica extends BaseContract {
   };
 
   estimateGas: {
+    NATIVE(overrides?: CallOverrides): Promise<BigNumber>;
+
     __Signers_init(
       signers_: PromiseOrValue<string>[],
       signaturesThreshold_: PromiseOrValue<BigNumberish>,
@@ -1042,7 +1092,7 @@ export interface Swapica extends BaseContract {
     createMatch(
       orderData: PromiseOrValue<BytesLike>,
       signatures: PromiseOrValue<BytesLike>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     createOrder(
@@ -1051,7 +1101,7 @@ export interface Swapica extends BaseContract {
       tokenToBuy: PromiseOrValue<string>,
       amountToBuy: PromiseOrValue<BigNumberish>,
       destChain: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     executeMatch(
@@ -1152,6 +1202,8 @@ export interface Swapica extends BaseContract {
   };
 
   populateTransaction: {
+    NATIVE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     __Signers_init(
       signers_: PromiseOrValue<string>[],
       signaturesThreshold_: PromiseOrValue<BigNumberish>,
@@ -1182,7 +1234,7 @@ export interface Swapica extends BaseContract {
     createMatch(
       orderData: PromiseOrValue<BytesLike>,
       signatures: PromiseOrValue<BytesLike>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     createOrder(
@@ -1191,7 +1243,7 @@ export interface Swapica extends BaseContract {
       tokenToBuy: PromiseOrValue<string>,
       amountToBuy: PromiseOrValue<BigNumberish>,
       destChain: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     executeMatch(

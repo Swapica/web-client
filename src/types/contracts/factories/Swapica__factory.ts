@@ -73,6 +73,11 @@ const _abi = [
             name: "executedBy",
             type: "uint256",
           },
+          {
+            internalType: "address",
+            name: "matchSwapica",
+            type: "address",
+          },
         ],
         indexed: true,
         internalType: "struct Swapica.Status",
@@ -103,6 +108,11 @@ const _abi = [
             internalType: "uint256",
             name: "executedBy",
             type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "matchSwapica",
+            type: "address",
           },
         ],
         indexed: true,
@@ -145,6 +155,19 @@ const _abi = [
     ],
     name: "Upgraded",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "NATIVE",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
@@ -236,7 +259,7 @@ const _abi = [
     ],
     name: "createMatch",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -269,7 +292,7 @@ const _abi = [
     ],
     name: "createOrder",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -553,6 +576,11 @@ const _abi = [
         name: "executedBy",
         type: "uint256",
       },
+      {
+        internalType: "address",
+        name: "matchSwapica",
+        type: "address",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -620,6 +648,11 @@ const _abi = [
         internalType: "uint256",
         name: "executedBy",
         type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "matchSwapica",
+        type: "address",
       },
     ],
     stateMutability: "view",
