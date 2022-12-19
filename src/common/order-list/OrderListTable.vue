@@ -120,6 +120,8 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .order-list-table__body-wrp {
   grid-area: body;
+  display: grid;
+  gap: toRem(12);
 }
 
 .order-list-table__body {
