@@ -6,7 +6,6 @@
     />
     <create-order-form-network-step v-if="currentStep.name === 'network'" />
     <create-order-form-tokens-step v-if="currentStep.name === 'tokens'" />
-    <app-button text="next" @click="forward" />
   </form>
 </template>
 
@@ -14,9 +13,9 @@
 import CreateOrderFormNetworkStep from '@/forms/create-order-form/CreateOrderFormNetworkStep.vue'
 import CreateOrderFormTokensStep from '@/forms/create-order-form/CreateOrderFormTokensStep.vue'
 import { useStepper } from '@/composables'
-import { AppButton, StepperIndicator } from '@/common'
+import { StepperIndicator } from '@/common'
 
-const { currentStep, forward, totalStepsVisible, currentIdx } = useStepper([
+const { currentStep, totalStepsVisible, currentIdx } = useStepper([
   'network',
   'tokens',
   'confirmation',

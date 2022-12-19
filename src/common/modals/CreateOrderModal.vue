@@ -4,7 +4,7 @@
     :is-shown="isShown"
     @update:is-shown="close"
   >
-    <create-order-form />
+    <create-order-form class="create-order-modal__form" />
   </modal>
 </template>
 
@@ -29,10 +29,17 @@ const close = () => emit('update:is-shown', false)
   :deep(.modal__pane) {
     max-width: toRem(658);
     width: 100%;
-    padding: toRem(51) toRem(16) toRem(48) toRem(17);
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    padding: toRem(24) toRem(16) toRem(48) toRem(17);
+
+    @include respond-to(small) {
+      padding: toRem(16) toRem(9) toRem(31) toRem(23);
+    }
   }
+}
+
+.create-order-modal__form {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 </style>

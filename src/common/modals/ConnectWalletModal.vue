@@ -68,7 +68,7 @@ const connect = async (providerName: PROVIDERS) => {
   :deep(.modal__pane) {
     max-width: toRem(431);
     width: 100%;
-    padding: toRem(51) toRem(33) toRem(43) toRem(35);
+    padding: toRem(24) toRem(33) toRem(43) toRem(35);
     align-items: center;
     display: flex;
     flex-direction: column;

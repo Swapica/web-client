@@ -51,7 +51,7 @@ const list = ref([])
 const loadList = async () => {
   try {
     swapicaContract.init('0x7dC47fBb83Aa9aD72fF87a5Ce1Cd9D521Af3a82a')
-    await swapicaContract.getOrders(provider.value.selectedAddress!, 1, 14)
+    await swapicaContract.getUserOrders(provider.value.selectedAddress!, 1, 14)
     emit('list-empty')
   } catch (e) {
     isLoadFailed.value = true

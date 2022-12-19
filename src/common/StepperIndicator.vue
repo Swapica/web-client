@@ -20,10 +20,9 @@ defineProps<{
 
 <style lang="scss" scoped>
 .stepper-indicator {
-  display: grid;
-  grid: auto / auto-flow auto;
+  display: flex;
   gap: toRem(12);
-  justify-content: start;
+  justify-content: center;
 }
 
 .stepper-indicator__dot {

@@ -28,13 +28,13 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     }
   }
 
-  const getOrders = async (address: string, from: number, to: number) => {
-    return _instance_rw.value?.getUserOrders(address, from, to)
+  const getUserOrders = async (address: string, from: number, to: number) => {
+    return _instance.value?.getUserOrders(address, from, to)
   }
 
   return {
     init,
     useSwapica,
-    getOrders,
+    getUserOrders,
   }
 }

@@ -397,6 +397,7 @@ $z-local-index: 2;
   color: var(--text-primary-main);
   display: flex;
   align-items: center;
+  gap: toRem(8);
 
   &:hover {
     color: var(--text-primary-dark);
@@ -423,6 +424,7 @@ $z-local-index: 2;
 .select-field__select-head-value {
   display: flex;
   align-items: center;
+  gap: toRem(8);
 }
 
 .select-field__select-head-text {
