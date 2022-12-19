@@ -6,7 +6,6 @@
       class="stepper-indicator__dot"
       :class="{
         'stepper-indicator__dot--active': idx - 1 <= currentStepIdx,
-        'stepper-indicator__dot--wide': idx - 1 === currentStepIdx,
       }"
     />
   </div>
@@ -23,22 +22,19 @@ defineProps<{
 .stepper-indicator {
   display: grid;
   grid: auto / auto-flow auto;
-  gap: 1.2rem;
+  gap: toRem(12);
   justify-content: start;
 }
 
 .stepper-indicator__dot {
-  width: 0.4rem;
-  height: 0.4rem;
-  background-color: transparent;
-  border-radius: 0.2rem;
-
-  &--wide {
-    width: 1.8rem;
-  }
+  width: toRem(16);
+  height: toRem(13);
+  background: url('/backgrounds/step-bg.svg') no-repeat;
+  background-size: 100% 100%;
 
   &--active {
-    // background-color: $col-success;
+    background: url('/backgrounds/step-active-bg.svg') no-repeat;
+    background-size: 100% 100%;
   }
 }
 </style>

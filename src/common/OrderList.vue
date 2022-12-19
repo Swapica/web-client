@@ -46,11 +46,11 @@ const emit = defineEmits<{
 const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref([{}])
+const list = ref([])
 
 const loadList = async () => {
   try {
-    swapicaContract.init('0xfd3ba43065d02137ad7E585945F28063EF9C8CaF')
+    swapicaContract.init('0x7dC47fBb83Aa9aD72fF87a5Ce1Cd9D521Af3a82a')
     await swapicaContract.getOrders(provider.value.selectedAddress!, 1, 14)
     emit('list-empty')
   } catch (e) {

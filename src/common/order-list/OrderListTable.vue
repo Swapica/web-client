@@ -5,14 +5,20 @@
     <div class="order-list-table__head">
       <div class="order-list-table__head-items-wrp">
         <div class="order-list-table__head-item">
-          <span class="order-list-table__head-title">To Buy</span>
+          <span class="order-list-table__head-title">
+            {{ $t('order-list-table.buy-lbl') }}
+          </span>
         </div>
         <div class="order-list-table__head-item">
-          <span class="order-list-table__head-title">To Sell</span>
+          <span class="order-list-table__head-title">
+            {{ $t('order-list-table.sell-lbl') }}
+          </span>
         </div>
       </div>
       <div v-if="!isTablet" class="order-list-table__head-item">
-        <span class="order-list-table__head-title">Network</span>
+        <span class="order-list-table__head-title">
+          {{ $t('order-list-table.network-lbl') }}
+        </span>
       </div>
     </div>
     <div class="order-list-table__body-wrp">
@@ -54,7 +60,10 @@
           class="order-list-table__body-item-cancel-btn"
           :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
           :size="isTablet ? 'default' : 'small'"
-          :text="isTablet? 'Cancel Order' : 'Cancel'"
+          :text="isTablet
+            ? $t('order-list-table.cancel-order-btn')
+            : $t('order-list-table.cancel-btn')
+          "
         />
       </div>
     </div>

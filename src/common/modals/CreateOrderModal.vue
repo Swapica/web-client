@@ -29,7 +29,7 @@ const close = () => emit('update:is-shown', false)
   :deep(.modal__pane) {
     max-width: toRem(658);
     width: 100%;
-    padding: toRem(24) toRem(16) toRem(48) toRem(17);
+    padding: toRem(51) toRem(16) toRem(48) toRem(17);
     align-items: center;
     display: flex;
     flex-direction: column;

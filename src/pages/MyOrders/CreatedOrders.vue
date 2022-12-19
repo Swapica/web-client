@@ -26,6 +26,7 @@
                 class="created-orders__no-data-create-btn"
                 scheme="primary"
                 :text="$t('created-orders.create-btn')"
+                @click="isCreateOrderModalShown = true"
               />
             </no-data-message>
           </template>
