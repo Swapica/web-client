@@ -4,7 +4,7 @@
     :is-shown="isShown"
     @update:is-shown="close"
   >
-    <create-order-form class="create-order-modal__form" />
+    <create-order-form class="create-order-modal__form" @close="close" />
   </modal>
 </template>
 

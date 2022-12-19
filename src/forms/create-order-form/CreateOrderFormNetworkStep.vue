@@ -25,6 +25,7 @@
         class="create-order-form-network-step__action"
         :text="$t('create-order-form-network-step.cancel-btn')"
         scheme="secondary"
+        @click="emit('cancel')"
       />
       <app-button
         class="create-order-form-network-step__action"
@@ -40,6 +41,11 @@ import { AppButton } from '@/common'
 import { SelectField } from '@/fields'
 import { useChainsStore } from '@/store'
 import { computed, ref } from 'vue'
+
+const emit = defineEmits<{
+  (e: 'cancel'): void
+  (e: 'next'): void
+}>()
 
 const val = ref('')
 

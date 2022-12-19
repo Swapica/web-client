@@ -4,7 +4,10 @@
       :total-steps="totalStepsVisible"
       :current-step-idx="currentIdx"
     />
-    <create-order-form-network-step v-if="currentStep.name === 'network'" />
+    <create-order-form-network-step
+      v-if="currentStep.name === 'network'"
+      @cancel="emit('close')"
+    />
     <create-order-form-tokens-step v-if="currentStep.name === 'tokens'" />
   </form>
 </template>
@@ -14,6 +17,10 @@ import CreateOrderFormNetworkStep from '@/forms/create-order-form/CreateOrderFor
 import CreateOrderFormTokensStep from '@/forms/create-order-form/CreateOrderFormTokensStep.vue'
 import { useStepper } from '@/composables'
 import { StepperIndicator } from '@/common'
+
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
 
 const { currentStep, totalStepsVisible, currentIdx } = useStepper([
   'network',
