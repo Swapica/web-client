@@ -206,6 +206,9 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   background: url('/backgrounds/input-bg.svg') no-repeat;
   background-size: 100% 100%;
   width: toRem(60);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .order-list-table__body-item-info-buy {
