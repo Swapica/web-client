@@ -8,6 +8,7 @@
       v-if="currentStep.name === 'network'"
       :former="former"
       @cancel="emit('close')"
+      @next="onNext"
     />
     <create-order-form-tokens-step v-if="currentStep.name === 'tokens'" />
   </form>
@@ -25,12 +26,19 @@ const emit = defineEmits<{
 
 const former = useCreateOrderForm()
 
-const { currentStep, totalStepsVisible, currentIdx } = useStepper([
+const { currentStep, totalStepsVisible, currentIdx, forward } = useStepper([
   'network',
   'tokens',
   'confirmation',
   'approve',
 ])
+
+const onNext = () => {
+  switch (currentStep.value.name) {
+    default:
+      forward()
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

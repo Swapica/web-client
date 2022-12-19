@@ -79,7 +79,7 @@ const chains = computed(() =>
 )
 
 const handleNext = () => {
-  if (isFormValid()) return
+  if (!isFormValid()) return
   emit('next')
 }
 </script>
