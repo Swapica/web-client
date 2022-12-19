@@ -22,6 +22,7 @@ const props = withDefaults(
     valueOptions?: {
       label: string
       icon?: ICON_NAMES
+      imageUrl?: string
       value: number | string
     }[]
     label?: string
@@ -159,7 +160,15 @@ watch(
                   class="select-field__select-head-value-icon"
                   :name="selectedOption?.icon"
                 />
-                {{ selectedOption?.label }}
+                <img
+                  v-if="selectedOption?.imageUrl"
+                  class="select-field__select-head-value-icon"
+                  :src="selectedOption?.imageUrl"
+                  :alt="selectedOption?.label"
+                />
+                <span class="select-field__select-head-text">
+                  {{ selectedOption?.label }}
+                </span>
               </div>
             </template>
             <template v-else-if="!label">
@@ -212,7 +221,15 @@ watch(
                   class="select-field__select-dropdown-item-icon"
                   :name="option.icon"
                 />
-                {{ option.label }}
+                <img
+                  v-if="option.imageUrl"
+                  class="select-field__select-dropdown-item-icon"
+                  :src="option.imageUrl"
+                  :alt="option.label"
+                />
+                <span class="select-field__select-dropdown-item-text">
+                  {{ option.label }}
+                </span>
               </button>
             </template>
           </div>
@@ -378,9 +395,6 @@ $z-local-index: 2;
   width: 100%;
   padding: toRem(8) toRem(12);
   color: var(--text-primary-main);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   display: flex;
   align-items: center;
 
@@ -393,9 +407,17 @@ $z-local-index: 2;
   }
 }
 
+.select-field__select-dropdown-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .select-field__select-dropdown-item-icon {
   width: toRem(24);
   height: toRem(24);
+  min-width: toRem(24);
+  min-height: toRem(24);
 }
 
 .select-field__select-head-value {
@@ -403,9 +425,17 @@ $z-local-index: 2;
   align-items: center;
 }
 
+.select-field__select-head-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .select-field__select-head-value-icon {
   width: toRem(24);
   height: toRem(24);
+  min-width: toRem(24);
+  min-height: toRem(24);
 }
 
 .select-field__err-msg {

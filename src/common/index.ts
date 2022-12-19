@@ -13,4 +13,5 @@ export { default as AppNavigationMobile } from '@/common/AppNavigationMobile.vue
 export { default as ConnectWalletBtn } from '@/common/ConnectWalletBtn.vue'
 export { default as ChainSelector } from '@/common/ChainSelector.vue'
 export { default as OrderList } from '@/common/OrderList.vue'
+export { default as StepperIndicator } from '@/common/StepperIndicator.vue'
 export * from '@/common/modals'

@@ -8,6 +8,7 @@
       class="created-orders__create-btn"
       :scheme="isTablet ? 'primary-mobile' : 'primary'"
       :text="$t('created-orders.create-btn')"
+      @click="isCreateOrderModalShown = true"
     />
     <div class="created-orders__content">
       <template v-if="provider.isConnected">
@@ -35,11 +36,19 @@
         </no-data-message>
       </template>
     </div>
+
+    <create-order-modal v-model:is-shown="isCreateOrderModalShown" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { AppButton, ConnectWalletBtn, NoDataMessage, OrderList } from '@/common'
+import {
+  AppButton,
+  ConnectWalletBtn,
+  NoDataMessage,
+  OrderList,
+  CreateOrderModal,
+} from '@/common'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
@@ -52,6 +61,7 @@ const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const isCreateOrderBtnShown = ref(true)
+const isCreateOrderModalShown = ref(false)
 </script>
 
 <style lang="scss" scoped>
