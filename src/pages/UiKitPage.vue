@@ -9,7 +9,7 @@ import {
   Collapse,
 } from '@/common'
 import { InputField, SelectField } from '@/fields'
-import LoginForm from '@/forms/LoginForm.vue'
+import LoginForm from '@/forms/CreateOrderForm.vue'
 
 import { reactive, ref } from 'vue'
 import { Bus } from '@/helpers'
