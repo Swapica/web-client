@@ -73,9 +73,12 @@ export default defineComponent({
   background: url('/backgrounds/modal-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(24) toRem(48) toRem(50);
+  display: flex;
+  flex-flow: column nowrap;
 
   @include respond-to(tablet) {
     margin: 0 toRem(32);
+    max-height: vh(80);
   }
 
   &:before {
