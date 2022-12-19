@@ -25,9 +25,10 @@
             <span v-if="!isSmall" class="order-list-table__body-item-address">
               (0x20...27c)
             </span>
-            <icon
+            <app-button
               class="order-list-table__body-item-icon"
-              :name="$icons.link"
+              scheme="icon"
+              :icon-left="$icons.link"
             />
           </div>
           <!-- eslint-disable-next-line max-len -->
@@ -37,9 +38,10 @@
             <span v-if="!isSmall" class="order-list-table__body-item-address">
               (0x20...27c)
             </span>
-            <icon
+            <app-button
               class="order-list-table__body-item-icon"
-              :name="$icons.link"
+              scheme="icon"
+              :icon-left="$icons.link"
             />
           </div>
         </div>
@@ -62,7 +64,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Icon, AppButton } from '@/common'
+import { AppButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'

@@ -277,6 +277,15 @@ const buttonClasses = computed(() =>
       background-size: 100% 100%;
     }
   }
+
+  &--icon {
+    color: var(--primary-main);
+    transition-property: color;
+
+    &:not([disabled]):hover {
+      color: var(--primary-dark);
+    }
+  }
 }
 
 .app-button__icon-left,
