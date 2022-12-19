@@ -4,7 +4,11 @@
     :is-shown="isShown"
     @update:is-shown="close"
   >
-    <create-order-form class="create-order-modal__form" @close="close" />
+    <create-order-form
+      :key="`${isShown}`"
+      class="create-order-modal__form"
+      @close="close"
+    />
   </modal>
 </template>
 

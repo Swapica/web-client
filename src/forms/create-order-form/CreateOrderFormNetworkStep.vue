@@ -8,13 +8,13 @@
     </p>
     <select-field
       class="create-order-form-network-step__sell-network-select"
-      v-model="val"
+      v-model="form.networkSell"
       scheme="primary"
       :label="$t('create-order-form-network-step.network-to-sell-lbl')"
       :value-options="chains"
     />
     <select-field
-      v-model="val"
+      v-model="form.networkBuy"
       scheme="primary"
       :value-options="chains"
       :label="$t('create-order-form-network-step.network-to-buy-lbl')"
@@ -40,14 +40,19 @@
 import { AppButton } from '@/common'
 import { SelectField } from '@/fields'
 import { useChainsStore } from '@/store'
-import { computed, ref } from 'vue'
+import { UseCreateOrderForm } from '@/types'
+import { computed, toRefs } from 'vue'
+
+const props = defineProps<{
+  former: UseCreateOrderForm
+}>()
 
 const emit = defineEmits<{
   (e: 'cancel'): void
   (e: 'next'): void
 }>()
 
-const val = ref('')
+const { form } = toRefs(props.former)
 
 const chainStore = useChainsStore()
 const chains = computed(() =>
