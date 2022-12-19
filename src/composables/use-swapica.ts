@@ -1,21 +1,17 @@
 import { ref } from 'vue'
-import { UseProvider, Swapica, Swapica__factory } from '@/types'
+import { UseUnrefProvider, Swapica, Swapica__factory } from '@/types'
 
-export const useSwapica = (provider: UseProvider, address?: string) => {
+export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
   const _instance = ref<Swapica | undefined>()
   const _instance_rw = ref<Swapica | undefined>()
-  if (
-    address &&
-    provider.currentProvider.value &&
-    provider.currentSigner.value
-  ) {
+  if (address && provider.currentProvider && provider.currentSigner) {
     _instance.value = Swapica__factory.connect(
       address,
-      provider.currentProvider.value,
+      provider.currentProvider,
     )
     _instance_rw.value = Swapica__factory.connect(
       address,
-      provider.currentSigner.value,
+      provider.currentSigner,
     )
   }
 
@@ -23,17 +19,17 @@ export const useSwapica = (provider: UseProvider, address?: string) => {
     if (address && provider.currentProvider && provider.currentSigner) {
       _instance.value = Swapica__factory.connect(
         address,
-        provider.currentProvider.value!,
+        provider.currentProvider,
       )
       _instance_rw.value = Swapica__factory.connect(
         address,
-        provider.currentSigner.value!,
+        provider.currentSigner,
       )
     }
   }
 
-  const getOrders = async () => {
-    return _instance.value?.orders(1)
+  const getOrders = async (address: string, from: number, to: number) => {
+    return _instance_rw.value?.getUserOrders(address, from, to)
   }
 
   return {

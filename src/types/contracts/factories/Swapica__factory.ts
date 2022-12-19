@@ -236,7 +236,7 @@ const _abi = [
     ],
     name: "createMatch",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -269,7 +269,7 @@ const _abi = [
     ],
     name: "createOrder",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -309,6 +309,67 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "begin",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "end",
+        type: "uint256",
+      },
+    ],
+    name: "getActiveOrders",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "tokenToSell",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "tokenToBuy",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToSell",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToBuy",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "destChain",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Swapica.Order[]",
+        name: "result",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getSigners",
     outputs: [
@@ -316,6 +377,133 @@ const _abi = [
         internalType: "address[]",
         name: "",
         type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "begin",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "end",
+        type: "uint256",
+      },
+    ],
+    name: "getUserMatches",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "originOrderId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "tokenToSell",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToSell",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "originChain",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Swapica.Match[]",
+        name: "result",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "begin",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "end",
+        type: "uint256",
+      },
+    ],
+    name: "getUserOrders",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "tokenToSell",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "tokenToBuy",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToSell",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToBuy",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "destChain",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Swapica.Order[]",
+        name: "result",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",

@@ -38,6 +38,59 @@ export declare namespace Swapica {
     state: number;
     executedBy: BigNumber;
   };
+
+  export type OrderStruct = {
+    id: PromiseOrValue<BigNumberish>;
+    account: PromiseOrValue<string>;
+    tokenToSell: PromiseOrValue<string>;
+    tokenToBuy: PromiseOrValue<string>;
+    amountToSell: PromiseOrValue<BigNumberish>;
+    amountToBuy: PromiseOrValue<BigNumberish>;
+    destChain: PromiseOrValue<BigNumberish>;
+  };
+
+  export type OrderStructOutput = [
+    BigNumber,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    id: BigNumber;
+    account: string;
+    tokenToSell: string;
+    tokenToBuy: string;
+    amountToSell: BigNumber;
+    amountToBuy: BigNumber;
+    destChain: BigNumber;
+  };
+
+  export type MatchStruct = {
+    id: PromiseOrValue<BigNumberish>;
+    originOrderId: PromiseOrValue<BigNumberish>;
+    account: PromiseOrValue<string>;
+    tokenToSell: PromiseOrValue<string>;
+    amountToSell: PromiseOrValue<BigNumberish>;
+    originChain: PromiseOrValue<BigNumberish>;
+  };
+
+  export type MatchStructOutput = [
+    BigNumber,
+    BigNumber,
+    string,
+    string,
+    BigNumber,
+    BigNumber
+  ] & {
+    id: BigNumber;
+    originOrderId: BigNumber;
+    account: string;
+    tokenToSell: string;
+    amountToSell: BigNumber;
+    originChain: BigNumber;
+  };
 }
 
 export interface SwapicaInterface extends utils.Interface {
@@ -51,7 +104,10 @@ export interface SwapicaInterface extends utils.Interface {
     "createOrder(address,uint256,address,uint256,uint256)": FunctionFragment;
     "executeMatch(bytes,bytes[])": FunctionFragment;
     "executeOrder(bytes,bytes[])": FunctionFragment;
+    "getActiveOrders(uint256,uint256)": FunctionFragment;
     "getSigners()": FunctionFragment;
+    "getUserMatches(address,uint256,uint256)": FunctionFragment;
+    "getUserOrders(address,uint256,uint256)": FunctionFragment;
     "locked(address,address)": FunctionFragment;
     "matchStatus(uint256)": FunctionFragment;
     "matches(uint256)": FunctionFragment;
@@ -79,7 +135,10 @@ export interface SwapicaInterface extends utils.Interface {
       | "createOrder"
       | "executeMatch"
       | "executeOrder"
+      | "getActiveOrders"
       | "getSigners"
+      | "getUserMatches"
+      | "getUserOrders"
       | "locked"
       | "matchStatus"
       | "matches"
@@ -139,8 +198,28 @@ export interface SwapicaInterface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BytesLike>[]]
   ): string;
   encodeFunctionData(
+    functionFragment: "getActiveOrders",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getSigners",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserMatches",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserOrders",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "locked",
@@ -229,7 +308,19 @@ export interface SwapicaInterface extends utils.Interface {
     functionFragment: "executeOrder",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getActiveOrders",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getSigners", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserMatches",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserOrders",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "locked", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "matchStatus",
@@ -417,7 +508,7 @@ export interface Swapica extends BaseContract {
     createMatch(
       orderData: PromiseOrValue<BytesLike>,
       signatures: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     createOrder(
@@ -426,7 +517,7 @@ export interface Swapica extends BaseContract {
       tokenToBuy: PromiseOrValue<string>,
       amountToBuy: PromiseOrValue<BigNumberish>,
       destChain: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     executeMatch(
@@ -441,7 +532,33 @@ export interface Swapica extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    getActiveOrders(
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [Swapica.OrderStructOutput[]] & { result: Swapica.OrderStructOutput[] }
+    >;
+
     getSigners(overrides?: CallOverrides): Promise<[string[]]>;
+
+    getUserMatches(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [Swapica.MatchStructOutput[]] & { result: Swapica.MatchStructOutput[] }
+    >;
+
+    getUserOrders(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [Swapica.OrderStructOutput[]] & { result: Swapica.OrderStructOutput[] }
+    >;
 
     locked(
       arg0: PromiseOrValue<string>,
@@ -555,7 +672,7 @@ export interface Swapica extends BaseContract {
   createMatch(
     orderData: PromiseOrValue<BytesLike>,
     signatures: PromiseOrValue<BytesLike>[],
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   createOrder(
@@ -564,7 +681,7 @@ export interface Swapica extends BaseContract {
     tokenToBuy: PromiseOrValue<string>,
     amountToBuy: PromiseOrValue<BigNumberish>,
     destChain: PromiseOrValue<BigNumberish>,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   executeMatch(
@@ -579,7 +696,27 @@ export interface Swapica extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  getActiveOrders(
+    begin: PromiseOrValue<BigNumberish>,
+    end: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<Swapica.OrderStructOutput[]>;
+
   getSigners(overrides?: CallOverrides): Promise<string[]>;
+
+  getUserMatches(
+    user: PromiseOrValue<string>,
+    begin: PromiseOrValue<BigNumberish>,
+    end: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<Swapica.MatchStructOutput[]>;
+
+  getUserOrders(
+    user: PromiseOrValue<string>,
+    begin: PromiseOrValue<BigNumberish>,
+    end: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<Swapica.OrderStructOutput[]>;
 
   locked(
     arg0: PromiseOrValue<string>,
@@ -717,7 +854,27 @@ export interface Swapica extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    getActiveOrders(
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<Swapica.OrderStructOutput[]>;
+
     getSigners(overrides?: CallOverrides): Promise<string[]>;
+
+    getUserMatches(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<Swapica.MatchStructOutput[]>;
+
+    getUserOrders(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<Swapica.OrderStructOutput[]>;
 
     locked(
       arg0: PromiseOrValue<string>,
@@ -885,7 +1042,7 @@ export interface Swapica extends BaseContract {
     createMatch(
       orderData: PromiseOrValue<BytesLike>,
       signatures: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     createOrder(
@@ -894,7 +1051,7 @@ export interface Swapica extends BaseContract {
       tokenToBuy: PromiseOrValue<string>,
       amountToBuy: PromiseOrValue<BigNumberish>,
       destChain: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     executeMatch(
@@ -909,7 +1066,27 @@ export interface Swapica extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    getActiveOrders(
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getSigners(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getUserMatches(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getUserOrders(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     locked(
       arg0: PromiseOrValue<string>,
@@ -1005,7 +1182,7 @@ export interface Swapica extends BaseContract {
     createMatch(
       orderData: PromiseOrValue<BytesLike>,
       signatures: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     createOrder(
@@ -1014,7 +1191,7 @@ export interface Swapica extends BaseContract {
       tokenToBuy: PromiseOrValue<string>,
       amountToBuy: PromiseOrValue<BigNumberish>,
       destChain: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     executeMatch(
@@ -1029,7 +1206,27 @@ export interface Swapica extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    getActiveOrders(
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getSigners(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getUserMatches(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getUserOrders(
+      user: PromiseOrValue<string>,
+      begin: PromiseOrValue<BigNumberish>,
+      end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     locked(
       arg0: PromiseOrValue<string>,

@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { ErrorMessage, Loader } from '@/common'
-import { UseProvider, useSwapica } from '@/composables'
+import { useSwapica } from '@/composables'
 import { ref } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
 import { ErrorHandler } from '@/helpers'
@@ -38,16 +38,17 @@ import OrderListTable from '@/common/order-list/OrderListTable.vue'
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 
-const swapicaContract = useSwapica(provider.value as unknown as UseProvider)
+const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref([{}])
 
 const loadList = async () => {
   try {
-    swapicaContract.init('0x338662C6e113aD9CfA4E2e755931643D8Cf1884B')
-    await swapicaContract.getOrders()
+    swapicaContract.init('0xfd3ba43065d02137ad7E585945F28063EF9C8CaF')
+    await swapicaContract.getOrders(provider.value.selectedAddress!, 1, 14)
   } catch (e) {
+    isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
   }
   isLoaded.value = true
