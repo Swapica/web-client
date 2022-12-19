@@ -63,7 +63,9 @@ import { ICON_NAMES } from '@/enums'
 
 type SCHEMES =
   | 'primary'
+  | 'primary-mobile'
   | 'secondary'
+  | 'secondary-mobile'
   | 'flat'
   | 'icon'
   | 'raised'
@@ -162,6 +164,26 @@ const buttonClasses = computed(() =>
     }
   }
 
+  &--primary-mobile {
+    background: url('/backgrounds/button-primary-mobile-bg.svg') no-repeat;
+    padding: toRem(13) toRem(28) toRem(18) calc(toRem(25.38) + toRem(10.92));
+    background-size: 100% 100%;
+
+    &:disabled,
+    &--disabled {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-mobile-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    &:not([disabled]):hover {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-primary-mobile-hover-bg.svg')
+        no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+
   &--secondary {
     background: url('/backgrounds/button-secondary-bg.svg') no-repeat;
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
@@ -193,6 +215,26 @@ const buttonClasses = computed(() =>
         padding: toRem(10.17) toRem(19.31) toRem(12.83)
           calc(toRem(15.59) + toRem(4.1));
       }
+    }
+  }
+
+  &--secondary-mobile {
+    background: url('/backgrounds/button-secondary-mobile-bg.svg') no-repeat;
+    padding: toRem(13) toRem(28) toRem(18) calc(toRem(25.38) + toRem(10.92));
+    background-size: 100% 100%;
+
+    &:disabled,
+    &--disabled {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-mobile-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    &:not([disabled]):hover {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-secondary-mobile-hover-bg.svg')
+        no-repeat;
+      background-size: 100% 100%;
     }
   }
 

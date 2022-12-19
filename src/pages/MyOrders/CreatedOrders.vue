@@ -6,7 +6,7 @@
     <app-button
       v-if="provider.isConnected"
       class="created-orders__create-btn"
-      scheme="primary"
+      :scheme="isTablet ? 'primary-mobile' : 'primary'"
       :text="$t('created-orders.create-btn')"
     />
     <div class="created-orders__content">
@@ -42,7 +42,13 @@
 import { AppButton, ConnectWalletBtn, NoDataMessage, OrderList } from '@/common'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import { useWindowSize } from '@vueuse/core'
+import { WINDOW_BREAKPOINTS } from '@/enums'
 
+const { width: windowWidth } = useWindowSize()
+
+const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 </script>
 
