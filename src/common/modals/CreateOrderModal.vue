@@ -45,5 +45,11 @@ const close = () => emit('update:is-shown', false)
   align-items: center;
   display: flex;
   flex-direction: column;
+
+  @include respond-to-height(500px) {
+    overflow: hidden auto;
+
+    @include scrollbar;
+  }
 }
 </style>
