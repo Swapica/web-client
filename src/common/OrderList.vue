@@ -48,7 +48,7 @@ const loadList = async () => {
     swapicaContract.init('0xfd3ba43065d02137ad7E585945F28063EF9C8CaF')
     await swapicaContract.getOrders(provider.value.selectedAddress!, 1, 14)
   } catch (e) {
-    isLoadFailed.value = true
+    // isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
   }
   isLoaded.value = true

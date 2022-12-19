@@ -70,10 +70,13 @@ type SCHEMES =
   | 'select'
   | 'default'
 
+type SIZES = 'small' | 'default'
+
 const props = withDefaults(
   defineProps<{
     text?: string
     scheme?: SCHEMES
+    size?: SIZES
     route?: LocationAsRelativeRaw
     href?: string
     iconLeft?: ICON_NAMES
@@ -82,6 +85,7 @@ const props = withDefaults(
   {
     text: '',
     scheme: 'default',
+    size: 'default',
     route: undefined,
     href: '',
     iconLeft: undefined,
@@ -99,6 +103,7 @@ const buttonClasses = computed(() =>
   [
     'app-button',
     `app-button--${props.scheme}`,
+    `app-button--${props.size}`,
     ...(isDisabled.value ? ['app-button--disabled'] : []),
   ].join(' '),
 )
@@ -162,17 +167,32 @@ const buttonClasses = computed(() =>
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
     background-size: 100% 100%;
 
+    &.app-button--small {
+      padding: toRem(9.17) toRem(21.31) toRem(13.83)
+        calc(toRem(19.59) + toRem(6.1));
+    }
+
     &:disabled,
     &--disabled {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
       background: url('/backgrounds/button-disabled-bg.svg') no-repeat;
       background-size: 100% 100%;
+
+      &.app-button--small {
+        padding: toRem(10.17) toRem(19.31) toRem(12.83)
+          calc(toRem(15.59) + toRem(4.1));
+      }
     }
 
     &:not([disabled]):hover {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
       background: url('/backgrounds/button-secondary-hover-bg.svg') no-repeat;
       background-size: 100% 100%;
+
+      &.app-button--small {
+        padding: toRem(10.17) toRem(19.31) toRem(12.83)
+          calc(toRem(15.59) + toRem(4.1));
+      }
     }
   }
 
@@ -229,6 +249,7 @@ const buttonClasses = computed(() =>
   pointer-events: none;
   word-break: break-all;
   min-width: 0;
+  line-height: toRem(17);
 
   @include text-ellipsis;
 }

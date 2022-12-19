@@ -51,6 +51,7 @@
         <app-button
           class="order-list-table__body-item-cancel-btn"
           scheme="secondary"
+          size="small"
           :text="isTablet? 'Cancel Order' : 'Cancel'"
         />
       </div>
@@ -245,5 +246,6 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .order-list-table__body-item-cancel-btn {
   width: 100%;
+  height: toRem(40);
 }
 </style>
