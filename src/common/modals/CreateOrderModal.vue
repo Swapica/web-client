@@ -45,8 +45,5 @@ const close = () => emit('update:is-shown', false)
   align-items: center;
   display: flex;
   flex-direction: column;
-  overflow: hidden auto;
-
-  @include scrollbar;
 }
 </style>
