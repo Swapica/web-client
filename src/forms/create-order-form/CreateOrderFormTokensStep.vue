@@ -9,7 +9,7 @@
 
     <div class="create-order-form-tokens-step__content">
       <div class="create-order-form-tokens-step__token-wrp">
-        <span class="create-order-form-tokens-step__token-lbl">
+        <span v-if="!isTablet" class="create-order-form-tokens-step__token-lbl">
           {{ $t('create-order-form-tokens-step.token-to-sell-lbl') }}
         </span>
         <!-- eslint-disable-next-line prettier/prettier max-len -->
@@ -32,7 +32,7 @@
         </p>
       </div>
       <div class="create-order-form-tokens-step__token-wrp">
-        <span class="create-order-form-tokens-step__token-lbl">
+        <span v-if="!isTablet" class="create-order-form-tokens-step__token-lbl">
           {{ $t('create-order-form-tokens-step.token-to-buy-lbl') }}
         </span>
         <!-- eslint-disable-next-line prettier/prettier max-len -->
@@ -78,8 +78,12 @@ import { AppButton } from '@/common'
 import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { UseCreateOrderForm } from '@/types'
-import { toRefs } from 'vue'
+import { computed, toRefs } from 'vue'
 import { required } from '@/validators'
+import { useWindowSize } from '@vueuse/core'
+import { WINDOW_BREAKPOINTS } from '@/enums'
+
+const { width: windowWidth } = useWindowSize()
 
 const props = defineProps<{
   former: UseCreateOrderForm
@@ -89,6 +93,8 @@ const emit = defineEmits<{
   (e: 'back'): void
   (e: 'next'): void
 }>()
+
+const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 
 const { form, networkBuy, networkSell } = toRefs(props.former)
 
@@ -167,6 +173,11 @@ const handleNext = () => {
   font-size: toRem(14);
   line-height: 1.2;
   color: var(--text-primary-dark);
+
+  @include respond-to(tablet) {
+    font-size: toRem(12);
+    line-height: 1;
+  }
 }
 
 .create-order-form-tokens-step__token-sell {
@@ -188,5 +199,9 @@ const handleNext = () => {
   align-items: center;
   width: calc(100% + #{toRem(3)});
   margin: toRem(8) 0;
+
+  @include respond-to(tablet) {
+    margin-top: 0;
+  }
 }
 </style>
