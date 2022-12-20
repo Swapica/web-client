@@ -1,9 +1,12 @@
 import { useChainsStore } from '@/store'
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 export const useCreateOrderForm = () => {
-  const { selectedChain } = storeToRefs(useChainsStore())
+  const { selectedChain, chainById } = storeToRefs(useChainsStore())
+
+  const networkSell = computed(() => chainById.value(+form.networkSell))
+  const networkBuy = computed(() => chainById.value(+form.networkBuy))
 
   const form = reactive({
     networkSell: selectedChain.value?.chain_params.chain_id || '',
@@ -14,5 +17,7 @@ export const useCreateOrderForm = () => {
 
   return {
     form,
+    networkSell,
+    networkBuy,
   }
 }

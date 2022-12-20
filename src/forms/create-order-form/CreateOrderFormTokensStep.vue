@@ -19,11 +19,16 @@
             class="create-order-form-tokens-step__input"
             placeholder="0.0000"
             :error-message="getFieldErrorMessage('amountSell')"
+            :is-error-message-shown="false"
             @blur="touchField('amountSell')"
           />
         </div>
         <p class="create-order-form-tokens-step__token-network">
-          {{ $t('create-order-form-tokens-step.token-network') }}
+          {{
+            $t('create-order-form-tokens-step.token-network', {
+              network: networkSell?.name,
+            })
+          }}
         </p>
       </div>
       <div class="create-order-form-tokens-step__token-wrp">
@@ -37,11 +42,16 @@
             class="create-order-form-tokens-step__input"
             placeholder="0.0000"
             :error-message="getFieldErrorMessage('amountBuy')"
+            :is-error-message-shown="false"
             @blur="touchField('amountBuy')"
           />
         </div>
         <p class="create-order-form-tokens-step__token-network">
-          {{ $t('create-order-form-tokens-step.token-network') }}
+          {{
+            $t('create-order-form-tokens-step.token-network', {
+              network: networkBuy?.name,
+            })
+          }}
         </p>
       </div>
     </div>
@@ -80,7 +90,7 @@ const emit = defineEmits<{
   (e: 'next'): void
 }>()
 
-const { form } = toRefs(props.former)
+const { form, networkBuy, networkSell } = toRefs(props.former)
 
 const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   form,

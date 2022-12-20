@@ -14,6 +14,7 @@ const props = withDefaults(
     placeholder?: string
     type?: INPUT_TYPES
     errorMessage?: string
+    isErrorMessageShown?: boolean
   }>(),
   {
     scheme: 'primary',
@@ -21,6 +22,7 @@ const props = withDefaults(
     label: '',
     placeholder: ' ',
     errorMessage: '',
+    isErrorMessageShown: true,
   },
 )
 
@@ -131,7 +133,10 @@ const setHeightCSSVar = (element: HTMLElement) => {
       @enter="setHeightCSSVar"
       @before-leave="setHeightCSSVar"
     >
-      <span v-if="errorMessage" class="input-field__err-msg">
+      <span
+        v-if="errorMessage && isErrorMessageShown"
+        class="input-field__err-msg"
+      >
         {{ errorMessage }}
       </span>
     </transition>
