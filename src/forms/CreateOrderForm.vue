@@ -16,6 +16,8 @@
       @back="onBack"
       @next="onNext"
     />
+
+    <confirmation-step v-if="currentStep.name === 'confirmation'" />
   </form>
 </template>
 
@@ -23,7 +25,7 @@
 import CreateOrderFormNetworkStep from '@/forms/create-order-form/CreateOrderFormNetworkStep.vue'
 import CreateOrderFormTokensStep from '@/forms/create-order-form/CreateOrderFormTokensStep.vue'
 import { useCreateOrderForm, useStepper } from '@/composables'
-import { StepperIndicator } from '@/common'
+import { StepperIndicator, ConfirmationStep } from '@/common'
 
 const emit = defineEmits<{
   (e: 'close'): void
@@ -32,7 +34,7 @@ const emit = defineEmits<{
 const former = useCreateOrderForm()
 
 const { currentStep, totalStepsVisible, currentIdx, forward, back } =
-  useStepper(['network', 'tokens', 'confirmation', 'approve'])
+  useStepper(['network', 'tokens', 'confirmation'])
 
 const onBack = () => {
   switch (currentStep.value.name) {

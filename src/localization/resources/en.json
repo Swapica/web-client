@@ -101,5 +101,9 @@
     "token-to-sell-lbl": "Token to sell",
     "token-to-buy-lbl": "Token to buy",
     "token-network": "Network: {network}"
+  },
+  "confirmation-step": {
+    "title": "Confirmation",
+    "description": "Lorem ipsum dolor sit amet consectetur. Purus condimentum nunc quam a enim ullamcorper.  Purus condimentum nunc"
   }
 }
