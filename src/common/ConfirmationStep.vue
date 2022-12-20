@@ -23,7 +23,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 withDefaults(
   defineProps<{
-    title: string
+    title?: string
     description?: string
   }>(),
   {
