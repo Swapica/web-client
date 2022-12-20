@@ -8,6 +8,8 @@ export const useCreateOrderForm = () => {
   const form = reactive({
     networkSell: selectedChain.value?.chain_params.chain_id || '',
     networkBuy: '',
+    amountSell: '',
+    amountBuy: '',
   })
 
   return {

@@ -1,5 +1,5 @@
 <template>
-  <form class="create-order-form-network-step" @submit.prevent>
+  <form class="create-order-form-network-step" @submit.prevent="handleNext">
     <h4 class="create-order-form-network-step__title">
       {{ $t('create-order-form-network-step.title') }}
     </h4>
@@ -35,7 +35,7 @@
         class="create-order-form-network-step__action"
         :text="$t('create-order-form-network-step.next-btn')"
         scheme="primary"
-        @click="handleNext"
+        type="submit"
       />
     </div>
   </form>
@@ -119,6 +119,10 @@ const handleNext = () => {
   grid-template-columns: 1fr 1fr;
   width: 100%;
   gap: toRem(32);
+
+  @include respond-to(tablet) {
+    gap: toRem(16);
+  }
 }
 
 .create-order-form-network-step__action {

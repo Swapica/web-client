@@ -36,7 +36,7 @@ const close = () => emit('update:is-shown', false)
     padding: toRem(24) toRem(16) toRem(48) toRem(17);
 
     @include respond-to(small) {
-      padding: toRem(16) toRem(9) toRem(31) toRem(23);
+      padding: toRem(16) toRem(10) toRem(31) toRem(23);
     }
   }
 }

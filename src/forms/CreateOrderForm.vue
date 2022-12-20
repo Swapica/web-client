@@ -10,7 +10,12 @@
       @cancel="emit('close')"
       @next="onNext"
     />
-    <create-order-form-tokens-step v-if="currentStep.name === 'tokens'" />
+    <create-order-form-tokens-step
+      v-if="currentStep.name === 'tokens'"
+      :former="former"
+      @back="onBack"
+      @next="onNext"
+    />
   </form>
 </template>
 
@@ -26,12 +31,15 @@ const emit = defineEmits<{
 
 const former = useCreateOrderForm()
 
-const { currentStep, totalStepsVisible, currentIdx, forward } = useStepper([
-  'network',
-  'tokens',
-  'confirmation',
-  'approve',
-])
+const { currentStep, totalStepsVisible, currentIdx, forward, back } =
+  useStepper(['network', 'tokens', 'confirmation', 'approve'])
+
+const onBack = () => {
+  switch (currentStep.value.name) {
+    default:
+      back()
+  }
+}
 
 const onNext = () => {
   switch (currentStep.value.name) {

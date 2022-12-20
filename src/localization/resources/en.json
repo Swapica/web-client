@@ -92,5 +92,14 @@
     "network-to-buy-lbl": "Network to buy",
     "cancel-btn": "Cancel",
     "next-btn": "Next step"
+  },
+  "create-order-form-tokens-step": {
+    "title": "Create Order",
+    "description": "Lorem ipsum dolor sit amet consectetur. Purus condimentum nunc quam a enim ullamcorper.  Purus condimentum nunc",
+    "back-btn": "Back",
+    "next-btn": "Confirm",
+    "token-to-sell-lbl": "Token to sell",
+    "token-to-buy-lbl": "Token to buy",
+    "token-network": "Network: {network}"
   }
 }
