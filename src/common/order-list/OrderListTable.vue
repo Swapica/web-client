@@ -44,6 +44,12 @@
             <app-button
               class="order-list-table__body-item-icon"
               scheme="icon"
+              target="_blank"
+              :href="provider.getAddressUrl(
+                networkBuy(i.info.destChain.toNumber())
+                  ?.chain_params.explorer_url!,
+                i.info.tokenToBuy
+              )"
               :icon-left="$icons.link"
             />
           </div>
@@ -69,7 +75,7 @@
         </div>
         <div class="order-list-table__body-item-network">
           <span class="order-list-table__body-item-network-text">
-            {{ i.info.destChain.toString() }}/BSC
+            {{ networkBuy(i.info.destChain.toNumber())?.name }}/Ethereum
           </span>
         </div>
         <app-button
@@ -95,12 +101,18 @@ import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { UserOrder } from '@/types'
 import { cropAddress } from '@/helpers'
+import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
 defineProps<{
   list: UserOrder[]
 }>()
 
 const { width: windowWidth } = useWindowSize()
+const { chainByChainId } = storeToRefs(useChainsStore())
+const { provider } = storeToRefs(useWeb3ProvidersStore())
+
+const networkBuy = (chainId: number) => chainByChainId.value(chainId)
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
