@@ -7,6 +7,7 @@
     <create-order-form-network-step
       v-if="currentStep.name === 'network'"
       :former="former"
+      :is-disabled="isFormDisabled"
       @cancel="emit('close')"
       @next="onNext"
     />
@@ -27,7 +28,7 @@ import CreateOrderFormNetworkStep from '@/forms/create-order-form/CreateOrderFor
 import CreateOrderFormTokensStep from '@/forms/create-order-form/CreateOrderFormTokensStep.vue'
 import { useCreateOrderForm, useForm, useStepper } from '@/composables'
 import { StepperIndicator, ConfirmationStep } from '@/common'
-import { ErrorHandler } from '@/helpers'
+import { ErrorHandler, switchNetwork } from '@/helpers'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { callers } from '@/api'
@@ -62,6 +63,9 @@ const onBack = () => {
 
 const onNext = () => {
   switch (currentStep.value.name) {
+    case STEPS.network:
+      switchChain()
+      break
     case STEPS.tokens:
       submit()
       break
@@ -111,5 +115,16 @@ const createOrder = async () => {
   const { data } = await former.createOrder()
   await provider.value.signAndSendTx(data.tx_body)
   emit('close')
+}
+
+const switchChain = async () => {
+  disableForm()
+  try {
+    await switchNetwork(former.networkSell.value!)
+    forward()
+  } catch (e) {
+    ErrorHandler.process(e)
+  }
+  enableForm()
 }
 </script>

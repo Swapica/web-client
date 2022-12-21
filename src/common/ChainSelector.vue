@@ -73,12 +73,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { EIP1474, WINDOW_BREAKPOINTS } from '@/enums'
+import { WINDOW_BREAKPOINTS } from '@/enums'
 import { Dropdown, Icon } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { ChainResposne, EthProviderRpcError } from '@/types'
+import { ChainResposne } from '@/types'
 import { storeToRefs } from 'pinia'
-import { ErrorHandler } from '@/helpers'
+import { ErrorHandler, switchNetwork } from '@/helpers'
 
 const chainStore = useChainsStore()
 const { provider } = storeToRefs(useWeb3ProvidersStore())
@@ -93,29 +93,10 @@ const switchChain = async (
   dropdown: { close: () => void },
 ) => {
   try {
-    if (provider.value.isConnected) {
-      await provider.value.switchChain(chain.chain_params.chain_id)
-    }
+    await switchNetwork(chain)
     chainStore.selectChain(chain.chain_params.chain_id)
   } catch (error) {
-    const e = error as EthProviderRpcError
-    if (e?.code === 4902 || e?.code === EIP1474.internalError) {
-      try {
-        await provider.value.addChain(
-          chain.chain_params.chain_id,
-          chain.name,
-          chain.chain_params.rpc,
-          chain.chain_params.native_symbol,
-          chain.chain_params.native_symbol, // TODO add name
-          chain.chain_params.native_decimals,
-          chain.chain_params.explorer_url,
-        )
-      } catch (e) {
-        ErrorHandler.process(e)
-      }
-    } else {
-      ErrorHandler.process(e)
-    }
+    ErrorHandler.process(error)
   }
   dropdown.close()
 }

@@ -1,10 +1,17 @@
-import { EthProviderRpcError, TokenInfo, TxRequestBody } from '@/types'
+import {
+  ChainResposne,
+  EthProviderRpcError,
+  TokenInfo,
+  TxRequestBody,
+} from '@/types'
 import { errors } from '@/errors'
 import { ethers } from 'ethers'
 import { EIP1193, EIP1193String, EIP1474 } from '@/enums'
 import { mapKeys, get } from 'lodash-es'
 import { toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
+import { useWeb3ProvidersStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
 export const connectEthAccounts = async (
   provider: ethers.providers.Web3Provider,
@@ -125,4 +132,33 @@ export async function loadTokenInfo(rpcUrl: string, address: string) {
     decimals: erc20.decimals.value,
     symbol: erc20.symbol.value,
   } as TokenInfo
+}
+
+export async function switchNetwork(chain: ChainResposne) {
+  const { provider } = storeToRefs(useWeb3ProvidersStore())
+
+  try {
+    if (provider.value.isConnected) {
+      await provider.value.switchChain(chain.chain_params.chain_id)
+    }
+  } catch (error) {
+    const e = error as EthProviderRpcError
+    if (e?.code === 4902 || e?.code === EIP1474.internalError) {
+      try {
+        await provider.value.addChain(
+          chain.chain_params.chain_id,
+          chain.name,
+          chain.chain_params.rpc,
+          chain.chain_params.native_symbol,
+          chain.chain_params.native_symbol, // TODO add name
+          chain.chain_params.native_decimals,
+          chain.chain_params.explorer_url,
+        )
+      } catch (e) {
+        handleEthError(e as EthProviderRpcError)
+      }
+    } else {
+      handleEthError(e)
+    }
+  }
 }

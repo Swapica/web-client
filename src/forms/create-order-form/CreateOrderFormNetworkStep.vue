@@ -12,6 +12,7 @@
       scheme="primary"
       :label="$t('create-order-form-network-step.network-to-sell-lbl')"
       :value-options="chains"
+      :disabled="isDisabled"
       :error-message="getFieldErrorMessage('networkSell')"
       @blur="touchField('networkSell')"
     />
@@ -19,6 +20,7 @@
       v-model="form.networkBuy"
       scheme="primary"
       :value-options="chains"
+      :disabled="isDisabled"
       :label="$t('create-order-form-network-step.network-to-buy-lbl')"
       :error-message="getFieldErrorMessage('networkBuy')"
       @blur="touchField('networkBuy')"
@@ -28,12 +30,14 @@
       <app-button
         class="create-order-form-network-step__action"
         :text="$t('create-order-form-network-step.cancel-btn')"
+        :disabled="isDisabled"
         scheme="secondary"
         @click="emit('cancel')"
       />
       <app-button
         class="create-order-form-network-step__action"
         :text="$t('create-order-form-network-step.next-btn')"
+        :disabled="isDisabled"
         scheme="primary"
         type="submit"
       />
@@ -52,6 +56,7 @@ import { required } from '@/validators'
 
 const props = defineProps<{
   former: UseCreateOrderForm
+  isDisabled: boolean
 }>()
 
 const emit = defineEmits<{
