@@ -28,7 +28,7 @@ export type ChainResposne = JsonApiRecordBase<'chain'> & {
   swap_contract: string
 }
 
-type TxBody = {
+export type TxBody = {
   from: string
   to: string
   value: string

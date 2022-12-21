@@ -28,8 +28,8 @@
             v-model="form.tokenSell"
             :value-options="[
               {
-                value: '0x242AA4858284e53D8B657E12A610fb5F03043CfA',
-                label: 'USDT ',
+                value: '0x6aba99FB7Aab12191b022C7A4D92f6f8775a2F0B',
+                label: 'SLP ',
               },
             ]"
             :disabled="isDisabled"

@@ -35,6 +35,8 @@ import { useWeb3ProvidersStore } from '@/store'
 import { ErrorHandler } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import OrderListTable from '@/common/order-list/OrderListTable.vue'
+import { ethers } from 'ethers'
+import { UserOrder } from '@/types'
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 
@@ -46,13 +48,25 @@ const emit = defineEmits<{
 const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref([])
+const list = ref<UserOrder[]>([])
 
 const loadList = async () => {
   try {
-    swapicaContract.init('0x7dC47fBb83Aa9aD72fF87a5Ce1Cd9D521Af3a82a')
-    await swapicaContract.getUserOrders(provider.value.selectedAddress!, 1, 14)
-    emit('list-empty')
+    const rpcProvider = new ethers.providers.JsonRpcProvider(
+      'https://goerli.infura.io/v3/5d2d42ec8be94b77a70ff167f9e19396',
+    )
+
+    swapicaContract.init(
+      '0x7dC47fBb83Aa9aD72fF87a5Ce1Cd9D521Af3a82a',
+      rpcProvider,
+    )
+    const data = await swapicaContract.getUserOrders(
+      provider.value.selectedAddress!,
+      0,
+      14,
+    )
+    list.value = data
+    if (!data.length) emit('list-empty')
   } catch (e) {
     isLoadFailed.value = true
     emit('load-failed')

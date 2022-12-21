@@ -1,7 +1,9 @@
-import { EthProviderRpcError } from '@/types'
+import { EthProviderRpcError, TxRequestBody } from '@/types'
 import { errors } from '@/errors'
 import { ethers } from 'ethers'
 import { EIP1193, EIP1474 } from '@/enums'
+import { mapKeys, get } from 'lodash-es'
+import { toCamelCaseDeep } from '@/helpers'
 
 export const connectEthAccounts = async (
   provider: ethers.providers.Web3Provider,
@@ -90,4 +92,24 @@ export function getEthExplorerTxUrl(explorerUrl: string, txHash: string) {
 
 export function getEthExplorerAddressUrl(explorerUrl: string, address: string) {
   return `${explorerUrl}/address/${address}`
+}
+
+export function normalizeTxBody(txBody: TxRequestBody): TxRequestBody {
+  const web3ToEthersTxBodyDiffs = {
+    chain: 'chainId',
+  }
+
+  const caseNormalizedTxBody = toCamelCaseDeep(txBody) as object
+  const propertyNormalizedTxBody = mapKeys(
+    caseNormalizedTxBody as object,
+    (value, key) => {
+      if (key in Object.keys(web3ToEthersTxBodyDiffs)) {
+        return get(web3ToEthersTxBodyDiffs, key)
+      } else {
+        return key
+      }
+    },
+  )
+
+  return propertyNormalizedTxBody as TxRequestBody
 }

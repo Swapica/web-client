@@ -6,6 +6,7 @@ import {
   handleEthError,
   requestAddEthChain,
   requestSwitchEthChain,
+  normalizeTxBody,
 } from '@/helpers'
 import { computed, ref } from 'vue'
 import {
@@ -118,7 +119,7 @@ export const useMetamask = (provider: ProviderInstance): ProviderWrapper => {
   const signAndSendTransaction = async (txRequestBody: TxRequestBody) => {
     try {
       const transactionResponse = await currentSigner.value.sendTransaction(
-        txRequestBody as Deferrable<TransactionRequest>,
+        normalizeTxBody(txRequestBody) as Deferrable<TransactionRequest>,
       )
       await transactionResponse.wait()
 

@@ -93,7 +93,7 @@ const checkApprove = async () => {
   const { data } = await callers.post<TxResposne>('/v1/approve', {
     data: {
       sender: provider.value.selectedAddress,
-      chain_id: former.networkSell.value.id,
+      chain_id: former.networkSell.value?.id,
       token_address: former.form.tokenSell,
       token_type: 'erc20',
     },
