@@ -13,6 +13,8 @@ export const useCreateOrderForm = () => {
     networkBuy: '',
     amountSell: '',
     amountBuy: '',
+    tokenSell: '',
+    tokenBuy: '',
   })
 
   return {

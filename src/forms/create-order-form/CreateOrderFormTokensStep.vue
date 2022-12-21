@@ -22,6 +22,15 @@
             :is-error-message-shown="false"
             @blur="touchField('amountSell')"
           />
+          <token-select
+            v-model="form.tokenSell"
+            :value-options="[
+              {
+                value: '0x242AA4858284e53D8B657E12A610fb5F03043CfA',
+                label: 'USDT ',
+              },
+            ]"
+          />
         </div>
         <p class="create-order-form-tokens-step__token-network">
           {{
@@ -44,6 +53,15 @@
             :error-message="getFieldErrorMessage('amountBuy')"
             :is-error-message-shown="false"
             @blur="touchField('amountBuy')"
+          />
+          <token-select
+            v-model="form.tokenBuy"
+            :value-options="[
+              {
+                value: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
+                label: 'USDC ',
+              },
+            ]"
           />
         </div>
         <p class="create-order-form-tokens-step__token-network">
@@ -74,7 +92,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AppButton } from '@/common'
+import { AppButton, TokenSelect } from '@/common'
 import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { UseCreateOrderForm } from '@/types'
@@ -195,13 +213,22 @@ const handleNext = () => {
 }
 
 .create-order-form-tokens-step__token {
-  display: flex;
+  display: grid;
   align-items: center;
+  grid-template-columns: toRem(60) minmax(toRem(100), 1fr);
   width: calc(100% + #{toRem(3)});
   margin: toRem(8) 0;
+  gap: toRem(12);
 
   @include respond-to(tablet) {
     margin-top: 0;
+  }
+}
+
+.create-order-form-tokens-step__input {
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  :deep(.input-field__input) {
+    padding: toRem(4) toRem(6.94) toRem(5) toRem(8.06);
   }
 }
 </style>

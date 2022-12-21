@@ -34,7 +34,7 @@ const emit = defineEmits<{
 const former = useCreateOrderForm()
 
 const { currentStep, totalStepsVisible, currentIdx, forward, back } =
-  useStepper(['network', 'tokens', 'confirmation'])
+  useStepper(['network', 'tokens', 'confirmation'], 'tokens')
 
 const onBack = () => {
   switch (currentStep.value.name) {
