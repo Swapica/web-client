@@ -78,9 +78,7 @@ const submit = async () => {
     if (approveTx.value) {
       await approve()
     } else {
-      const { data } = await former.createOrder()
-      await provider.value.signAndSendTx(data.tx_body)
-      emit('close')
+      await createOrder()
     }
   } catch (e) {
     toStep(STEPS.tokens)
@@ -107,5 +105,11 @@ const approve = async () => {
     // toStep(STEPS.approve)
     ErrorHandler.process(e)
   }
+}
+
+const createOrder = async () => {
+  const { data } = await former.createOrder()
+  await provider.value.signAndSendTx(data.tx_body)
+  emit('close')
 }
 </script>

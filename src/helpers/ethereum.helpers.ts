@@ -1,7 +1,7 @@
 import { EthProviderRpcError, TxRequestBody } from '@/types'
 import { errors } from '@/errors'
 import { ethers } from 'ethers'
-import { EIP1193, EIP1474 } from '@/enums'
+import { EIP1193, EIP1193String, EIP1474 } from '@/enums'
 import { mapKeys, get } from 'lodash-es'
 import { toCamelCaseDeep } from '@/helpers'
 
@@ -48,6 +48,7 @@ export async function requestAddEthChain(
 export function handleEthError(error: EthProviderRpcError) {
   switch (error.code) {
     case EIP1193.userRejectedRequest:
+    case EIP1193String.userRejectedRequest:
       throw new errors.ProviderUserRejectedRequest(error.message)
     case EIP1193.unauthorized:
       throw new errors.ProviderUnauthorized(error.message)
