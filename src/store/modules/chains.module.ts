@@ -19,8 +19,7 @@ export const useChainsStore = defineStore('chains-store', {
   },
   getters: {
     chains: state => state._chains,
-    chainById: state => (id: number) =>
-      state._chains.find(i => i.chain_params.chain_id === id),
+    chainById: state => (id: string) => state._chains.find(i => i.id === id),
     selectedChain: state => state._selectedChain,
   },
 })

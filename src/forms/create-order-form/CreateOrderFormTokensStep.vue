@@ -20,6 +20,7 @@
             class="create-order-form-tokens-step__input"
             placeholder="0.0000"
             :error-message="getFieldErrorMessage('amountSell')"
+            :disabled="isDisabled"
             :is-error-message-shown="false"
             @blur="touchField('amountSell')"
           />
@@ -31,6 +32,9 @@
                 label: 'USDT ',
               },
             ]"
+            :disabled="isDisabled"
+            :error-message="getFieldErrorMessage('tokenSell')"
+            @blur="touchField('tokenSell')"
           />
         </div>
         <p class="create-order-form-tokens-step__token-network">
@@ -54,6 +58,7 @@
             placeholder="0.0000"
             :error-message="getFieldErrorMessage('amountBuy')"
             :is-error-message-shown="false"
+            :disabled="isDisabled"
             @blur="touchField('amountBuy')"
           />
           <token-select
@@ -64,6 +69,9 @@
                 label: 'USDC ',
               },
             ]"
+            :error-message="getFieldErrorMessage('tokenBuy')"
+            :disabled="isDisabled"
+            @blur="touchField('tokenBuy')"
           />
         </div>
         <p class="create-order-form-tokens-step__token-network">
@@ -80,12 +88,14 @@
       <app-button
         class="create-order-form-tokens-step__action"
         :text="$t('create-order-form-tokens-step.back-btn')"
+        :disabled="isDisabled"
         scheme="secondary"
         @click="emit('back')"
       />
       <app-button
         class="create-order-form-tokens-step__action"
         :text="$t('create-order-form-tokens-step.next-btn')"
+        :disabled="isDisabled"
         scheme="primary"
         type="submit"
       />
@@ -107,6 +117,7 @@ const { width: windowWidth } = useWindowSize()
 
 const props = defineProps<{
   former: UseCreateOrderForm
+  isDisabled: boolean
 }>()
 
 const emit = defineEmits<{
@@ -123,6 +134,8 @@ const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   {
     amountSell: { required },
     amountBuy: { required },
+    tokenSell: { required },
+    tokenBuy: { required },
   },
 )
 

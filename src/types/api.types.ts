@@ -25,4 +25,18 @@ export type ChainResposne = JsonApiRecordBase<'chain'> & {
   icon: string
   name: string
   chain_params: ChainParams
+  swap_contract: string
+}
+
+type TxBody = {
+  from: string
+  to: string
+  value: string
+  data: string
+  chain_id: string
+}
+
+export type TxResposne = JsonApiRecordBase<'evm_transaction'> & {
+  tx_body: TxBody
+  confirmed: boolean
 }

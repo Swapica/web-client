@@ -73,7 +73,7 @@ const chainStore = useChainsStore()
 const chains = computed(() =>
   chainStore.chains.map(i => ({
     label: i.name,
-    value: i.chain_params.chain_id,
+    value: i.id,
     imageUrl: i.icon,
   })),
 )
