@@ -83,7 +83,8 @@
     "sell-lbl": "To Sell",
     "network-lbl": "Network",
     "cancel-order-btn": "Cancel order",
-    "cancel-btn": "Cancel"
+    "cancel-btn": "Cancel",
+    "address": "({address})"
   },
   "create-order-form-network-step": {
     "title": "Create Order",

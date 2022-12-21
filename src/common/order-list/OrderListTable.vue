@@ -22,14 +22,24 @@
       </div>
     </div>
     <div class="order-list-table__body-wrp">
-      <div class="order-list-table__body" v-for="i in 5" :key="i">
+      <div
+        class="order-list-table__body"
+        v-for="i in list"
+        :key="i.info.id.toString()"
+      >
         <div class="order-list-table__body-item-info-wrp">
           <!-- eslint-disable-next-line max-len -->
           <div class="order-list-table__body-item-info order-list-table__body-item-info-buy">
-            <span class="order-list-table__body-item-amount"> 0.0045 </span>
-            <span class="order-list-table__body-item-code">WETH</span>
+            <span class="order-list-table__body-item-amount">
+              {{ i.info.amountToBuy.toString() }}
+            </span>
+            <span class="order-list-table__body-item-code">
+              {{ i.tokenToBuy.symbol }}
+            </span>
             <span v-if="!isSmall" class="order-list-table__body-item-address">
-              (0x20...27c)
+              {{ $t('order-list-table.address', {
+                address: cropAddress(i.info.tokenToBuy, 4, 3)
+              }) }}
             </span>
             <app-button
               class="order-list-table__body-item-icon"
@@ -39,10 +49,16 @@
           </div>
           <!-- eslint-disable-next-line max-len -->
           <div class="order-list-table__body-item-info order-list-table__body-item-info-sell">
-            <span class="order-list-table__body-item-amount"> 0.0045 </span>
-            <span class="order-list-table__body-item-code">SOL</span>
+            <span class="order-list-table__body-item-amount">
+              {{ i.info.amountToSell.toString() }}
+            </span>
+            <span class="order-list-table__body-item-code">
+              {{ i.tokenToSell.symbol }}
+            </span>
             <span v-if="!isSmall" class="order-list-table__body-item-address">
-              (0x20...27c)
+              {{ $t('order-list-table.address', {
+                address: cropAddress(i.info.tokenToSell, 4, 3)
+              }) }}
             </span>
             <app-button
               class="order-list-table__body-item-icon"
@@ -53,7 +69,7 @@
         </div>
         <div class="order-list-table__body-item-network">
           <span class="order-list-table__body-item-network-text">
-            Ethereum/BSC
+            {{ i.info.destChain.toString() }}/BSC
           </span>
         </div>
         <app-button
@@ -77,6 +93,12 @@ import { AppButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
+import { UserOrder } from '@/types'
+import { cropAddress } from '@/helpers'
+
+defineProps<{
+  list: UserOrder[]
+}>()
 
 const { width: windowWidth } = useWindowSize()
 

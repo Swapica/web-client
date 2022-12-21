@@ -1,39 +1,44 @@
 import { ref } from 'vue'
-import { UseProvider, Erc20, Erc20__factory } from '@/types'
+import { UseUnrefProvider, Erc20, Erc20__factory } from '@/types'
 import { BN } from '@/utils/math.util'
+import { JsonRpcProvider } from '@ethersproject/providers'
 
-export const useErc20 = (provider: UseProvider, address?: string) => {
+export const useErc20 = (
+  provider: UseUnrefProvider | JsonRpcProvider,
+  address?: string,
+) => {
   const _instance = ref<Erc20 | undefined>()
   const _instance_rw = ref<Erc20 | undefined>()
 
-  if (
-    address &&
-    provider.currentProvider.value &&
-    provider.currentSigner.value
-  ) {
+  if (address) {
     _instance.value = Erc20__factory.connect(
       address,
-      provider.currentProvider.value,
+      provider && 'currentSigner' in provider
+        ? provider.currentProvider!
+        : provider!,
     )
-    _instance_rw.value = Erc20__factory.connect(
-      address,
-      provider.currentSigner.value,
-    )
-  }
-
-  const init = (address: string) => {
-    if (
-      address &&
-      provider.currentProvider.value &&
-      provider.currentSigner.value
-    ) {
-      _instance.value = Erc20__factory.connect(
-        address,
-        provider.currentProvider.value,
-      )
+    if (provider && 'currentSigner' in provider) {
       _instance_rw.value = Erc20__factory.connect(
         address,
-        provider.currentSigner.value,
+        provider.currentSigner!,
+      )
+    }
+  }
+
+  const init = (
+    address: string,
+    provider: UseUnrefProvider | JsonRpcProvider,
+  ) => {
+    _instance.value = Erc20__factory.connect(
+      address,
+      provider && 'currentSigner' in provider
+        ? provider.currentProvider!
+        : provider!,
+    )
+    if (provider && 'currentSigner' in provider) {
+      _instance_rw.value = Erc20__factory.connect(
+        address,
+        provider.currentSigner!,
       )
     }
   }
@@ -55,16 +60,10 @@ export const useErc20 = (provider: UseProvider, address?: string) => {
   const loadDetails = async () => {
     if (!_instance.value) return
 
-    await Promise.all([
-      getDecimals(),
-      getName(),
-      getOwner(),
-      getSymbol(),
-      getTotalSupply(),
-    ])
-    if (provider.currentSigner.value) {
+    await Promise.all([getDecimals(), getName(), getSymbol(), getTotalSupply()])
+    if (provider && 'currentSigner' in provider) {
       balance.value = await getBalanceOf(
-        await provider.currentSigner.value?.getAddress(),
+        await provider.currentSigner!.getAddress(),
       )
     }
   }

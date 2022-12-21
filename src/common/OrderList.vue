@@ -9,7 +9,7 @@
       </template>
       <template v-else>
         <template v-if="list.length">
-          <order-list-table />
+          <order-list-table :list="list" />
         </template>
         <template v-else>
           <template v-if="$slots.noDataMsg">
@@ -63,7 +63,7 @@ const loadList = async () => {
     const data = await swapicaContract.getUserOrders(
       provider.value.selectedAddress!,
       0,
-      14,
+      1,
     )
     list.value = data
     if (!data.length) emit('list-empty')
