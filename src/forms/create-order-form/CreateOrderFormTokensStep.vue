@@ -16,6 +16,7 @@
         <div class="create-order-form-tokens-step__token create-order-form-tokens-step__token-sell">
           <input-field
             v-model="form.amountSell"
+            type="number"
             class="create-order-form-tokens-step__input"
             placeholder="0.0000"
             :error-message="getFieldErrorMessage('amountSell')"
@@ -47,6 +48,7 @@
         <!-- eslint-disable-next-line prettier/prettier max-len -->
         <div class="create-order-form-tokens-step__token create-order-form-tokens-step__token-buy">
           <input-field
+            type="number"
             v-model="form.amountBuy"
             class="create-order-form-tokens-step__input"
             placeholder="0.0000"
