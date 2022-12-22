@@ -14,10 +14,12 @@ import { onClickOutside } from '@vueuse/core'
 import { ICON_NAMES } from '@/enums'
 
 type SCHEMES = 'primary'
+type SIZES = 'medium' | 'default'
 
 const props = withDefaults(
   defineProps<{
     scheme?: SCHEMES
+    size?: SIZES
     modelValue: string | number
     valueOptions?: {
       label: string
@@ -31,6 +33,7 @@ const props = withDefaults(
   }>(),
   {
     scheme: 'primary',
+    size: 'default',
     valueOptions: () => [],
     type: 'text',
     label: '',
@@ -78,6 +81,7 @@ const selectFieldClasses = computed(() => ({
   'select-field--readonly': isReadonly.value,
   'select-field--label-active': isLabelActive.value,
   [`select-field--${props.scheme}`]: true,
+  [`select-field--${props.size}`]: true,
 }))
 
 const setHeightCSSVar = (element: HTMLElement) => {
@@ -306,6 +310,13 @@ $z-local-index: 2;
   @include field-text;
 
   transition-property: color;
+
+  .select-field--medium & {
+    font-size: toRem(18);
+    padding: toRem(7.5) toRem(12);
+    padding-right: toRem(32);
+    min-height: toRem(32);
+  }
 
   .select-field--open.select-field--primary & {
     background: url('/backgrounds/select-field-hover-bg.svg') no-repeat;

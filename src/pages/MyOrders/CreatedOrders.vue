@@ -1,11 +1,24 @@
 <template>
-  <div class="created-orders">
-    <h5 class="created-orders__title">
-      {{ $t('created-orders.title') }}
-    </h5>
+  <div
+    class="created-orders"
+    :class="{ 'created-orders--without-btn': !isCreateOrderBtnShown }"
+  >
+    <div class="created-orders__title-wrp">
+      <h5 class="created-orders__title">
+        {{ $t('created-orders.title') }}
+      </h5>
+      <select-field
+        class="created-orders__network-select"
+        v-model="networkId"
+        scheme="primary"
+        size="medium"
+        :value-options="chains"
+      />
+    </div>
     <app-button
       v-if="provider.isConnected && isCreateOrderBtnShown"
       class="created-orders__create-btn"
+      size="small"
       :scheme="isTablet ? 'primary-mobile' : 'primary'"
       :text="$t('created-orders.create-btn')"
       :disabled="isCreateOrderBtnDisabled"
@@ -14,6 +27,7 @@
     <div class="created-orders__content">
       <template v-if="provider.isConnected">
         <order-list
+          :chain-id="networkId"
           @list-empty="isCreateOrderBtnShown = !$event"
           @load-failed="isCreateOrderBtnDisabled = $event"
         >
@@ -54,16 +68,26 @@ import {
   OrderList,
   CreateOrderModal,
 } from '@/common'
-import { useWeb3ProvidersStore } from '@/store'
+import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
+import { SelectField } from '@/fields'
 
 const { width: windowWidth } = useWindowSize()
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const { provider } = storeToRefs(useWeb3ProvidersStore())
+const chainStore = useChainsStore()
+const networkId = ref(chainStore.selectedChain?.id ?? chainStore.chains[0].id)
+
+const chains = computed(() =>
+  chainStore.chains.map(i => ({
+    label: i.name,
+    value: i.id,
+  })),
+)
 
 const isCreateOrderBtnShown = ref(true)
 const isCreateOrderBtnDisabled = ref(false)
@@ -74,17 +98,25 @@ const isCreateOrderModalShown = ref(false)
 .created-orders {
   display: grid;
   grid-template-columns: 1fr toRem(181);
+  gap: toRem(12);
   align-items: center;
   grid-template-areas:
     'title button'
     'content content';
 
+  &--without-btn {
+    grid-template-areas:
+      'title title'
+      'content content';
+  }
+
   @include respond-to(tablet) {
+    gap: toRem(8);
     grid-template-columns: 1fr;
     grid-template-areas:
       'title'
-      'content'
-      'button';
+      'button'
+      'content';
   }
 }
 
@@ -94,13 +126,19 @@ const isCreateOrderModalShown = ref(false)
 
   @include respond-to(tablet) {
     width: toRem(288);
-    margin: toRem(9) auto 0;
+    margin: 0 auto;
   }
+}
+
+.created-orders__title-wrp {
+  grid-area: title;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .created-orders__title {
   margin-left: toRem(32);
-  grid-area: title;
 
   @include respond-to(tablet) {
     margin-left: toRem(12);
@@ -109,7 +147,6 @@ const isCreateOrderModalShown = ref(false)
 
 .created-orders__content {
   grid-area: content;
-  margin-top: toRem(12);
   background: url('/backgrounds/block-bg.svg') no-repeat;
   background-size: 100% 100%;
   width: 100%;
@@ -118,7 +155,6 @@ const isCreateOrderModalShown = ref(false)
   padding: toRem(32) toRem(42) toRem(46) toRem(50);
 
   @include respond-to(tablet) {
-    margin-top: toRem(15.5);
     padding: toRem(17) toRem(10) toRem(26) toRem(21);
     min-height: toRem(210);
   }
@@ -142,5 +178,10 @@ const isCreateOrderModalShown = ref(false)
   @include respond-to(small) {
     max-width: toRem(245);
   }
+}
+
+.created-orders__network-select {
+  max-width: toRem(158);
+  width: 100%;
 }
 </style>
