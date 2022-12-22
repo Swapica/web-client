@@ -106,5 +106,10 @@
   "confirmation-step": {
     "title": "Confirmation",
     "description": "Lorem ipsum dolor sit amet consectetur. Purus condimentum nunc quam a enim ullamcorper.  Purus condimentum nunc"
+  },
+  "approve-step": {
+    "title": "Approve Token",
+    "back-btn": "Back",
+    "approve-btn": "Approve"
   }
 }

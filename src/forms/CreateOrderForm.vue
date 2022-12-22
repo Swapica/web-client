@@ -1,25 +1,27 @@
 <template>
   <form class="create-order-form" @submit.prevent>
-    <stepper-indicator
-      :total-steps="totalStepsVisible"
-      :current-step-idx="currentIdx"
-    />
+    <stepper-indicator :steps="steps" :current-step-idx="currentIdx" />
     <create-order-form-network-step
-      v-if="currentStep.name === 'network'"
+      v-if="currentStep.name === STEPS.network"
       :former="former"
       :is-disabled="isFormDisabled"
       @cancel="emit('close')"
       @next="onNext"
     />
     <create-order-form-tokens-step
-      v-if="currentStep.name === 'tokens'"
+      v-if="currentStep.name === STEPS.tokens"
       :former="former"
       :is-disabled="isFormDisabled"
       @back="onBack"
       @next="onNext"
     />
 
-    <confirmation-step v-if="currentStep.name === 'confirmation'" />
+    <approve-step
+      v-if="currentStep.name === STEPS.approve"
+      @back="onBack"
+      @approve="handleApprove"
+    />
+    <confirmation-step v-if="currentStep.name === STEPS.confirmation" />
   </form>
 </template>
 
@@ -27,8 +29,8 @@
 import CreateOrderFormNetworkStep from '@/forms/create-order-form/CreateOrderFormNetworkStep.vue'
 import CreateOrderFormTokensStep from '@/forms/create-order-form/CreateOrderFormTokensStep.vue'
 import { useCreateOrderForm, useForm, useStepper } from '@/composables'
-import { StepperIndicator, ConfirmationStep } from '@/common'
-import { ErrorHandler, switchNetwork } from '@/helpers'
+import { StepperIndicator, ConfirmationStep, ApproveStep } from '@/common'
+import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { callers } from '@/api'
@@ -39,6 +41,7 @@ enum STEPS {
   network = 'network',
   tokens = 'tokens',
   confirmation = 'confirmation',
+  approve = 'approve',
 }
 
 const emit = defineEmits<{
@@ -49,8 +52,12 @@ const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const former = useCreateOrderForm()
 const { isFormDisabled, disableForm, enableForm } = useForm()
-const { currentStep, totalStepsVisible, currentIdx, forward, back, toStep } =
-  useStepper([STEPS.network, STEPS.tokens, STEPS.confirmation])
+const { currentStep, steps, currentIdx, forward, back, toStep } = useStepper([
+  STEPS.network,
+  STEPS.tokens,
+  { name: STEPS.approve, isHidden: true },
+  STEPS.confirmation,
+])
 
 const approveTx = ref<TxResposne | null>(null)
 
@@ -75,20 +82,18 @@ const onNext = () => {
 }
 
 const submit = async () => {
-  forward()
-  disableForm()
+  toStep(STEPS.confirmation)
   try {
     await checkApprove()
     if (approveTx.value) {
-      await approve()
-    } else {
-      await createOrder()
+      toStep(STEPS.approve)
+      return
     }
+
+    await createOrder()
   } catch (e) {
-    toStep(STEPS.tokens)
     ErrorHandler.process(e)
   }
-  enableForm()
 }
 
 const checkApprove = async () => {
@@ -102,19 +107,35 @@ const checkApprove = async () => {
   })
   approveTx.value = data || null
 }
-const approve = async () => {
+
+const handleApprove = async () => {
+  toStep(STEPS.confirmation)
+  try {
+    await approveToken()
+    await createOrder()
+  } catch (e) {
+    ErrorHandler.process(e)
+  }
+}
+const approveToken = async () => {
   try {
     await provider.value.signAndSendTx(approveTx.value?.tx_body)
   } catch (e) {
-    // toStep(STEPS.approve)
-    ErrorHandler.process(e)
+    toStep(STEPS.approve)
+    throw e
   }
 }
 
 const createOrder = async () => {
-  const { data } = await former.createOrder()
-  await provider.value.signAndSendTx(data.tx_body)
-  emit('close')
+  try {
+    const { data } = await former.createOrder()
+    await provider.value.signAndSendTx(data.tx_body)
+    Bus.emit(Bus.eventList.offerCreated)
+    emit('close')
+  } catch (e) {
+    toStep(STEPS.tokens)
+    throw e
+  }
 }
 
 const switchChain = async () => {

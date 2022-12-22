@@ -14,8 +14,8 @@
     <div class="created-orders__content">
       <template v-if="provider.isConnected">
         <order-list
-          @list-empty="isCreateOrderBtnShown = false"
-          @load-failed="isCreateOrderBtnDisabled = true"
+          @list-empty="isCreateOrderBtnShown = !$event"
+          @load-failed="isCreateOrderBtnDisabled = $event"
         >
           <template #noDataMsg>
             <no-data-message

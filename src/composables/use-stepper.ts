@@ -1,11 +1,7 @@
+import { Step } from '@/types'
 import { ref, computed } from 'vue'
 
-type Step = {
-  name: string
-  isHidden?: boolean
-}
-
-export function useStepper(_steps: Step[] | string[], initialStep = '') {
+export function useStepper(_steps: (Step | string)[], initialStep = '') {
   const steps = ref<Step[]>(_steps.map(_getStepOptions))
   const currentStep = ref(_getStep(initialStep) || steps.value[0])
   const currentIdx = computed(() => steps.value.indexOf(currentStep.value))

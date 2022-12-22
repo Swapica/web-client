@@ -1,19 +1,22 @@
 <template>
   <div class="stepper-indicator">
     <i
-      v-for="idx in totalSteps"
-      :key="idx"
+      v-for="(i, index) in steps"
+      :key="index"
+      v-show="!i.isHidden"
       class="stepper-indicator__dot"
       :class="{
-        'stepper-indicator__dot--active': idx - 1 <= currentStepIdx,
+        'stepper-indicator__dot--active': index <= currentStepIdx,
       }"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { Step } from '@/types'
+
 defineProps<{
-  totalSteps: number
+  steps: Step[]
   currentStepIdx: number
 }>()
 </script>

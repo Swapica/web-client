@@ -54,7 +54,8 @@ export async function requestAddEthChain(
 }
 
 export function handleEthError(error: EthProviderRpcError) {
-  switch (error.code) {
+  const code = get(error, 'error.code', error.code)
+  switch (code) {
     case EIP1193.userRejectedRequest:
     case EIP1193String.userRejectedRequest:
       throw new errors.ProviderUserRejectedRequest(error.message)

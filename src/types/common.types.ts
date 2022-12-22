@@ -42,3 +42,8 @@ export interface UseUnrefProvider {
   getTxUrl: (explorerUrl: string, txHash: string) => string
   getAddressUrl: (explorerUrl: string, address: string) => string
 }
+
+export type Step = {
+  name: string
+  isHidden?: boolean
+}

@@ -30,9 +30,9 @@
 <script lang="ts" setup>
 import { ErrorMessage, Loader } from '@/common'
 import { useSwapica } from '@/composables'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
-import { ErrorHandler } from '@/helpers'
+import { Bus, ErrorHandler } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { ethers } from 'ethers'
@@ -41,8 +41,8 @@ import { UserOrder } from '@/types'
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const emit = defineEmits<{
-  (e: 'list-empty'): void
-  (e: 'load-failed'): void
+  (e: 'list-empty', value: boolean): void
+  (e: 'load-failed', value: boolean): void
 }>()
 
 const swapicaContract = useSwapica(provider.value)
@@ -51,6 +51,10 @@ const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
 
 const loadList = async () => {
+  emit('load-failed', false)
+  emit('list-empty', false)
+  isLoaded.value = false
+  isLoadFailed.value = false
   try {
     const rpcProvider = new ethers.providers.JsonRpcProvider(
       'https://goerli.infura.io/v3/5d2d42ec8be94b77a70ff167f9e19396',
@@ -63,19 +67,31 @@ const loadList = async () => {
     const data = await swapicaContract.getUserOrders(
       provider.value.selectedAddress!,
       0,
-      1,
+      2,
     )
     list.value = data
-    if (!data.length) emit('list-empty')
+    if (!data.length) emit('list-empty', true)
   } catch (e) {
     isLoadFailed.value = true
-    emit('load-failed')
+    emit('load-failed', true)
     ErrorHandler.processWithoutFeedback(e)
   }
   isLoaded.value = true
 }
 
-loadList()
+Bus.on(Bus.eventList.offerCreated, () => {
+  loadList()
+})
+
+watch(
+  () => provider.value.selectedAddress,
+  () => {
+    loadList()
+  },
+  {
+    immediate: true,
+  },
+)
 </script>
 
 <style lang="scss" scoped>
