@@ -84,7 +84,8 @@
     "network-lbl": "Network",
     "cancel-order-btn": "Cancel order",
     "cancel-btn": "Cancel",
-    "address": "({address})"
+    "address": "({address})",
+    "network": "{to}/{from}"
   },
   "create-order-form-network-step": {
     "title": "Create Order",

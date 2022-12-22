@@ -9,7 +9,7 @@
       </template>
       <template v-else>
         <template v-if="list.length">
-          <order-list-table :list="list" />
+          <order-list-table :network-sell="network!" :list="list" />
         </template>
         <template v-else>
           <template v-if="$slots.noDataMsg">

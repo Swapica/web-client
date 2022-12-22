@@ -36,7 +36,11 @@
             <span class="order-list-table__body-item-code">
               {{ i.tokenToBuy.symbol }}
             </span>
-            <span v-if="!isSmall" class="order-list-table__body-item-address">
+            <span
+              v-if="!isSmall"
+              class="order-list-table__body-item-address"
+              :title="i.info.tokenToBuy"
+            >
               {{ $t('order-list-table.address', {
                 address: cropAddress(i.info.tokenToBuy, 4, 3)
               }) }}
@@ -61,7 +65,11 @@
             <span class="order-list-table__body-item-code">
               {{ i.tokenToSell.symbol }}
             </span>
-            <span v-if="!isSmall" class="order-list-table__body-item-address">
+            <span
+              v-if="!isSmall"
+              class="order-list-table__body-item-address"
+              :title="i.info.tokenToSell"
+            >
               {{ $t('order-list-table.address', {
                 address: cropAddress(i.info.tokenToSell, 4, 3)
               }) }}
@@ -70,12 +78,25 @@
               class="order-list-table__body-item-icon"
               scheme="icon"
               :icon-left="$icons.link"
+              :href="provider.getAddressUrl(
+                networkSell.chain_params.explorer_url,
+                i.info.tokenToSell
+              )"
             />
           </div>
         </div>
         <div class="order-list-table__body-item-network">
-          <span class="order-list-table__body-item-network-text">
-            {{ networkBuy(i.info.destChain.toNumber())?.name }}/Ethereum
+          <span
+            class="order-list-table__body-item-network-text"
+            :title="$t('order-list-table.network', {
+              from: networkSell.name,
+              to: networkBuy(i.info.destChain.toNumber())?.name
+            })"
+          >
+            {{ $t('order-list-table.network', {
+              from: networkSell.name,
+              to: networkBuy(i.info.destChain.toNumber())?.name
+            }) }}
           </span>
         </div>
         <app-button
@@ -100,13 +121,14 @@ import { AppButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { UserOrder } from '@/types'
+import { ChainResposne, UserOrder } from '@/types'
 import { cropAddress } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
 defineProps<{
   list: UserOrder[]
+  networkSell: ChainResposne
 }>()
 
 const { width: windowWidth } = useWindowSize()
