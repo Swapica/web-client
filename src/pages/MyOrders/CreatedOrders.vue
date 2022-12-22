@@ -12,6 +12,7 @@
         v-model="networkId"
         scheme="primary"
         size="medium"
+        :disabled="isLoading"
         :value-options="chains"
       />
     </div>
@@ -21,7 +22,7 @@
       size="small"
       :scheme="isTablet ? 'primary-mobile' : 'primary'"
       :text="$t('created-orders.create-btn')"
-      :disabled="isCreateOrderBtnDisabled"
+      :disabled="isCreateOrderBtnDisabled || isLoading"
       @click="isCreateOrderModalShown = true"
     />
     <div class="created-orders__content">
@@ -30,6 +31,7 @@
           :chain-id="networkId"
           @list-empty="isCreateOrderBtnShown = !$event"
           @load-failed="isCreateOrderBtnDisabled = $event"
+          @is-loading="isLoading = $event"
         >
           <template #noDataMsg>
             <no-data-message
@@ -94,6 +96,7 @@ const chains = computed(() =>
 
 const isCreateOrderBtnShown = ref(true)
 const isCreateOrderBtnDisabled = ref(false)
+const isLoading = ref(false)
 const isCreateOrderModalShown = ref(false)
 </script>
 

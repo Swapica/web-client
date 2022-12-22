@@ -49,6 +49,7 @@ const network = computed(() => chainByChainId.value(props.chainId))
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void
   (e: 'load-failed', value: boolean): void
+  (e: 'is-loading', value: boolean): void
 }>()
 
 const swapicaContract = useSwapica(provider.value)
@@ -59,6 +60,7 @@ const list = ref<UserOrder[]>([])
 const loadList = async () => {
   emit('load-failed', false)
   emit('list-empty', false)
+  emit('is-loading', true)
   isLoaded.value = false
   isLoadFailed.value = false
   try {
@@ -79,6 +81,7 @@ const loadList = async () => {
     emit('load-failed', true)
     ErrorHandler.processWithoutFeedback(e)
   }
+  emit('is-loading', false)
   isLoaded.value = true
 }
 
