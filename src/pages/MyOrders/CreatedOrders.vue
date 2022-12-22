@@ -80,12 +80,15 @@ const { width: windowWidth } = useWindowSize()
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const chainStore = useChainsStore()
-const networkId = ref(chainStore.selectedChain?.id ?? chainStore.chains[0].id)
+const networkId = ref(
+  chainStore.selectedChain?.chain_params.chain_id ??
+    chainStore.chains[0].chain_params.chain_id,
+)
 
 const chains = computed(() =>
   chainStore.chains.map(i => ({
     label: i.name,
-    value: i.id,
+    value: i.chain_params.chain_id,
   })),
 )
 

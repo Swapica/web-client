@@ -91,6 +91,7 @@
     </div>
     <div class="order-list__pagination">
       pag
+      slot
     </div>
   </div>
 </template>

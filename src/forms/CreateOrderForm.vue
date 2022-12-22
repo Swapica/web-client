@@ -92,6 +92,7 @@ const submit = async () => {
 
     await createOrder()
   } catch (e) {
+    toStep(STEPS.tokens)
     ErrorHandler.process(e)
   }
 }

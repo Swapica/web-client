@@ -30,15 +30,21 @@
 <script lang="ts" setup>
 import { ErrorMessage, Loader } from '@/common'
 import { useSwapica } from '@/composables'
-import { ref, watch } from 'vue'
-import { useWeb3ProvidersStore } from '@/store'
+import { ref, watch, computed } from 'vue'
+import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { ethers } from 'ethers'
 import { UserOrder } from '@/types'
 
+const props = defineProps<{
+  chainId: number
+}>()
+
 const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { chainByChainId } = storeToRefs(useChainsStore())
+const network = computed(() => chainByChainId.value(props.chainId))
 
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void
@@ -57,13 +63,10 @@ const loadList = async () => {
   isLoadFailed.value = false
   try {
     const rpcProvider = new ethers.providers.JsonRpcProvider(
-      'https://goerli.infura.io/v3/5d2d42ec8be94b77a70ff167f9e19396',
+      network.value?.chain_params.rpc,
     )
 
-    swapicaContract.init(
-      '0x7dC47fBb83Aa9aD72fF87a5Ce1Cd9D521Af3a82a',
-      rpcProvider,
-    )
+    swapicaContract.init(network.value?.swap_contract!, rpcProvider)
     const data = await swapicaContract.getUserOrders(
       provider.value.selectedAddress!,
       0,
@@ -84,7 +87,7 @@ Bus.on(Bus.eventList.offerCreated, () => {
 })
 
 watch(
-  () => provider.value.selectedAddress,
+  () => [provider.value.selectedAddress, props.chainId],
   () => {
     loadList()
   },
