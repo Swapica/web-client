@@ -117,5 +117,8 @@
     "created-msg": "Offer successfuly created",
     "approve-msg": "Approve {token} to match this order. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
     "approve-msg-token": "ERC20 Token"
+  },
+  "copy-button": {
+    "copied-message": "Copied!"
   }
 }

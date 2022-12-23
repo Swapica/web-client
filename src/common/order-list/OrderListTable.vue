@@ -48,9 +48,10 @@
             <span class="order-list-table__body-item-code">
               {{ i.tokenToBuy.symbol }}
             </span>
-            <span
+            <copy-button
               v-if="!isSmall"
               class="order-list-table__body-item-address"
+              :text="i.info.tokenToBuy"
               :title="i.info.tokenToBuy"
             >
               {{
@@ -58,7 +59,7 @@
                   address: cropAddress(i.info.tokenToBuy, 4, 3),
                 })
               }}
-            </span>
+            </copy-button>
             <app-button
               class="order-list-table__body-item-icon"
               scheme="icon"
@@ -92,9 +93,10 @@
             <span class="order-list-table__body-item-code">
               {{ i.tokenToSell.symbol }}
             </span>
-            <span
+            <copy-button
               v-if="!isSmall"
               class="order-list-table__body-item-address"
+              :text="i.info.tokenToSell"
               :title="i.info.tokenToSell"
             >
               {{
@@ -102,7 +104,7 @@
                   address: cropAddress(i.info.tokenToSell, 4, 3),
                 })
               }}
-            </span>
+            </copy-button>
             <app-button
               class="order-list-table__body-item-icon"
               scheme="icon"
@@ -153,7 +155,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { AppButton } from '@/common'
+import { AppButton, CopyButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
