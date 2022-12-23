@@ -331,6 +331,8 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 }
 
 .order-list__pagination {
+  margin-left: auto;
+
   @include respond-to(tablet) {
     margin: toRem(6) auto toRem(16);
   }

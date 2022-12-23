@@ -9,8 +9,10 @@
       :disabled="isFirstPage"
     />
     <span class="pagination__current-page">{{ formatPage(currentPage) }}</span>
-    <div class="pagination__divider" />
-    <span class="pagination__total-pages">{{ formatPage(totalPages) }}</span>
+    <template v-if="totalPages > 1">
+      <div class="pagination__divider" />
+      <span class="pagination__total-pages">{{ formatPage(totalPages) }}</span>
+    </template>
     <app-button
       class="pagination__item"
       scheme="default"
