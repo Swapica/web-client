@@ -82,16 +82,16 @@ const loadList = async () => {
     const rpcProvider = new ethers.providers.JsonRpcProvider(
       network.value?.chain_params.rpc,
     )
-
-    if (currentPage.value > Math.ceil(totalItems.value / PAGE_LIMIT)) {
-      currentPage.value -= 1
+    const lastPage = Math.ceil(totalItems.value / PAGE_LIMIT)
+    if (currentPage.value > lastPage) {
+      currentPage.value = lastPage
     }
     swapicaContract.init(network.value?.swap_contract!, rpcProvider)
-    const beginIndex = totalItems.value - PAGE_LIMIT * currentPage.value
+    const firstItemIndex = totalItems.value - PAGE_LIMIT * currentPage.value
     const data = await swapicaContract.getUserOrders(
       provider.value.selectedAddress!,
-      beginIndex < 0 ? 0 : beginIndex,
-      beginIndex + PAGE_LIMIT,
+      firstItemIndex < 0 ? 0 : firstItemIndex,
+      firstItemIndex + PAGE_LIMIT,
     )
     list.value = data.reverse()
     if (!data.length) emit('list-empty', true)
