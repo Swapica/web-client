@@ -100,14 +100,11 @@ const submit = async () => {
 }
 
 const checkApprove = async () => {
-  const { data } = await callers.post<TxResposne>('/v1/approve', {
-    data: {
-      sender: provider.value.selectedAddress,
-      chain_id: former.networkSell.value?.id,
-      token_address: former.form.tokenSell,
-      token_type: 'erc20',
-    },
-  })
+  const { data } = await callers.approve(
+    provider.value.selectedAddress!,
+    former.networkSell.value?.id!,
+    former.form.tokenSell,
+  )
   approveTx.value = data || null
 }
 

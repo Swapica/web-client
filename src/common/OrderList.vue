@@ -105,7 +105,7 @@ const loadList = async () => {
 }
 
 const getTotalItems = async () => {
-  totalItems.value = 7
+  totalItems.value = 8
 }
 
 Bus.on(Bus.eventList.offerCreated, () => {
