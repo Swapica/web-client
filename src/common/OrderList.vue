@@ -12,7 +12,8 @@
           <order-list-table :network-sell="network!" :list="list">
             <template #pagination>
               <pagination
-                v-model:current-page="currentPage"
+                :current-page="currentPage"
+                @update:current-page=";(currentPage = $event), loadList()"
                 :total-items="totalItems"
                 :page-limit="PAGE_LIMIT"
               />
@@ -82,6 +83,9 @@ const loadList = async () => {
       network.value?.chain_params.rpc,
     )
 
+    if (currentPage.value > Math.ceil(totalItems.value / PAGE_LIMIT)) {
+      currentPage.value -= 1
+    }
     swapicaContract.init(network.value?.swap_contract!, rpcProvider)
     const beginIndex = totalItems.value - PAGE_LIMIT * currentPage.value
     const data = await swapicaContract.getUserOrders(
@@ -101,7 +105,7 @@ const loadList = async () => {
 }
 
 const getTotalItems = async () => {
-  totalItems.value = 8
+  totalItems.value = 7
 }
 
 Bus.on(Bus.eventList.offerCreated, () => {
@@ -109,14 +113,9 @@ Bus.on(Bus.eventList.offerCreated, () => {
 })
 
 watch(
-  () => [provider.value.selectedAddress, props.chainId, currentPage.value],
-  (value, oldValue) => {
-    if (
-      (oldValue && oldValue[0] !== value[0]) ||
-      (oldValue && oldValue[1] !== value[1])
-    ) {
-      currentPage.value = 1
-    }
+  () => [provider.value.selectedAddress, props.chainId],
+  () => {
+    currentPage.value = 1
     loadList()
   },
   {
