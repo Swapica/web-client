@@ -20,7 +20,19 @@
       v-if="currentStep.name === STEPS.approve"
       @back="onBack"
       @approve="handleApprove"
-    />
+    >
+      <i18n-t
+        keypath="create-order-form.approve-msg"
+        tag="p"
+        class="create-order-form__approve-msg"
+      >
+        <template #token>
+          <span class="create-order-form__approve-token">
+            {{ $t('create-order-form.approve-msg-token') }}
+          </span>
+        </template>
+      </i18n-t>
+    </approve-step>
     <confirmation-step v-if="currentStep.name === STEPS.confirmation" />
   </form>
 </template>
@@ -150,3 +162,13 @@ const switchChain = async () => {
   enableForm()
 }
 </script>
+<style lang="scss" scoped>
+.create-order-form__approve-msg {
+  text-align: center;
+}
+
+.create-order-form__approve-token {
+  font-size: inherit;
+  color: var(--text-primary-dark);
+}
+</style>
