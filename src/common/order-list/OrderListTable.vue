@@ -348,7 +348,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 }
 
 .order-list-table__body-item-network {
-  background: url('/backgrounds/input-bg.svg') no-repeat;
+  background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
   display: flex;
   align-items: center;
