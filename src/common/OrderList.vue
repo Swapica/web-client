@@ -57,7 +57,7 @@ const { chainByChainId } = storeToRefs(useChainsStore())
 const network = computed(() => chainByChainId.value(props.chainId))
 
 const currentPage = ref(1)
-const totalItems = ref(7)
+const totalItems = ref(0)
 
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void
@@ -70,13 +70,16 @@ const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
 
-const loadList = async () => {
+const loadList = async (isLoadTotalItems = true) => {
   emit('load-failed', false)
   emit('list-empty', false)
   emit('is-loading', true)
   isLoaded.value = false
   isLoadFailed.value = false
   try {
+    if (isLoadTotalItems) {
+      await getTotalItems()
+    }
     const rpcProvider = new ethers.providers.JsonRpcProvider(
       network.value?.chain_params.rpc,
     )
@@ -99,6 +102,10 @@ const loadList = async () => {
   isLoaded.value = true
 }
 
+const getTotalItems = async () => {
+  totalItems.value = 8
+}
+
 Bus.on(Bus.eventList.offerCreated, () => {
   loadList()
 })
@@ -111,13 +118,14 @@ watch(
       (oldValue && oldValue[1] !== value[1])
     ) {
       currentPage.value = 1
+      loadList()
+    } else {
+      loadList(false)
     }
-    loadList()
-  },
-  {
-    immediate: true,
   },
 )
+
+loadList()
 </script>
 
 <style lang="scss" scoped>
