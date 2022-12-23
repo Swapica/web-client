@@ -70,16 +70,14 @@ const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
 
-const loadList = async (isLoadTotalItems = true) => {
+const loadList = async () => {
   emit('load-failed', false)
   emit('list-empty', false)
   emit('is-loading', true)
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    if (isLoadTotalItems) {
-      await getTotalItems()
-    }
+    await getTotalItems()
     const rpcProvider = new ethers.providers.JsonRpcProvider(
       network.value?.chain_params.rpc,
     )
@@ -118,14 +116,13 @@ watch(
       (oldValue && oldValue[1] !== value[1])
     ) {
       currentPage.value = 1
-      loadList()
-    } else {
-      loadList(false)
     }
+    loadList()
+  },
+  {
+    immediate: true,
   },
 )
-
-loadList()
 </script>
 
 <style lang="scss" scoped>
