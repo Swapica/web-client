@@ -57,7 +57,7 @@ const { chainByChainId } = storeToRefs(useChainsStore())
 const network = computed(() => chainByChainId.value(props.chainId))
 
 const currentPage = ref(1)
-const totalItems = ref(6)
+const totalItems = ref(7)
 
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void

@@ -1,4 +1,3 @@
-<!-- eslint-disable vue-i18n/no-raw-text -->
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="order-list-table">
@@ -30,8 +29,21 @@
         <div class="order-list-table__body-item-info-wrp">
           <!-- eslint-disable-next-line max-len -->
           <div class="order-list-table__body-item-info order-list-table__body-item-info-buy">
-            <span class="order-list-table__body-item-amount">
-              {{ i.info.amountToBuy.toString() }}
+            <span
+              class="order-list-table__body-item-amount"
+              :title="
+                formatWeiAmount(
+                  i.info.amountToBuy.toString(),
+                  i.tokenToBuy.decimals,
+                )
+              "
+            >
+              {{
+                formatWeiAmount(
+                  i.info.amountToBuy.toString(),
+                  i.tokenToBuy.decimals,
+                )
+              }}
             </span>
             <span class="order-list-table__body-item-code">
               {{ i.tokenToBuy.symbol }}
@@ -41,9 +53,11 @@
               class="order-list-table__body-item-address"
               :title="i.info.tokenToBuy"
             >
-              {{ $t('order-list-table.address', {
-                address: cropAddress(i.info.tokenToBuy, 4, 3)
-              }) }}
+              {{
+                $t('order-list-table.address', {
+                  address: cropAddress(i.info.tokenToBuy, 4, 3),
+                })
+              }}
             </span>
             <app-button
               class="order-list-table__body-item-icon"
@@ -59,8 +73,21 @@
           </div>
           <!-- eslint-disable-next-line max-len -->
           <div class="order-list-table__body-item-info order-list-table__body-item-info-sell">
-            <span class="order-list-table__body-item-amount">
-              {{ i.info.amountToSell.toString() }}
+            <span
+              class="order-list-table__body-item-amount"
+              :title="
+                formatWeiAmount(
+                  i.info.amountToSell.toString(),
+                  i.tokenToSell.decimals,
+                )
+              "
+            >
+              {{
+                formatWeiAmount(
+                  i.info.amountToSell.toString(),
+                  i.tokenToSell.decimals,
+                )
+              }}
             </span>
             <span class="order-list-table__body-item-code">
               {{ i.tokenToSell.symbol }}
@@ -70,43 +97,52 @@
               class="order-list-table__body-item-address"
               :title="i.info.tokenToSell"
             >
-              {{ $t('order-list-table.address', {
-                address: cropAddress(i.info.tokenToSell, 4, 3)
-              }) }}
+              {{
+                $t('order-list-table.address', {
+                  address: cropAddress(i.info.tokenToSell, 4, 3),
+                })
+              }}
             </span>
             <app-button
               class="order-list-table__body-item-icon"
               scheme="icon"
               target="_blank"
               :icon-left="$icons.link"
-              :href="provider.getAddressUrl(
-                networkSell.chain_params.explorer_url,
-                i.info.tokenToSell
-              )"
+              :href="
+                provider.getAddressUrl(
+                  networkSell.chain_params.explorer_url,
+                  i.info.tokenToSell,
+                )
+              "
             />
           </div>
         </div>
         <div class="order-list-table__body-item-network">
           <span
             class="order-list-table__body-item-network-text"
-            :title="$t('order-list-table.network', {
-              from: networkSell.name,
-              to: networkBuy(i.info.destChain.toNumber())?.name
-            })"
+            :title="
+              $t('order-list-table.network', {
+                from: networkSell.name,
+                to: networkBuy(i.info.destChain.toNumber())?.name,
+              })
+            "
           >
-            {{ $t('order-list-table.network', {
-              from: networkSell.name,
-              to: networkBuy(i.info.destChain.toNumber())?.name
-            }) }}
+            {{
+              $t('order-list-table.network', {
+                from: networkSell.name,
+                to: networkBuy(i.info.destChain.toNumber())?.name,
+              })
+            }}
           </span>
         </div>
         <app-button
           class="order-list-table__body-item-cancel-btn"
           :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
           :size="isTablet ? 'default' : 'small'"
-          :text="isTablet
-            ? $t('order-list-table.cancel-order-btn')
-            : $t('order-list-table.cancel-btn')
+          :text="
+            isTablet
+              ? $t('order-list-table.cancel-order-btn')
+              : $t('order-list-table.cancel-btn')
           "
         />
       </div>
@@ -122,7 +158,7 @@ import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { ChainResposne, UserOrder } from '@/types'
-import { cropAddress } from '@/helpers'
+import { cropAddress, formatWeiAmount } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
@@ -233,7 +269,12 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   width: calc(100% + #{toRem(3)});
 
   @include respond-to(tablet) {
+    width: calc(100% + #{toRem(5)});
     justify-content: center;
+  }
+
+  @include respond-to(small) {
+    width: calc(100% + #{toRem(1)});
   }
 }
 
@@ -296,7 +337,12 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   padding: toRem(8) toRem(18);
   left: toRem(-3);
 
+  @include respond-to(tablet) {
+    left: toRem(-5);
+  }
+
   @include respond-to(small) {
+    left: toRem(-1);
     padding: toRem(8) toRem(4.5) toRem(8) toRem(8);
   }
 }
