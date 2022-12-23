@@ -77,6 +77,7 @@
             <app-button
               class="order-list-table__body-item-icon"
               scheme="icon"
+              target="_blank"
               :icon-left="$icons.link"
               :href="provider.getAddressUrl(
                 networkSell.chain_params.explorer_url,
@@ -111,8 +112,7 @@
       </div>
     </div>
     <div class="order-list__pagination">
-      pag
-      slot
+      <slot name="pagination" />
     </div>
   </div>
 </template>
@@ -143,16 +143,17 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 <style lang="scss" scoped>
 .order-list-table {
   display: grid;
-  grid-template-columns: 1fr toRem(95);
+  grid-template-columns: 1fr toRem(126);
   grid-template-areas:
     'head pagination'
     'body body';
   width: 100%;
-  gap: toRem(24) toRem(32);
+  gap: toRem(24) 0;
   grid-auto-rows: max-content;
+  align-items: center;
 
   @include respond-to(xmedium) {
-    gap: toRem(24) toRem(16);
+    gap: toRem(24) 0;
   }
 
   @include respond-to(tablet) {
@@ -199,6 +200,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   gap: toRem(32);
 
   @include respond-to(xmedium) {
+    grid-template-columns: minmax(toRem(150), 1fr) toRem(154) toRem(110);
     gap: toRem(16);
   }
 
@@ -325,6 +327,12 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
     height: auto;
     max-width: toRem(293);
     margin: 0 auto;
+  }
+}
+
+.order-list__pagination {
+  @include respond-to(tablet) {
+    margin: toRem(6) auto toRem(16);
   }
 }
 </style>

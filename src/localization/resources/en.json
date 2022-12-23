@@ -112,5 +112,8 @@
     "title": "Approve Token",
     "back-btn": "Back",
     "approve-btn": "Approve"
+  },
+  "create-order-form": {
+    "created-msg": "Offer successfuly created"
   }
 }

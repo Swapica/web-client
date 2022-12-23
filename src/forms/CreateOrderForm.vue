@@ -36,6 +36,7 @@ import { storeToRefs } from 'pinia'
 import { callers } from '@/api'
 import { TxResposne } from '@/types'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 enum STEPS {
   network = 'network',
@@ -49,6 +50,7 @@ const emit = defineEmits<{
 }>()
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { t } = useI18n({ useScope: 'global' })
 
 const former = useCreateOrderForm()
 const { isFormDisabled, disableForm, enableForm } = useForm()
@@ -132,6 +134,7 @@ const createOrder = async () => {
     const { data } = await former.createOrder()
     await provider.value.signAndSendTx(data.tx_body)
     Bus.emit(Bus.eventList.offerCreated)
+    Bus.success(t('create-order-form.created-msg'))
     emit('close')
   } catch (e) {
     toStep(STEPS.tokens)

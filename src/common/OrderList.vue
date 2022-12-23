@@ -9,7 +9,15 @@
       </template>
       <template v-else>
         <template v-if="list.length">
-          <order-list-table :network-sell="network!" :list="list" />
+          <order-list-table :network-sell="network!" :list="list">
+            <template #pagination>
+              <pagination
+                v-model:current-page="currentPage"
+                :total-items="totalItems"
+                :page-limit="PAGE_LIMIT"
+              />
+            </template>
+          </order-list-table>
         </template>
         <template v-else>
           <template v-if="$slots.noDataMsg">
@@ -28,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ErrorMessage, Loader } from '@/common'
+import { ErrorMessage, Loader, Pagination } from '@/common'
 import { useSwapica } from '@/composables'
 import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
@@ -38,6 +46,8 @@ import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { ethers } from 'ethers'
 import { UserOrder } from '@/types'
 
+const PAGE_LIMIT = 5
+
 const props = defineProps<{
   chainId: number
 }>()
@@ -45,6 +55,9 @@ const props = defineProps<{
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { chainByChainId } = storeToRefs(useChainsStore())
 const network = computed(() => chainByChainId.value(props.chainId))
+
+const currentPage = ref(1)
+const totalItems = ref(6)
 
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void
@@ -69,12 +82,13 @@ const loadList = async () => {
     )
 
     swapicaContract.init(network.value?.swap_contract!, rpcProvider)
+    const beginIndex = totalItems.value - PAGE_LIMIT * currentPage.value
     const data = await swapicaContract.getUserOrders(
       provider.value.selectedAddress!,
-      0,
-      2,
+      beginIndex < 0 ? 0 : beginIndex,
+      beginIndex + PAGE_LIMIT,
     )
-    list.value = data
+    list.value = data.reverse()
     if (!data.length) emit('list-empty', true)
   } catch (e) {
     isLoadFailed.value = true
@@ -90,8 +104,14 @@ Bus.on(Bus.eventList.offerCreated, () => {
 })
 
 watch(
-  () => [provider.value.selectedAddress, props.chainId],
-  () => {
+  () => [provider.value.selectedAddress, props.chainId, currentPage.value],
+  (value, oldValue) => {
+    if (
+      (oldValue && oldValue[0] !== value[0]) ||
+      (oldValue && oldValue[1] !== value[1])
+    ) {
+      currentPage.value = 1
+    }
     loadList()
   },
   {
