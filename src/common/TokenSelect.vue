@@ -11,7 +11,7 @@
               <input-field
                 ref="searchFieldRef"
                 scheme="flat"
-                :model-value="modelValue"
+                v-model="searchValue"
                 @blur="emit('blur')"
               />
             </template>
@@ -31,7 +31,10 @@
         </div>
       </div>
       <transition name="token-select__select-dropdown">
-        <div v-if="isDropdownOpen" class="token-select__select-dropdown-wrp">
+        <div
+          v-if="isDropdownOpen && optionList.length"
+          class="token-select__select-dropdown-wrp"
+        >
           <div class="token-select__select-dropdown">
             <button
               :class="[
@@ -42,7 +45,7 @@
                 },
               ]"
               type="button"
-              v-for="(option, idx) in valueOptions"
+              v-for="(option, idx) in optionList"
               :key="`[${idx}] ${option.value}`"
               @click="select(option.value)"
             >
@@ -51,6 +54,11 @@
                 class="token-select__select-dropdown-item-icon"
                 :src="option.imageUrl"
                 :alt="option.label"
+              />
+              <icon
+                v-else-if="option.icon"
+                class="select-field__select-dropdown-item-icon"
+                :name="option.icon"
               />
               <span class="token-select__select-dropdown-item-text">
                 {{ option.label }}
@@ -66,22 +74,27 @@
 <script lang="ts" setup>
 import { Icon } from '@/common'
 
-import { computed, nextTick, onMounted, ref, useAttrs } from 'vue'
+import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 import { useRouter } from '@/router'
 import { onClickOutside } from '@vueuse/core'
 import { InputField } from '@/fields'
+import { ErrorHandler, loadTokenInfo } from '@/helpers'
+import { debounce } from 'lodash'
+import { ICON_NAMES } from '@/enums'
 
 const props = withDefaults(
   defineProps<{
-    modelValue: string | number
+    modelValue: string
     valueOptions?: {
       label: string
       imageUrl?: string
-      value: number | string
+      icon?: ICON_NAMES
+      value: string
     }[]
     label?: string
     placeholder?: string
     errorMessage?: string
+    rpcUrl?: string
   }>(),
   {
     valueOptions: () => [],
@@ -89,6 +102,7 @@ const props = withDefaults(
     label: '',
     placeholder: ' ',
     errorMessage: '',
+    rpcUrl: '',
   },
 )
 
@@ -103,6 +117,8 @@ const selectElement = ref<HTMLDivElement>()
 const searchFieldRef = ref<typeof InputField>()
 
 const isDropdownOpen = ref(false)
+const searchValue = ref('')
+const optionList = ref(props.valueOptions)
 
 const router = useRouter()
 
@@ -120,8 +136,8 @@ const isReadonly = computed(() =>
 
 const selectedOption = computed(
   () =>
-    props.valueOptions.find(i => i.value === props.modelValue)?.label ||
-    props.modelValue,
+    props.valueOptions.find(i => i.value === props.modelValue) ||
+    searchValue.value,
 )
 
 const selectFieldClasses = computed(() => ({
@@ -155,6 +171,37 @@ const select = (value: string | number) => {
   closeDropdown()
 }
 
+const getOptionList = () => {
+  const regex = new RegExp(searchValue.value.trim(), 'i')
+
+  optionList.value = searchValue.value
+    ? props.valueOptions.filter(i => regex.test(i.label) || regex.test(i.value))
+    : props.valueOptions
+}
+
+const handleSearch = async () => {
+  emit('update:modelValue', '')
+  try {
+    let address = ''
+    if (isDisabled.value) {
+      if (props.rpcUrl) return
+      const data = await loadTokenInfo(props.rpcUrl, searchValue.value)
+      if (data.symbol) {
+        address = searchValue.value
+      }
+    } else {
+      address =
+        props.valueOptions.find(
+          i => i.value === searchValue.value || i.label === searchValue.value,
+        )?.value ?? ''
+    }
+    emit('update:modelValue', address)
+  } catch (e) {
+    emit('update:modelValue', '')
+    ErrorHandler.processWithoutFeedback(false)
+  }
+}
+
 onMounted(() => {
   if (selectElement.value) {
     onClickOutside(selectElement, () => {
@@ -162,6 +209,14 @@ onMounted(() => {
     })
   }
 })
+
+watch(
+  searchValue,
+  debounce(() => {
+    getOptionList()
+    handleSearch()
+  }, 500),
+)
 </script>
 
 <style lang="scss" scoped>
