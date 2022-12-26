@@ -141,11 +141,13 @@
           class="order-list-table__body-item-cancel-btn"
           :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
           :size="isTablet ? 'default' : 'small'"
+          :disabled="isBtnDisabled"
           :text="
             isTablet
               ? $t('order-list-table.cancel-order-btn')
               : $t('order-list-table.cancel-btn')
           "
+          @click="emit('btn-click', i)"
         />
       </div>
     </div>
@@ -164,9 +166,19 @@ import { cropAddress, formatWeiAmount } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
-defineProps<{
-  list: UserOrder[]
-  networkSell: ChainResposne
+withDefaults(
+  defineProps<{
+    list: UserOrder[]
+    networkSell: ChainResposne
+    isBtnDisabled: boolean
+  }>(),
+  {
+    isBtnDisabled: false,
+  },
+)
+
+const emit = defineEmits<{
+  (e: 'btn-click', value: UserOrder): void
 }>()
 
 const { width: windowWidth } = useWindowSize()

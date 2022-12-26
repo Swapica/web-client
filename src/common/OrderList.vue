@@ -9,7 +9,12 @@
       </template>
       <template v-else>
         <template v-if="list.length">
-          <order-list-table :network-sell="network!" :list="list">
+          <order-list-table
+            :is-btn-disabled="isSubmitting"
+            :network-sell="network!"
+            :list="list"
+            @btn-click="handleBtnClick"
+          >
             <template #pagination>
               <pagination
                 :current-page="currentPage"
@@ -41,11 +46,12 @@ import { ErrorMessage, Loader, Pagination } from '@/common'
 import { useSwapica } from '@/composables'
 import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { Bus, ErrorHandler } from '@/helpers'
+import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { ethers } from 'ethers'
-import { UserOrder } from '@/types'
+import { TxResposne, UserOrder } from '@/types'
+import { callers } from '@/api'
 
 const PAGE_LIMIT = 5
 
@@ -59,6 +65,8 @@ const network = computed(() => chainByChainId.value(props.chainId))
 
 const currentPage = ref(1)
 const totalItems = ref(0)
+
+const isSubmitting = ref(false)
 
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void
@@ -105,7 +113,26 @@ const loadList = async () => {
 }
 
 const getTotalItems = async () => {
-  totalItems.value = 8
+  totalItems.value = 9
+}
+
+const handleBtnClick = async (item: UserOrder) => {
+  isSubmitting.value = true
+  try {
+    await switchNetwork(network.value!)
+    const { data } = await callers.post<TxResposne>('/v1/cancel/order', {
+      data: {
+        src_chain: network.value?.id,
+        order_id: item.info.id.toNumber(),
+        sender: provider.value.selectedAddress,
+      },
+    })
+    await provider.value.signAndSendTx(data.tx_body)
+    loadList()
+  } catch (e) {
+    ErrorHandler.process(e)
+  }
+  isSubmitting.value = false
 }
 
 Bus.on(Bus.eventList.offerCreated, () => {
