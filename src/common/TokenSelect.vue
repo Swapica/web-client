@@ -95,7 +95,12 @@ import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 import { useRouter } from '@/router'
 import { onClickOutside } from '@vueuse/core'
 import { InputField } from '@/fields'
-import { ErrorHandler, loadTokenInfo } from '@/helpers'
+import {
+  cropAddress,
+  ErrorHandler,
+  isEthAddress,
+  loadTokenInfo,
+} from '@/helpers'
 import { debounce } from 'lodash'
 import { ICON_NAMES } from '@/enums'
 
@@ -154,7 +159,12 @@ const isReadonly = computed(() =>
   ['', 'readonly', true].includes(attrs.readonly as string | boolean),
 )
 
-const headLabel = computed(() => searchValue.value)
+const headLabel = computed(() => {
+  return isEthAddress(searchValue.value)
+    ? cropAddress(searchValue.value, 3, 4)
+    : searchValue.value
+})
+
 const selectedOption = computed(() =>
   props.valueOptions.find(
     i =>
@@ -208,8 +218,8 @@ const handleSearch = async () => {
     let address = ''
     if (selectedOption.value) {
       address = selectedOption?.value?.value
-    } else if (isDisabled.value) {
-      if (props.rpcUrl) return
+    } else if (isEthAddress(searchValue.value)) {
+      if (!props.rpcUrl) return
       const data = await loadTokenInfo(props.rpcUrl, searchValue.value)
       if (data.symbol) {
         address = searchValue.value
@@ -236,13 +246,6 @@ watch(
     getOptionList()
     handleSearch()
   }, 500),
-)
-
-watch(
-  () => props.modelValue,
-  val =>
-    (searchValue.value =
-      props.valueOptions.find(i => i.value === val)?.label ?? ''),
 )
 </script>
 
