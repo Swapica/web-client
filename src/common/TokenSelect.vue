@@ -206,14 +206,14 @@ const handleSearch = async () => {
   emit('update:modelValue', '')
   try {
     let address = ''
-    if (isDisabled.value) {
+    if (selectedOption.value) {
+      address = selectedOption?.value?.value
+    } else if (isDisabled.value) {
       if (props.rpcUrl) return
       const data = await loadTokenInfo(props.rpcUrl, searchValue.value)
       if (data.symbol) {
         address = searchValue.value
       }
-    } else {
-      address = selectedOption?.value?.value ?? ''
     }
     emit('update:modelValue', address)
   } catch (e) {
@@ -236,6 +236,13 @@ watch(
     getOptionList()
     handleSearch()
   }, 500),
+)
+
+watch(
+  () => props.modelValue,
+  val =>
+    (searchValue.value =
+      props.valueOptions.find(i => i.value === val)?.label ?? ''),
 )
 </script>
 
