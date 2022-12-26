@@ -29,7 +29,7 @@
             :value-options="[
               {
                 value: '0x6aba99FB7Aab12191b022C7A4D92f6f8775a2F0B',
-                label: 'SLP ',
+                label: 'SLP',
               },
             ]"
             :disabled="isDisabled"
@@ -67,7 +67,7 @@
             :value-options="[
               {
                 value: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
-                label: 'USDC ',
+                label: 'USDC',
               },
             ]"
             :rpc-url="networkBuy?.chain_params.rpc"

@@ -7,17 +7,33 @@
       <div class="token-select__select-head-wrp">
         <div class="token-select__select-head" @click="toggleDropdown">
           <div class="token-select__select-head-content">
+            <template v-if="isHeadIconShown && searchValue">
+              <img
+                v-if="selectedOption?.imageUrl"
+                class="token-select__head-item-icon"
+                :src="selectedOption.imageUrl"
+                :alt="selectedOption.label"
+              />
+              <icon
+                v-else
+                class="token-select__head-item-icon"
+                :name="selectedOption?.icon || $icons.user"
+              />
+            </template>
             <template v-if="isInputShown">
               <input-field
-                @click.stop
+                class="token-select__select-head-input"
                 ref="searchFieldRef"
                 scheme="flat"
                 v-model="searchValue"
+                @click.stop
                 @blur="emit('blur')"
               />
             </template>
             <template v-else>
-              {{ selectedOption }}
+              <span class="token-select__select-head-text">
+                {{ headLabel }}
+              </span>
             </template>
           </div>
           <icon
@@ -96,6 +112,7 @@ const props = withDefaults(
     placeholder?: string
     errorMessage?: string
     rpcUrl?: string
+    isHeadIconShown?: boolean
   }>(),
   {
     valueOptions: () => [],
@@ -104,6 +121,7 @@ const props = withDefaults(
     placeholder: ' ',
     errorMessage: '',
     rpcUrl: '',
+    isHeadIconShown: false,
   },
 )
 
@@ -136,7 +154,14 @@ const isReadonly = computed(() =>
   ['', 'readonly', true].includes(attrs.readonly as string | boolean),
 )
 
-const selectedOption = computed(() => searchValue.value)
+const headLabel = computed(() => searchValue.value)
+const selectedOption = computed(() =>
+  props.valueOptions.find(
+    i =>
+      i.value.toLowerCase() === searchValue.value.toLowerCase() ||
+      i.label.toLowerCase() === searchValue.value.toLowerCase(),
+  ),
+)
 
 const selectFieldClasses = computed(() => ({
   'token-select': true,
@@ -188,12 +213,7 @@ const handleSearch = async () => {
         address = searchValue.value
       }
     } else {
-      address =
-        props.valueOptions.find(
-          i =>
-            i.value.toLowerCase() === searchValue.value.toLowerCase() ||
-            i.label.toLowerCase() === searchValue.value.toLowerCase(),
-        )?.value ?? ''
+      address = selectedOption?.value?.value ?? ''
     }
     emit('update:modelValue', address)
   } catch (e) {
@@ -383,6 +403,7 @@ $z-local-index: 2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: toRem(14);
 }
 
 .token-select__select-dropdown-item-icon {
@@ -402,6 +423,7 @@ $z-local-index: 2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: toRem(18);
 }
 
 .token-select__select-head-value-icon {
@@ -412,9 +434,26 @@ $z-local-index: 2;
 }
 
 .token-select__select-head-content {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: block;
+  height: toRem(17);
+  display: flex;
+  gap: toRem(4);
+}
+
+.select-field__select-dropdown-item-icon {
+  width: toRem(18);
+  height: toRem(18);
+  min-width: toRem(18);
+  min-height: toRem(18);
+}
+
+.token-select__head-item-icon {
+  width: toRem(18);
+  height: toRem(18);
+  min-width: toRem(18);
+  min-height: toRem(18);
+}
+
+.token-select__select-head-input {
   overflow: hidden;
 }
 </style>
