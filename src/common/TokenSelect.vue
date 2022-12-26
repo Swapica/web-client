@@ -7,8 +7,9 @@
       <div class="token-select__select-head-wrp">
         <div class="token-select__select-head" @click="toggleDropdown">
           <div class="token-select__select-head-content">
-            <template v-if="isDropdownOpen">
+            <template v-if="isInputShown">
               <input-field
+                @click.stop
                 ref="searchFieldRef"
                 scheme="flat"
                 v-model="searchValue"
@@ -47,7 +48,7 @@
               type="button"
               v-for="(option, idx) in optionList"
               :key="`[${idx}] ${option.value}`"
-              @click="select(option.value)"
+              @click="select(option.label)"
             >
               <img
                 v-if="option.imageUrl"
@@ -119,6 +120,7 @@ const searchFieldRef = ref<typeof InputField>()
 const isDropdownOpen = ref(false)
 const searchValue = ref('')
 const optionList = ref(props.valueOptions)
+const isInputShown = ref(false)
 
 const router = useRouter()
 
@@ -134,11 +136,7 @@ const isReadonly = computed(() =>
   ['', 'readonly', true].includes(attrs.readonly as string | boolean),
 )
 
-const selectedOption = computed(
-  () =>
-    props.valueOptions.find(i => i.value === props.modelValue) ||
-    searchValue.value,
-)
+const selectedOption = computed(() => searchValue.value)
 
 const selectFieldClasses = computed(() => ({
   'token-select': true,
@@ -155,6 +153,7 @@ const toggleDropdown = () => {
 const openDropdown = () => {
   if (isDisabled.value || isReadonly.value) return
   isDropdownOpen.value = true
+  isInputShown.value = true
   nextTick(() => {
     searchFieldRef.value?.inputRef.focus()
   })
@@ -162,12 +161,11 @@ const openDropdown = () => {
 
 const closeDropdown = () => {
   isDropdownOpen.value = false
+  isInputShown.value = false
 }
 
-const select = (value: string | number) => {
-  if (isDisabled.value || isReadonly.value) return
-
-  emit('update:modelValue', value)
+const select = (value: string) => {
+  searchValue.value = value
   closeDropdown()
 }
 
@@ -192,7 +190,9 @@ const handleSearch = async () => {
     } else {
       address =
         props.valueOptions.find(
-          i => i.value === searchValue.value || i.label === searchValue.value,
+          i =>
+            i.value.toLowerCase() === searchValue.value.toLowerCase() ||
+            i.label.toLowerCase() === searchValue.value.toLowerCase(),
         )?.value ?? ''
     }
     emit('update:modelValue', address)
@@ -409,5 +409,12 @@ $z-local-index: 2;
   height: toRem(18);
   min-width: toRem(18);
   min-height: toRem(18);
+}
+
+.token-select__select-head-content {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
 }
 </style>

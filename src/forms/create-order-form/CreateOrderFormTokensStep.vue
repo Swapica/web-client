@@ -33,6 +33,7 @@
               },
             ]"
             :disabled="isDisabled"
+            :rpc-url="networkSell?.chain_params.rpc"
             :error-message="getFieldErrorMessage('tokenSell')"
             @blur="touchField('tokenSell')"
           />
@@ -69,6 +70,7 @@
                 label: 'USDC ',
               },
             ]"
+            :rpc-url="networkBuy?.chain_params.rpc"
             :error-message="getFieldErrorMessage('tokenBuy')"
             :disabled="isDisabled"
             @blur="touchField('tokenBuy')"
