@@ -7,14 +7,41 @@
       {{ $t('create-order-form-tokens-step.description') }}
     </p>
 
+    <div class="create-order-form-tokens-step__inputs" v-if="isSmallWidth">
+      <input-field
+        v-model="form.amountSell"
+        type="number"
+        class="create-order-form-tokens-step__input"
+        placeholder="0.0000"
+        :error-message="getFieldErrorMessage('amountSell')"
+        :disabled="isDisabled"
+        :is-error-message-shown="false"
+        @blur="touchField('amountSell')"
+      />
+      <input-field
+        type="number"
+        v-model="form.amountBuy"
+        class="create-order-form-tokens-step__input"
+        placeholder="0.0000"
+        :error-message="getFieldErrorMessage('amountBuy')"
+        :is-error-message-shown="false"
+        :disabled="isDisabled"
+        @blur="touchField('amountBuy')"
+      />
+    </div>
+
     <div class="create-order-form-tokens-step__content">
       <div class="create-order-form-tokens-step__token-wrp">
-        <span v-if="!isTablet" class="create-order-form-tokens-step__token-lbl">
+        <span
+          v-if="!isSmallWidth"
+          class="create-order-form-tokens-step__token-lbl"
+        >
           {{ $t('create-order-form-tokens-step.token-to-sell-lbl') }}
         </span>
         <!-- eslint-disable-next-line prettier/prettier max-len -->
         <div class="create-order-form-tokens-step__token create-order-form-tokens-step__token-sell">
           <input-field
+            v-if="!isSmallWidth"
             v-model="form.amountSell"
             type="number"
             class="create-order-form-tokens-step__input"
@@ -47,12 +74,17 @@
         </p>
       </div>
       <div class="create-order-form-tokens-step__token-wrp">
-        <span v-if="!isTablet" class="create-order-form-tokens-step__token-lbl">
+        <span
+          v-if="!isSmallWidth"
+          class="create-order-form-tokens-step__token-lbl"
+        >
           {{ $t('create-order-form-tokens-step.token-to-buy-lbl') }}
         </span>
+
         <!-- eslint-disable-next-line prettier/prettier max-len -->
         <div class="create-order-form-tokens-step__token create-order-form-tokens-step__token-buy">
           <input-field
+            v-if="!isSmallWidth"
             type="number"
             v-model="form.amountBuy"
             class="create-order-form-tokens-step__input"
@@ -127,7 +159,9 @@ const emit = defineEmits<{
   (e: 'next'): void
 }>()
 
-const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
+const isSmallWidth = computed(
+  () => windowWidth.value < WINDOW_BREAKPOINTS.small,
+)
 
 const { form, networkBuy, networkSell } = toRefs(props.former)
 
@@ -219,6 +253,10 @@ const handleNext = () => {
   background: url('/backgrounds/order-1-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(5.85) toRem(25) toRem(8.2) toRem(14);
+
+  @include respond-to(small) {
+    padding: toRem(7) toRem(10);
+  }
 }
 
 .create-order-form-tokens-step__token-buy {
@@ -227,6 +265,10 @@ const handleNext = () => {
   position: relative;
   left: toRem(-3);
   padding: toRem(5.85) toRem(19) toRem(8.2) toRem(20);
+
+  @include respond-to(small) {
+    padding: toRem(7) toRem(4) toRem(7) toRem(14);
+  }
 }
 
 .create-order-form-tokens-step__token {
@@ -240,6 +282,11 @@ const handleNext = () => {
   @include respond-to(tablet) {
     margin-top: 0;
   }
+
+  @include respond-to(small) {
+    grid-template-columns: minmax(toRem(100), 1fr);
+    width: 100%;
+  }
 }
 
 .create-order-form-tokens-step__input {
@@ -247,5 +294,13 @@ const handleNext = () => {
   :deep(.input-field__input) {
     padding: toRem(4) toRem(6.94) toRem(5) toRem(8.06);
   }
+}
+
+.create-order-form-tokens-step__inputs {
+  display: grid;
+  grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
+  width: 100%;
+  gap: toRem(4.5);
+  margin-bottom: toRem(8);
 }
 </style>
