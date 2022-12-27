@@ -256,6 +256,11 @@ watch(
   }, 500),
   { immediate: true },
 )
+
+watch(
+  () => attrs.disabled,
+  () => closeDropdown(),
+)
 </script>
 
 <style lang="scss" scoped>
