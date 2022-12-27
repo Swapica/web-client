@@ -141,7 +141,9 @@ const selectElement = ref<HTMLDivElement>()
 const searchFieldRef = ref<typeof InputField>()
 
 const isDropdownOpen = ref(false)
-const searchValue = ref(props.modelValue)
+const searchValue = ref(
+  props.valueOptions.find(i => i.value === props.modelValue)?.label ?? '',
+)
 const optionList = ref(props.valueOptions)
 const isInputShown = ref(false)
 
