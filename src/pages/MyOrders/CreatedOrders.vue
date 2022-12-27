@@ -1,7 +1,10 @@
 <template>
   <div
     class="created-orders"
-    :class="{ 'created-orders--without-btn': !isCreateOrderBtnShown }"
+    :class="{
+      'created-orders--without-btn':
+        !isCreateOrderBtnShown || !provider.selectedAddress,
+    }"
   >
     <div class="created-orders__title-wrp">
       <h5 class="created-orders__title">

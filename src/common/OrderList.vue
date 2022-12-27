@@ -100,6 +100,7 @@ const loadList = async () => {
       provider.value.selectedAddress!,
       firstItemIndex < 0 ? 0 : firstItemIndex,
       firstItemIndex + PAGE_LIMIT,
+      network.value!,
     )
     list.value = data.reverse()
     if (!data.length) emit('list-empty', true)

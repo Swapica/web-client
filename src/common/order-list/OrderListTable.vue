@@ -170,7 +170,7 @@ withDefaults(
   defineProps<{
     list: UserOrder[]
     networkSell: ChainResposne
-    isBtnDisabled: boolean
+    isBtnDisabled?: boolean
   }>(),
   {
     isBtnDisabled: false,

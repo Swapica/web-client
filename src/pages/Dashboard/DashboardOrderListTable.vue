@@ -120,7 +120,7 @@
           class="dashboard-order-list-table__body-item-match-btn"
           :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
           :size="isTablet ? 'default' : 'small'"
-          :disabled="isBtnDisabled"
+          :disabled="isBtnDisabled || !provider.selectedAddress"
           :text="$t('dashboard-order-list-table.match-btn')"
           @click="emit('btn-click', i)"
         />
@@ -145,7 +145,7 @@ withDefaults(
   defineProps<{
     list: UserOrder[]
     networkSell: ChainResposne
-    isBtnDisabled: boolean
+    isBtnDisabled?: boolean
   }>(),
   {
     isBtnDisabled: false,

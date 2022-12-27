@@ -40,15 +40,19 @@
 <script lang="ts" setup>
 import { ErrorMessage, Loader, Pagination, NoDataMessage } from '@/common'
 import { useSwapica } from '@/composables'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
 import { ErrorHandler } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import DashboardOrderListTable from '@/pages/Dashboard/DashboardOrderListTable.vue'
 import { ethers } from 'ethers'
 import { ChainResposne, UserOrder } from '@/types'
+import { WINDOW_BREAKPOINTS } from '@/enums'
+import { useWindowSize } from '@vueuse/core'
 
-const PAGE_LIMIT = 5
+const { width: windowWidth } = useWindowSize()
+const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
+const PAGE_LIMIT = isTablet.value ? 5 : 10
 
 const props = defineProps<{
   network: ChainResposne
@@ -85,10 +89,10 @@ const loadList = async () => {
     }
     swapicaContract.init(props.network.swap_contract!, rpcProvider)
     const firstItemIndex = totalItems.value - PAGE_LIMIT * currentPage.value
-    const data = await swapicaContract.getUserOrders(
-      provider.value.selectedAddress!,
+    const data = await swapicaContract.getActiveOrders(
       firstItemIndex < 0 ? 0 : firstItemIndex,
       firstItemIndex + PAGE_LIMIT,
+      props.network,
     )
     list.value = data.reverse()
   } catch (e) {

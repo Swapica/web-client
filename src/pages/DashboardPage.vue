@@ -116,6 +116,10 @@ const networkTo = computed(() => chainStore.chainById(filters.networkTo))
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
   gap: toRem(33);
   margin-bottom: toRem(31.5);
+
+  @include respond-to(small) {
+    grid-template-columns: minmax(toRem(100), 1fr);
+  }
 }
 
 .dashboard-page__block {
