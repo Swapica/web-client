@@ -7,7 +7,7 @@
       <div class="token-select__select-head-wrp">
         <div class="token-select__select-head" @click="toggleDropdown">
           <div class="token-select__select-head-content">
-            <template v-if="isHeadIconShown && searchValue">
+            <template v-if="isHeadIconShown">
               <img
                 v-if="selectedOption?.imageUrl"
                 class="token-select__head-item-icon"
@@ -104,6 +104,8 @@ import {
 import { debounce } from 'lodash'
 import { ICON_NAMES } from '@/enums'
 
+type SIZES = 'big' | 'default'
+
 const props = withDefaults(
   defineProps<{
     modelValue: string
@@ -118,6 +120,7 @@ const props = withDefaults(
     errorMessage?: string
     rpcUrl?: string
     isHeadIconShown?: boolean
+    size?: SIZES
   }>(),
   {
     valueOptions: () => [],
@@ -127,6 +130,7 @@ const props = withDefaults(
     errorMessage: '',
     rpcUrl: '',
     isHeadIconShown: false,
+    size: 'default',
   },
 )
 
@@ -181,6 +185,7 @@ const selectFieldClasses = computed(() => ({
   'token-select--open': isDropdownOpen.value,
   'token-select--disabled': isDisabled.value,
   'token-select--readonly': isReadonly.value,
+  [`token-select--${props.size}`]: true,
 }))
 
 const toggleDropdown = () => {
@@ -311,6 +316,12 @@ $z-local-index: 2;
   font-size: toRem(18);
   transition-property: color;
 
+  .token-select--big & {
+    font-size: toRem(16);
+    min-height: toRem(44);
+    padding: toRem(10) toRem(36) toRem(10) toRem(16);
+  }
+
   .token-select--open & {
     background: url('/backgrounds/select-field-hover-bg.svg') no-repeat;
     background-size: 100% 100%;
@@ -342,6 +353,12 @@ $z-local-index: 2;
   height: toRem(16);
   color: var(--field-text);
 
+  .token-select--big & {
+    width: toRem(20);
+    height: toRem(20);
+    right: toRem(16);
+  }
+
   &--open {
     transform: translateY(-50%) rotate(180deg);
   }
@@ -363,6 +380,11 @@ $z-local-index: 2;
   background: url('/backgrounds/select-field-dropdown-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(5) toRem(6);
+
+  .token-select--big & {
+    top: 105%;
+    padding: toRem(6);
+  }
 }
 
 .token-select__select-dropdown {
@@ -403,6 +425,11 @@ $z-local-index: 2;
   align-items: center;
   gap: toRem(4);
 
+  .token-select--big & {
+    padding: toRem(8) toRem(12);
+    gap: toRem(8);
+  }
+
   &:hover {
     color: var(--text-primary-dark);
   }
@@ -417,6 +444,10 @@ $z-local-index: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: toRem(14);
+
+  .token-select--big & {
+    font-size: toRem(16);
+  }
 }
 
 .token-select__select-dropdown-item-icon {
@@ -424,6 +455,13 @@ $z-local-index: 2;
   height: toRem(18);
   min-width: toRem(18);
   min-height: toRem(18);
+
+  .token-select--big & {
+    width: toRem(24);
+    height: toRem(24);
+    min-width: toRem(24);
+    min-height: toRem(24);
+  }
 }
 
 .token-select__select-head-value {
@@ -437,26 +475,23 @@ $z-local-index: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: toRem(18);
-}
 
-.token-select__select-head-value-icon {
-  width: toRem(18);
-  height: toRem(18);
-  min-width: toRem(18);
-  min-height: toRem(18);
+  .token-select--big & {
+    font-size: toRem(16);
+    line-height: toRem(15.5);
+  }
 }
 
 .token-select__select-head-content {
   height: toRem(17);
   display: flex;
+  align-items: center;
   gap: toRem(4);
-}
 
-.select-field__select-dropdown-item-icon {
-  width: toRem(18);
-  height: toRem(18);
-  min-width: toRem(18);
-  min-height: toRem(18);
+  .token-select--big & {
+    gap: toRem(8);
+    height: auto;
+  }
 }
 
 .token-select__head-item-icon {
@@ -464,9 +499,23 @@ $z-local-index: 2;
   height: toRem(18);
   min-width: toRem(18);
   min-height: toRem(18);
+
+  .token-select--big & {
+    width: toRem(24);
+    height: toRem(24);
+    min-width: toRem(24);
+    min-height: toRem(24);
+  }
 }
 
 .token-select__select-head-input {
   overflow: hidden;
+
+  .token-select--big & {
+    /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+    :deep(.input-field__input) {
+      font-size: toRem(16);
+    }
+  }
 }
 </style>

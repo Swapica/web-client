@@ -120,5 +120,15 @@
   },
   "copy-button": {
     "copied-message": "Copied!"
+  },
+  "dashboard-page": {
+    "network-title-number-lbl": "1",
+    "network-title-lbl": "Select networks to start swaping your tokens",
+    "tokens-title-number-lbl": "2",
+    "tokens-title-lbl": "Select tokens to filter the orders",
+    "network-from-lbl": "Transfer from",
+    "network-to-lbl": "Transfer to",
+    "token-sell-lbl": "To sell",
+    "token-buy-lbl": "To buy"
   }
 }
