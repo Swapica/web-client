@@ -26,6 +26,7 @@
                 ref="searchFieldRef"
                 scheme="flat"
                 v-model="searchValue"
+                :disabled="attrs.disabled"
                 @click.stop
                 @blur="emit('blur')"
               />

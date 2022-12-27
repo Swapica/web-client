@@ -58,6 +58,7 @@ const props = defineProps<{
   network: ChainResposne
   tokenBuy: string
   tokenSell: string
+  isSubmitting?: boolean
 }>()
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
@@ -66,7 +67,7 @@ const currentPage = ref(1)
 const totalItems = ref(0)
 
 const emit = defineEmits<{
-  (e: 'is-loading', value: boolean): void
+  (e: 'update:is-submitting', value: boolean): void
 }>()
 
 const swapicaContract = useSwapica(provider.value)
@@ -75,7 +76,7 @@ const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
 
 const loadList = async () => {
-  emit('is-loading', true)
+  emit('update:is-submitting', true)
   isLoaded.value = false
   isLoadFailed.value = false
   try {
@@ -99,7 +100,7 @@ const loadList = async () => {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
   }
-  emit('is-loading', false)
+  emit('update:is-submitting', false)
   isLoaded.value = true
 }
 
@@ -109,9 +110,14 @@ const getTotalItems = async () => {
 
 watch(
   () => [props.tokenSell, props.tokenBuy],
-  () => {
-    currentPage.value = 1
-    loadList()
+  val => {
+    if (val[0] && val[1]) {
+      currentPage.value = 1
+      loadList()
+    } else {
+      list.value = []
+      isLoaded.value = true
+    }
   },
   {
     immediate: true,

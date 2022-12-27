@@ -16,12 +16,14 @@
             scheme="primary"
             :label="$t('dashboard-page.network-from-lbl')"
             :value-options="chains"
+            :disabled="isSubmitting"
           />
           <select-field
             v-model="filters.networkTo"
             scheme="primary"
             :label="$t('dashboard-page.network-to-lbl')"
             :value-options="chains"
+            :disabled="isSubmitting"
           />
         </div>
       </div>
@@ -47,6 +49,7 @@
                 label: 'USDC',
               },
             ]"
+            :disabled="isSubmitting"
             :rpc-url="networkFrom?.chain_params.rpc"
             :label="$t('dashboard-page.token-sell-lbl')"
           />
@@ -60,6 +63,7 @@
                 label: 'USDC',
               },
             ]"
+            :disabled="isSubmitting"
             :rpc-url="networkTo?.chain_params.rpc"
             :label="$t('dashboard-page.token-buy-lbl')"
           />
@@ -75,6 +79,7 @@
       </div>
       <div class="dashboard-page__content">
         <dashboard-order-list
+          v-model:is-submitting="isSubmitting"
           :network="networkFrom!"
           :token-buy="filters.tokenBuy"
           :token-sell="filters.tokenSell"
@@ -87,7 +92,7 @@
 <script lang="ts" setup>
 import { SelectField } from '@/fields'
 import { useChainsStore } from '@/store'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { TokenSelect } from '@/common'
 import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
 
@@ -103,9 +108,11 @@ const chains = computed(() =>
 const filters = reactive({
   networkFrom: chainStore.selectedChain?.id ?? '',
   networkTo: chains.value[0].value,
-  tokenSell: '',
-  tokenBuy: '',
+  tokenSell: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
+  tokenBuy: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
 })
+
+const isSubmitting = ref(false)
 
 const networkFrom = computed(() => chainStore.chainById(filters.networkFrom))
 const networkTo = computed(() => chainStore.chainById(filters.networkTo))
