@@ -129,6 +129,18 @@
     "network-from-lbl": "Transfer from",
     "network-to-lbl": "Transfer to",
     "token-sell-lbl": "To sell",
-    "token-buy-lbl": "To buy"
+    "token-buy-lbl": "To buy",
+    "title": "Available Orders"
+  },
+  "dashboard-order-list": {
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
+    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "no-data-msg": "No orders created"
+  },
+  "dashboard-order-list-table": {
+    "buy-lbl": "To Buy",
+    "sell-lbl": "To Sell",
+    "match-btn": "Match",
+    "address": "({address})"
   }
 }

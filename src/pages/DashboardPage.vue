@@ -66,6 +66,21 @@
         </div>
       </div>
     </div>
+
+    <div class="dashboard-page__content-wrp">
+      <div class="dashboard-page__title-wrp">
+        <h6 class="dashboard-page__title">
+          {{ $t('dashboard-page.title') }}
+        </h6>
+      </div>
+      <div class="dashboard-page__content">
+        <dashboard-order-list
+          :network="networkFrom!"
+          :token-buy="filters.tokenBuy"
+          :token-sell="filters.tokenSell"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -74,6 +89,7 @@ import { SelectField } from '@/fields'
 import { useChainsStore } from '@/store'
 import { computed, reactive } from 'vue'
 import { TokenSelect } from '@/common'
+import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
 
 const chainStore = useChainsStore()
 const chains = computed(() =>
@@ -99,12 +115,13 @@ const networkTo = computed(() => chainStore.chainById(filters.networkTo))
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
   gap: toRem(33);
-  margin-bottom: toRem(24);
+  margin-bottom: toRem(31.5);
 }
 
 .dashboard-page__block {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: toRem(13);
 }
 
@@ -140,5 +157,32 @@ const networkTo = computed(() => chainStore.chainById(filters.networkTo))
   color: var(--text-primary-dark);
   font-size: toRem(18);
   line-height: 1;
+}
+
+.dashboard-page__title {
+  margin-left: toRem(32);
+  color: var(--text-primary-dark);
+
+  @include respond-to(tablet) {
+    margin-left: toRem(12);
+  }
+}
+
+.dashboard-page__title-wrp {
+  margin-bottom: toRem(19.5);
+}
+
+.dashboard-page__content {
+  background: url('/backgrounds/block-bg.svg') no-repeat;
+  background-size: 100% 100%;
+  width: 100%;
+  min-height: toRem(380);
+  display: flex;
+  padding: toRem(32) toRem(42) toRem(56) toRem(50);
+
+  @include respond-to(tablet) {
+    padding: toRem(17) toRem(10) toRem(26) toRem(21);
+    min-height: toRem(210);
+  }
 }
 </style>

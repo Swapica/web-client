@@ -1,81 +1,29 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="order-list-table">
-    <div class="order-list-table__head">
-      <div class="order-list-table__head-items-wrp">
-        <div class="order-list-table__head-item">
-          <span class="order-list-table__head-title">
-            {{ $t('order-list-table.buy-lbl') }}
-          </span>
-        </div>
-        <div class="order-list-table__head-item">
-          <span class="order-list-table__head-title">
-            {{ $t('order-list-table.sell-lbl') }}
-          </span>
-        </div>
+  <div class="dashboard-order-list-table">
+    <div class="dashboard-order-list-table__head">
+      <div class="dashboard-order-list-table__head-item">
+        <span class="dashboard-order-list-table__head-title">
+          {{ $t('dashboard-order-list-table.sell-lbl') }}
+        </span>
       </div>
-      <div v-if="!isTablet" class="order-list-table__head-item">
-        <span class="order-list-table__head-title">
-          {{ $t('order-list-table.network-lbl') }}
+      <div class="dashboard-order-list-table__head-item">
+        <span class="dashboard-order-list-table__head-title">
+          {{ $t('dashboard-order-list-table.buy-lbl') }}
         </span>
       </div>
     </div>
-    <div class="order-list-table__body-wrp">
+    <div class="dashboard-order-list-table__body-wrp">
       <div
-        class="order-list-table__body"
+        class="dashboard-order-list-table__body"
         v-for="i in list"
         :key="i.info.id.toString()"
       >
-        <div class="order-list-table__body-item-info-wrp">
+        <div class="dashboard-order-list-table__body-item-info-wrp">
           <!-- eslint-disable-next-line max-len -->
-          <div class="order-list-table__body-item-info order-list-table__body-item-info-buy">
+          <div class="dashboard-order-list-table__body-item-info dashboard-order-list-table__body-item-info-sell">
             <span
-              class="order-list-table__body-item-amount"
-              :title="
-                formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
-                )
-              "
-            >
-              {{
-                formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
-                )
-              }}
-            </span>
-            <span class="order-list-table__body-item-code">
-              {{ i.tokenToBuy.symbol }}
-            </span>
-            <copy-button
-              v-if="!isSmall"
-              class="order-list-table__body-item-address"
-              :text="i.info.tokenToBuy"
-              :title="i.info.tokenToBuy"
-            >
-              {{
-                $t('order-list-table.address', {
-                  address: cropAddress(i.info.tokenToBuy, 4, 3),
-                })
-              }}
-            </copy-button>
-            <app-button
-              class="order-list-table__body-item-icon"
-              scheme="icon"
-              target="_blank"
-              :href="provider.getAddressUrl(
-                networkBuy(i.info.destChain.toNumber())
-                  ?.chain_params.explorer_url!,
-                i.info.tokenToBuy
-              )"
-              :icon-left="$icons.link"
-            />
-          </div>
-          <!-- eslint-disable-next-line max-len -->
-          <div class="order-list-table__body-item-info order-list-table__body-item-info-sell">
-            <span
-              class="order-list-table__body-item-amount"
+              class="dashboard-order-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
                   i.info.amountToSell.toString(),
@@ -90,23 +38,25 @@
                 )
               }}
             </span>
-            <span class="order-list-table__body-item-code">
+            <span class="dashboard-order-list-table__body-item-code">
               {{ i.tokenToSell.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
-              class="order-list-table__body-item-address"
+              class="dashboard-order-list-table__body-item-address"
               :text="i.info.tokenToSell"
               :title="i.info.tokenToSell"
             >
               {{
-                $t('order-list-table.address', {
-                  address: cropAddress(i.info.tokenToSell, 4, 3),
+                $t('dashboard-order-list-table.address', {
+                  address: isMediumWidth
+                    ? cropAddress(i.info.tokenToSell)
+                    : cropAddress(i.info.tokenToSell, 7, 12),
                 })
               }}
             </copy-button>
             <app-button
-              class="order-list-table__body-item-icon"
+              class="dashboard-order-list-table__body-item-icon"
               scheme="icon"
               target="_blank"
               :icon-left="$icons.link"
@@ -118,35 +68,60 @@
               "
             />
           </div>
-        </div>
-        <div class="order-list-table__body-item-network">
-          <span
-            class="order-list-table__body-item-network-text"
-            :title="
-              $t('order-list-table.network', {
-                from: networkSell.name,
-                to: networkBuy(i.info.destChain.toNumber())?.name,
-              })
-            "
-          >
-            {{
-              $t('order-list-table.network', {
-                from: networkSell.name,
-                to: networkBuy(i.info.destChain.toNumber())?.name,
-              })
-            }}
-          </span>
+          <!-- eslint-disable-next-line max-len -->
+          <div class="dashboard-order-list-table__body-item-info dashboard-order-list-table__body-item-info-buy">
+            <span
+              class="dashboard-order-list-table__body-item-amount"
+              :title="
+                formatWeiAmount(
+                  i.info.amountToBuy.toString(),
+                  i.tokenToBuy.decimals,
+                )
+              "
+            >
+              {{
+                formatWeiAmount(
+                  i.info.amountToBuy.toString(),
+                  i.tokenToBuy.decimals,
+                )
+              }}
+            </span>
+            <span class="dashboard-order-list-table__body-item-code">
+              {{ i.tokenToBuy.symbol }}
+            </span>
+            <copy-button
+              v-if="!isSmall"
+              class="dashboard-order-list-table__body-item-address"
+              :text="i.info.tokenToBuy"
+              :title="i.info.tokenToBuy"
+            >
+              {{
+                $t('dashboard-order-list-table.address', {
+                  address: isMediumWidth
+                    ? cropAddress(i.info.tokenToBuy)
+                    : cropAddress(i.info.tokenToBuy, 7, 12),
+                })
+              }}
+            </copy-button>
+            <app-button
+              class="dashboard-order-list-table__body-item-icon"
+              scheme="icon"
+              target="_blank"
+              :href="provider.getAddressUrl(
+                networkBuy(i.info.destChain.toNumber())
+                  ?.chain_params.explorer_url!,
+                i.info.tokenToBuy
+              )"
+              :icon-left="$icons.link"
+            />
+          </div>
         </div>
         <app-button
-          class="order-list-table__body-item-cancel-btn"
+          class="dashboard-order-list-table__body-item-match-btn"
           :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
           :size="isTablet ? 'default' : 'small'"
           :disabled="isBtnDisabled"
-          :text="
-            isTablet
-              ? $t('order-list-table.cancel-order-btn')
-              : $t('order-list-table.cancel-btn')
-          "
+          :text="$t('dashboard-order-list-table.match-btn')"
           @click="emit('btn-click', i)"
         />
       </div>
@@ -187,11 +162,14 @@ const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const networkBuy = (chainId: number) => chainByChainId.value(chainId)
 
+const isMediumWidth = computed(
+  () => windowWidth.value < WINDOW_BREAKPOINTS.medium,
+)
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 </script>
 <style lang="scss" scoped>
-.order-list-table {
+.dashboard-order-list-table {
   display: grid;
   grid-template-columns: 1fr toRem(126);
   grid-template-areas:
@@ -216,43 +194,28 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__head {
+.dashboard-order-list-table__head {
   display: grid;
-  grid-template-columns: minmax(toRem(100), 1fr) toRem(154);
+  grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
   grid-area: head;
-  gap: toRem(32);
-
-  @include respond-to(xmedium) {
-    gap: toRem(16);
-  }
-
-  @include respond-to(tablet) {
-    grid-template-columns: minmax(toRem(100), 1fr);
-  }
 }
 
-.order-list-table__head-items-wrp,
-.order-list-table__body-item-info-wrp {
+.dashboard-order-list-table__body-item-info-wrp {
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
 }
 
-.order-list-table__body-wrp {
+.dashboard-order-list-table__body-wrp {
   grid-area: body;
   display: grid;
   gap: toRem(12);
 }
 
-.order-list-table__body {
+.dashboard-order-list-table__body {
   display: grid;
-  grid-template-columns: minmax(toRem(100), 1fr) toRem(154) toRem(95);
+  grid-template-columns: minmax(toRem(100), 1fr) toRem(95);
   align-items: center;
   gap: toRem(32);
-
-  @include respond-to(xmedium) {
-    grid-template-columns: minmax(toRem(100), 1fr) toRem(154) toRem(110);
-    gap: toRem(16);
-  }
 
   @include respond-to(tablet) {
     grid-template-columns: minmax(toRem(100), 1fr);
@@ -260,11 +223,11 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__pagination {
+.dashboard-order-list-table__pagination {
   grid-area: pagination;
 }
 
-.order-list-table__head-title {
+.dashboard-order-list-table__head-title {
   font-size: toRem(24);
   line-height: 1;
   color: var(--text-primary-dark);
@@ -275,28 +238,32 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-info {
+.dashboard-order-list-table__body-item-info {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: toRem(4);
+  gap: toRem(8);
   width: calc(100% + #{toRem(3)});
 
-  @include respond-to(tablet) {
-    width: calc(100% + #{toRem(5)});
+  @include respond-to(medium) {
     justify-content: center;
   }
 
+  @include respond-to(tablet) {
+    width: calc(100% + #{toRem(5)});
+  }
+
   @include respond-to(small) {
+    gap: toRem(4);
     width: calc(100% + #{toRem(1)});
   }
 }
 
-.order-list-table__body-item-code {
+.dashboard-order-list-table__body-item-code {
   font-size: toRem(18);
   line-height: 1;
   color: var(--text-primary-dark);
-  width: toRem(55);
+  width: toRem(45);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -308,20 +275,26 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-address {
+.dashboard-order-list-table__body-item-address {
   font-size: toRem(12);
   line-height: 1;
   color: var(--text-primary-main);
+  flex: 1;
+  text-align: left;
+
+  @include respond-to(medium) {
+    flex: none;
+  }
 }
 
-.order-list-table__body-item-icon {
+.dashboard-order-list-table__body-item-icon {
   width: toRem(20);
   height: toRem(20);
   min-width: toRem(20);
   min-height: toRem(20);
 }
 
-.order-list-table__body-item-amount {
+.dashboard-order-list-table__body-item-amount {
   font-size: toRem(16);
   line-height: 0.9375;
   color: var(--text-primary-dark);
@@ -334,21 +307,11 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   white-space: nowrap;
 }
 
-.order-list-table__body-item-info-buy {
-  background: url('/backgrounds/order-1-bg.svg') no-repeat;
-  background-size: 100% 100%;
-  padding: toRem(8) toRem(24) toRem(8) toRem(12);
-
-  @include respond-to(small) {
-    padding: toRem(8) toRem(4.45) toRem(8) toRem(5);
-  }
-}
-
-.order-list-table__body-item-info-sell {
+.dashboard-order-list-table__body-item-info-buy {
   background: url('/backgrounds/order-2-bg.svg') no-repeat;
   background-size: 100% 100%;
   position: relative;
-  padding: toRem(8) toRem(18);
+  padding: toRem(8) toRem(16) toRem(8) toRem(29);
   left: toRem(-3);
 
   @include respond-to(tablet) {
@@ -361,25 +324,17 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-network {
-  background: url('/backgrounds/network-bg.svg') no-repeat;
+.dashboard-order-list-table__body-item-info-sell {
+  background: url('/backgrounds/order-1-bg.svg') no-repeat;
   background-size: 100% 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: toRem(8) toRem(16);
+  padding: toRem(8) toRem(29) toRem(8) toRem(16);
+
+  @include respond-to(small) {
+    padding: toRem(8) toRem(4.45) toRem(8) toRem(5);
+  }
 }
 
-.order-list-table__body-item-network-text {
-  font-size: toRem(16);
-  line-height: 1;
-  color: var(--text-primary-dark);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.order-list-table__body-item-cancel-btn {
+.dashboard-order-list-table__body-item-match-btn {
   width: 100%;
   height: toRem(40);
 
