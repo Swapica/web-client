@@ -141,6 +141,8 @@
     "buy-lbl": "To Buy",
     "sell-lbl": "To Sell",
     "match-btn": "Match",
-    "address": "({address})"
+    "address": "({address})",
+    "tooltip-title": "Connect wallet",
+    "tooltip-msg": "u haven’t connect your wallet, u will be able to match orders after connection."
   }
 }

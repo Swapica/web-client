@@ -116,14 +116,21 @@
             />
           </div>
         </div>
-        <app-button
-          class="dashboard-order-list-table__body-item-match-btn"
-          :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
-          :size="isTablet ? 'default' : 'small'"
-          :disabled="isBtnDisabled || !provider.selectedAddress"
-          :text="$t('dashboard-order-list-table.match-btn')"
-          @click="emit('btn-click', i)"
-        />
+        <tooltip
+          class="dashboard-order-list-table__tooltip"
+          :title="$t('dashboard-order-list-table.tooltip-title')"
+          :message="$t('dashboard-order-list-table.tooltip-msg')"
+          :is-show-tooltip="!provider.selectedAddress"
+        >
+          <app-button
+            class="dashboard-order-list-table__body-item-match-btn"
+            :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
+            :size="isTablet ? 'default' : 'small'"
+            :disabled="isBtnDisabled || !provider.selectedAddress"
+            :text="$t('dashboard-order-list-table.match-btn')"
+            @click="emit('btn-click', i)"
+          />
+        </tooltip>
       </div>
     </div>
     <div class="order-list__pagination">
@@ -132,7 +139,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { AppButton, CopyButton } from '@/common'
+import { AppButton, CopyButton, Tooltip } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
@@ -354,6 +361,26 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
   @include respond-to(tablet) {
     margin: toRem(6) auto toRem(16);
+  }
+}
+
+.dashboard-order-list-table__tooltip {
+  @include respond-to(tablet) {
+    max-width: toRem(293);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  :deep(.tooltip__content) {
+    @include respond-to(1200px) {
+      bottom: 70%;
+      left: -10%;
+    }
+
+    @include respond-to(tablet) {
+      left: 35%;
+    }
   }
 }
 </style>
