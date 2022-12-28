@@ -106,7 +106,7 @@ const chains = computed(() =>
 )
 
 const filters = reactive({
-  networkFrom: chainStore.selectedChain?.id ?? '',
+  networkFrom: chainStore.selectedChain?.id ?? chains.value[0].value,
   networkTo: chains.value[0].value,
   tokenSell: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
   tokenBuy: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
