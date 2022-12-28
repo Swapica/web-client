@@ -10,9 +10,10 @@
         <router-link class="app-navbar__link" :to="{ name: $routes.myOrders }">
           {{ $t('app-navbar.my-orders-link') }}
         </router-link>
-        <router-link class="app-navbar__link" :to="{ name: $routes.claim }">
+        <!-- eslint-disable-next-line max-len -->
+        <!-- <router-link class="app-navbar__link" :to="{ name: $routes.claim }">
           {{ $t('app-navbar.claim-link') }}
-        </router-link>
+        </router-link> -->
       </div>
     </div>
     <div class="app-navbar__actions">

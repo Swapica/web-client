@@ -26,7 +26,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/claim',
     name: ROUTE_NAMES.claim,
-    component: () => import('@/pages/UiKitPage.vue'),
+    component: () => import('@/pages/MyOrdersPage.vue'),
   },
 ]
 
