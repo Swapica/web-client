@@ -61,7 +61,7 @@
               target="_blank"
               :icon-left="$icons.link"
               :href="
-                provider.getAddressUrl(
+                getEthExplorerAddressUrl(
                   networkSell.chain_params.explorer_url,
                   i.info.tokenToSell,
                 )
@@ -107,7 +107,7 @@
               class="dashboard-order-list-table__body-item-icon"
               scheme="icon"
               target="_blank"
-              :href="provider.getAddressUrl(
+              :href="getEthExplorerAddressUrl(
                 networkBuy(i.info.destChain.toNumber())
                   ?.chain_params.explorer_url!,
                 i.info.tokenToBuy
@@ -137,7 +137,11 @@ import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { ChainResposne, UserOrder } from '@/types'
-import { cropAddress, formatWeiAmount } from '@/helpers'
+import {
+  cropAddress,
+  formatWeiAmount,
+  getEthExplorerAddressUrl,
+} from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
