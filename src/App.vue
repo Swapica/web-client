@@ -24,17 +24,19 @@ import { ErrorHandler } from '@/helpers/error-handler'
 import { ref } from 'vue'
 import { useNotifications } from '@/composables'
 import { config } from '@config'
-import { useWeb3ProvidersStore, useChainsStore } from '@/store'
+import { useWeb3ProvidersStore, useChainsStore, useTokensStore } from '@/store'
 import { PROVIDERS } from './enums'
 
 const web3Store = useWeb3ProvidersStore()
 const chainStore = useChainsStore()
+const tokenStore = useTokensStore()
 const isAppInitialized = ref(false)
 const isAppLoadFailed = ref(false)
 const init = async () => {
   try {
     useNotifications()
     await chainStore.loadChains()
+    await tokenStore.loadTokens()
 
     await web3Store.detectProviders()
 

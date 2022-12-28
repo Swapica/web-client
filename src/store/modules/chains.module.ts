@@ -9,7 +9,11 @@ export const useChainsStore = defineStore('chains-store', {
   }),
   actions: {
     async loadChains() {
-      const { data } = await callers.get<ChainResposne[]>('/v1/chains')
+      const { data } = await callers.get<ChainResposne[]>('/v1/chains', {
+        params: {
+          'page[limit]': 100,
+        },
+      })
       this._chains = data
     },
     selectChain(chainId: number) {

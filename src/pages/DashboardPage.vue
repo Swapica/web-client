@@ -40,29 +40,21 @@
         </div>
         <div class="dashboard-page__filters">
           <token-select
+            v-if="isMounted"
             v-model="filters.tokenSell"
             is-head-icon-shown
             size="big"
-            :value-options="[
-              {
-                value: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
-                label: 'USDC',
-              },
-            ]"
+            :value-options="tokensSell"
             :disabled="isSubmitting"
             :rpc-url="networkFrom?.chain_params.rpc"
             :label="$t('dashboard-page.token-sell-lbl')"
           />
           <token-select
+            v-if="isMounted"
             v-model="filters.tokenBuy"
             is-head-icon-shown
             size="big"
-            :value-options="[
-              {
-                value: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
-                label: 'USDC',
-              },
-            ]"
+            :value-options="tokensBuy"
             :disabled="isSubmitting"
             :rpc-url="networkTo?.chain_params.rpc"
             :label="$t('dashboard-page.token-buy-lbl')"
@@ -79,6 +71,7 @@
       </div>
       <div class="dashboard-page__content">
         <dashboard-order-list
+          v-if="isMounted"
           v-model:is-submitting="isSubmitting"
           :network="networkFrom!"
           :token-buy="filters.tokenBuy"
@@ -91,12 +84,14 @@
 
 <script lang="ts" setup>
 import { SelectField } from '@/fields'
-import { useChainsStore } from '@/store'
-import { computed, reactive, ref } from 'vue'
+import { useChainsStore, useTokensStore } from '@/store'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { TokenSelect } from '@/common'
 import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
 
 const chainStore = useChainsStore()
+const { tokensByChainId } = useTokensStore()
+
 const chains = computed(() =>
   chainStore.chains.map(i => ({
     label: i.name,
@@ -105,17 +100,51 @@ const chains = computed(() =>
   })),
 )
 
+const isMounted = ref(false)
+
 const filters = reactive({
   networkFrom: chainStore.selectedChain?.id ?? chains.value[0].value,
   networkTo: chains.value[0].value,
-  tokenSell: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
-  tokenBuy: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
+  tokenSell: '',
+  tokenBuy: '',
 })
+
+const tokensSell = computed(() =>
+  tokensByChainId(filters.networkFrom).map(i => ({
+    label: i.symbol,
+    value: i.chain.contract_address,
+    imageUrl: i.icon,
+  })),
+)
+
+const tokensBuy = computed(() =>
+  tokensByChainId(filters.networkTo).map(i => ({
+    label: i.symbol,
+    value: i.chain.contract_address,
+    imageUrl: i.icon,
+  })),
+)
 
 const isSubmitting = ref(false)
 
 const networkFrom = computed(() => chainStore.chainById(filters.networkFrom))
 const networkTo = computed(() => chainStore.chainById(filters.networkTo))
+
+watch(
+  () => filters.networkFrom,
+  () => (filters.tokenSell = tokensSell.value[0]?.value ?? ''),
+  { immediate: true },
+)
+
+watch(
+  () => filters.networkTo,
+  () => (filters.tokenBuy = tokensBuy.value[0]?.value ?? ''),
+  { immediate: true },
+)
+
+onMounted(() => {
+  isMounted.value = true
+})
 </script>
 <style lang="scss" scoped>
 .dashboard-page__head {

@@ -147,7 +147,8 @@ const searchFieldRef = ref<typeof InputField>()
 
 const isDropdownOpen = ref(false)
 const searchValue = ref(
-  props.valueOptions.find(i => i.value === props.modelValue)?.label ?? '',
+  props.valueOptions.find(i => i.value === props.modelValue)?.label ??
+    props.modelValue,
 )
 const optionList = ref(props.valueOptions)
 const isInputShown = ref(false)
@@ -221,7 +222,6 @@ const getOptionList = () => {
 }
 
 const handleSearch = async () => {
-  emit('update:modelValue', '')
   try {
     let address = ''
     if (selectedOption.value) {
