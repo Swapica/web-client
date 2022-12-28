@@ -122,6 +122,7 @@ const props = withDefaults(
     rpcUrl?: string
     isHeadIconShown?: boolean
     size?: SIZES
+    emitEmptyValueOnStartSearch?: boolean
   }>(),
   {
     valueOptions: () => [],
@@ -131,6 +132,7 @@ const props = withDefaults(
     errorMessage: '',
     rpcUrl: '',
     isHeadIconShown: false,
+    emitEmptyValueOnStartSearch: false,
     size: 'default',
   },
 )
@@ -223,6 +225,9 @@ const getOptionList = () => {
 
 const handleSearch = async () => {
   try {
+    if (props.emitEmptyValueOnStartSearch) {
+      emit('update:modelValue', '')
+    }
     let address = ''
     if (selectedOption.value) {
       address = selectedOption?.value?.value

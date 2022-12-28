@@ -53,6 +53,7 @@
           />
           <token-select
             v-model="form.tokenSell"
+            emit-empty-value-on-start-search
             :value-options="tokensSell"
             :disabled="isDisabled"
             :rpc-url="networkSell?.chain_params.rpc"
@@ -91,6 +92,7 @@
           />
           <token-select
             v-model="form.tokenBuy"
+            emit-empty-value-on-start-search
             :value-options="tokensBuy"
             :rpc-url="networkBuy?.chain_params.rpc"
             :error-message="getFieldErrorMessage('tokenBuy')"
