@@ -40,20 +40,20 @@
         </div>
         <div class="dashboard-page__filters">
           <token-select
-            v-if="isMounted"
             v-model="filters.tokenSell"
             is-head-icon-shown
             size="big"
+            :key="filters.networkFrom"
             :value-options="tokensSell"
             :disabled="isSubmitting"
             :rpc-url="networkFrom?.chain_params.rpc"
             :label="$t('dashboard-page.token-sell-lbl')"
           />
           <token-select
-            v-if="isMounted"
             v-model="filters.tokenBuy"
             is-head-icon-shown
             size="big"
+            :key="filters.networkTo"
             :value-options="tokensBuy"
             :disabled="isSubmitting"
             :rpc-url="networkTo?.chain_params.rpc"
