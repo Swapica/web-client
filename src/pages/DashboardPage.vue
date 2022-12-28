@@ -172,6 +172,10 @@ onMounted(() => {
   gap: toRem(20);
   display: flex;
   flex-direction: column;
+
+  @include respond-to(small) {
+    padding: toRem(24) toRem(16.96) toRem(32.92) toRem(28.13);
+  }
 }
 
 .dashboard-page__block-title-wrp {
