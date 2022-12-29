@@ -128,7 +128,7 @@
             :size="isTablet ? 'default' : 'small'"
             :disabled="isBtnDisabled || !provider.selectedAddress"
             :text="$t('dashboard-order-list-table.match-btn')"
-            @click="emit('btn-click', i)"
+            @click="emit('match-btn-click', i)"
           />
         </tooltip>
       </div>
@@ -164,7 +164,7 @@ withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'btn-click', value: UserOrder): void
+  (e: 'match-btn-click', value: UserOrder): void
 }>()
 
 const { width: windowWidth } = useWindowSize()

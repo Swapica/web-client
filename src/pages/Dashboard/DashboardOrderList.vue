@@ -9,13 +9,19 @@
       </template>
       <template v-else>
         <template v-if="list.length">
-          <dashboard-order-list-table :network-sell="network!" :list="list">
+          <dashboard-order-list-table
+            :network-sell="network!"
+            :list="list"
+            @match-btn-click="
+              ;(selectedOrder = $event), (isMatchOrderModalShown = true)
+            "
+          >
             <template #pagination>
               <pagination
                 :current-page="currentPage"
-                @update:current-page=";(currentPage = $event), loadList()"
                 :total-items="totalItems"
                 :page-limit="PAGE_LIMIT"
+                @update:current-page=";(currentPage = $event), loadList()"
               />
             </template>
           </dashboard-order-list-table>
@@ -34,11 +40,24 @@
         :message="$t('dashboard-order-list.loading-msg')"
       />
     </template>
+
+    <match-order-modal
+      v-if="selectedOrder"
+      v-model:is-shown="isMatchOrderModalShown"
+      :order="selectedOrder"
+      :network-sell="network"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ErrorMessage, Loader, Pagination, NoDataMessage } from '@/common'
+import {
+  ErrorMessage,
+  Loader,
+  Pagination,
+  NoDataMessage,
+  MatchOrderModal,
+} from '@/common'
 import { useSwapica } from '@/composables'
 import { computed, ref, watch } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
@@ -65,6 +84,7 @@ const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const currentPage = ref(1)
 const totalItems = ref(0)
+const isMatchOrderModalShown = ref(false)
 
 const emit = defineEmits<{
   (e: 'update:is-submitting', value: boolean): void
@@ -74,6 +94,7 @@ const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
+const selectedOrder = ref<UserOrder>()
 
 const loadList = async () => {
   emit('update:is-submitting', true)

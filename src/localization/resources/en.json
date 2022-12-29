@@ -144,5 +144,18 @@
     "address": "({address})",
     "tooltip-title": "Connect wallet",
     "tooltip-msg": "u haven’t connect your wallet, u will be able to match orders after connection."
+  },
+  "change-network-step": {
+    "title": "Change Network",
+    "change-network-btn": "Change Network",
+    "cancel-btn": "Cancel"
+  },
+  "match-order-form": {
+    "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will bw able to call the action and match this order."
+  },
+  "match-order-form-match-step": {
+    "title": "Match Order",
+    "confirm-btn": "Confirm",
+    "cancel-btn": "Cancel"
   }
 }
