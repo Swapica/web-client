@@ -4,6 +4,8 @@
       {{ $t('match-order-form-match-step.title') }}
     </h4>
 
+    <p>{{ $t('match-order-form-match-step.description') }}</p>
+
     <div class="match-order-form-match-step__actions">
       <app-button
         class="match-order-form-match-step__action"
@@ -22,11 +24,11 @@
 </template>
 <script lang="ts" setup>
 import { AppButton } from '@/common'
-// import { ChainResposne } from '@/types'
+import { UserOrder } from '@/types'
 
-// const props = defineProps<{
-//   network: ChainResposne
-// }>()
+defineProps<{
+  order: UserOrder
+}>()
 
 const emit = defineEmits<{
   (e: 'cancel'): void

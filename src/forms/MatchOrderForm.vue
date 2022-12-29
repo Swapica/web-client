@@ -24,8 +24,9 @@
     </change-network-step>
     <match-order-form-match-step
       v-if="currentStep.name === STEPS.match"
+      :order="order"
       @cancel="close"
-      @changed="onNext"
+      @confirm="onNext"
     />
     <approve-step
       v-if="currentStep.name === STEPS.approve"
@@ -55,7 +56,7 @@ import {
   ApproveStep,
   ChangeNetworkStep,
 } from '@/common'
-import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
+import { Bus, ErrorHandler } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { callers } from '@/api'
@@ -88,7 +89,7 @@ const networkBuy = computed(() =>
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { t } = useI18n({ useScope: 'global' })
 
-const { currentStep, steps, currentIdx, forward, back, toStep } = useStepper([
+const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
   STEPS.matchChangeNetwork,
   STEPS.match,
   { name: STEPS.approve, isHidden: true },
@@ -117,7 +118,7 @@ const close = () => {
 const match = async () => {
   toStep(STEPS.confirmation)
   try {
-    await checkApprove(networkBuy.value?.id, props.order.info.tokenToBuy)
+    await checkApprove(networkBuy.value?.id!, props.order.info.tokenToBuy)
     if (approveTx.value) {
       toStep(STEPS.approve)
       return
@@ -159,23 +160,21 @@ const approveToken = async () => {
 
 const matchOrder = async () => {
   try {
-    const { data } = await former.matchOrder()
+    const { data } = await callers.post<TxResposne>('/v1/create/match', {
+      data: {
+        dest_chain: networkBuy.value?.id,
+        order_id: props.order.info.id.toNumber(),
+        src_chain: props.networkSell.id,
+        sender: provider.value.selectedAddress,
+      },
+    })
     await provider.value.signAndSendTx(data.tx_body)
-    Bus.emit(Bus.eventList.offermatchd)
+    Bus.emit(Bus.eventList.orderMatched)
     Bus.success(t('match-order-form.matchd-msg'))
     emit('close')
   } catch (e) {
-    toStep(STEPS.tokens)
+    toStep(STEPS.match)
     throw e
-  }
-}
-
-const switchChain = async () => {
-  try {
-    await switchNetwork(former.networkSell.value!)
-    forward()
-  } catch (e) {
-    ErrorHandler.process(e)
   }
 }
 </script>
