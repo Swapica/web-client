@@ -12,14 +12,13 @@
           <order-list-table
             :is-btn-disabled="isSubmitting"
             :network-sell="network!"
-            :list="list"
+            :list="orderList"
             @btn-click="handleBtnClick"
           >
             <template #pagination>
               <pagination
-                :current-page="currentPage"
-                @update:current-page=";(currentPage = $event), loadList()"
-                :total-items="totalItems"
+                v-model:current-page="currentPage"
+                :total-items="list.length"
                 :page-limit="PAGE_LIMIT"
               />
             </template>
@@ -62,6 +61,10 @@ const props = defineProps<{
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { chainByChainId } = storeToRefs(useChainsStore())
 const network = computed(() => chainByChainId.value(props.chainId))
+const orderList = computed(() => {
+  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
+  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
+})
 
 const currentPage = ref(1)
 const totalItems = ref(0)
@@ -86,23 +89,15 @@ const loadList = async () => {
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    await getTotalItems()
     const rpcProvider = new ethers.providers.JsonRpcProvider(
       network.value?.chain_params.rpc,
     )
-    const lastPage = Math.ceil(totalItems.value / PAGE_LIMIT)
-    if (currentPage.value > lastPage) {
-      currentPage.value = lastPage
-    }
     swapicaContract.init(network.value?.swap_contract!, rpcProvider)
-    const firstItemIndex = totalItems.value - PAGE_LIMIT * currentPage.value
-    const data = await swapicaContract.getUserOrders(
-      provider.value.selectedAddress!,
-      firstItemIndex < 0 ? 0 : firstItemIndex,
-      firstItemIndex + PAGE_LIMIT,
-      network.value!,
-    )
-    list.value = data.reverse()
+
+    await getTotalItems()
+
+    const data = await loadingOrdersLoop()
+    list.value = data.flat().reverse()
     if (!data.length) emit('list-empty', true)
   } catch (e) {
     isLoadFailed.value = true
@@ -113,8 +108,27 @@ const loadList = async () => {
   isLoaded.value = true
 }
 
+const loadingOrdersLoop = async () => {
+  const promises = []
+
+  for (let i = 0; i < totalItems.value; i += 100) {
+    promises.push(
+      swapicaContract.getUserOrders(
+        provider.value.selectedAddress!,
+        i,
+        i + 100,
+        network.value!,
+      ),
+    )
+  }
+  return Promise.all(promises)
+}
+
 const getTotalItems = async () => {
-  totalItems.value = 9
+  const data = await swapicaContract.getUserOrdersLength(
+    provider.value.selectedAddress!,
+  )
+  totalItems.value = data?.toNumber() || 0
 }
 
 const handleBtnClick = async (item: UserOrder) => {

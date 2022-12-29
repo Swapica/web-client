@@ -52,7 +52,7 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
   ) => {
     const { chainByChainId } = storeToRefs(useChainsStore())
 
-    const response = await _instance.value?.getUserOrders(address, from, to)
+    const response = await _instance.value?.getUserOrders(address, 1, from, to)
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
@@ -73,6 +73,10 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     return data
   }
 
+  const getUserOrdersLength = async (user: string) => {
+    return _instance.value?.getUserOrdersLength(user)
+  }
+
   const getActiveOrders = async (
     from: number,
     to: number,
@@ -80,7 +84,12 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
   ) => {
     const { chainByChainId } = storeToRefs(useChainsStore())
 
-    const response = await _instance.value?.getActiveOrders(from, to)
+    const response = await _instance.value?.getActiveOrders(
+      '0x0000000000000000000000000000000000000000',
+      '0x0000000000000000000000000000000000000000',
+      from,
+      to,
+    )
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
@@ -106,5 +115,6 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     useSwapica,
     getUserOrders,
     getActiveOrders,
+    getUserOrdersLength,
   }
 }
