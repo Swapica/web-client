@@ -63,6 +63,88 @@
     "metamask": "MetaMask"
   },
   "app": {
-    "error-msg": "An error occurred. Please try again later or contact the owner"
+    "error-msg": "Ooops, something went wrong, please reload page or try again later"
+  },
+  "chain-selector": {
+    "unsupported-chain": "Unsupported"
+  },
+  "created-orders": {
+    "title": "Created Orders",
+    "create-btn": "Create Order",
+    "connect-wallet-msg": "Connect wallet to see what u have here",
+    "no-data-msg": "U have no orders created, let’s create your first order"
+  },
+  "order-list": {
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
+    "loading-msg": "Hold a sec, we’re trying to solve it."
+  },
+  "order-list-table": {
+    "buy-lbl": "To Buy",
+    "sell-lbl": "To Sell",
+    "network-lbl": "Network",
+    "cancel-order-btn": "Cancel order",
+    "cancel-btn": "Cancel",
+    "address": "({address})",
+    "network": "{to}/{from}"
+  },
+  "create-order-form-network-step": {
+    "title": "Create Order",
+    "description": "Please, select Networks.",
+    "network-to-sell-lbl": "Network to sell",
+    "network-to-buy-lbl": "Network to buy",
+    "cancel-btn": "Cancel",
+    "next-btn": "Next step"
+  },
+  "create-order-form-tokens-step": {
+    "title": "Create Order",
+    "description": "Lorem ipsum dolor sit amet consectetur. Purus condimentum nunc quam a enim ullamcorper.  Purus condimentum nunc",
+    "back-btn": "Back",
+    "next-btn": "Confirm",
+    "token-to-sell-lbl": "Token to sell",
+    "token-to-buy-lbl": "Token to buy",
+    "token-network": "Network: {network}"
+  },
+  "confirmation-step": {
+    "title": "Confirmation",
+    "description": "Lorem ipsum dolor sit amet consectetur. Purus condimentum nunc quam a enim ullamcorper.  Purus condimentum nunc"
+  },
+  "approve-step": {
+    "title": "Approve Token",
+    "back-btn": "Back",
+    "approve-btn": "Approve"
+  },
+  "create-order-form": {
+    "created-msg": "Offer successfuly created",
+    "approve-msg": "Approve {token} to match this order. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+    "approve-msg-token": "ERC20 Token",
+    "approve-confirmation-title": "Approve Token",
+    "create-confirmation-title": "Create Order"
+  },
+  "copy-button": {
+    "copied-message": "Copied!"
+  },
+  "dashboard-page": {
+    "network-title-number-lbl": "1",
+    "network-title-lbl": "Select networks to start swaping your tokens",
+    "tokens-title-number-lbl": "2",
+    "tokens-title-lbl": "Select tokens to filter the orders",
+    "network-from-lbl": "Original chain",
+    "network-to-lbl": "Match chain",
+    "token-sell-lbl": "Order sells",
+    "token-buy-lbl": "Order buys",
+    "title": "Available Orders"
+  },
+  "dashboard-order-list": {
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
+    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "no-data-msg": "No orders created"
+  },
+  "dashboard-order-list-table": {
+    "buy-lbl": "To Buy",
+    "sell-lbl": "To Sell",
+    "match-btn": "Match",
+    "address": "({address})",
+    "tooltip-title": "Connect wallet",
+    "tooltip-msg": "u haven’t connect your wallet, u will be able to match orders after connection."
   }
 }

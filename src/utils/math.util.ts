@@ -95,6 +95,14 @@ export class BN {
     return this.#bn.toPrecision(precision, mode)
   }
 
+  toFixed(precision: number, mode?: BN_ROUNDING): string {
+    return this.#bn.toFixed(precision, mode)
+  }
+
+  toDefaultFormat(): string {
+    return this.#bn.toFormat()
+  }
+
   format(format?: BnFormatCfg): string {
     try {
       const groupSeparatorFormat: { [key: string]: string | number } = {}

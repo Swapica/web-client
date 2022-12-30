@@ -28,13 +28,13 @@
               >
                 {{ $t('app-navigation-mobile.my-orders-link') }}
               </router-link>
-              <router-link
+              <!-- <router-link
                 class="app-navigation-mobile__link"
                 :to="{ name: $routes.claim }"
                 @click="closeNav"
               >
                 {{ $t('app-navigation-mobile.claim-link') }}
-              </router-link>
+              </router-link> -->
             </div>
             <div class="app-navigation-mobile__actions">
               <connect-wallet-btn />

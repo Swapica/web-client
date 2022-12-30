@@ -1,3 +1,5 @@
+import { BN, BnLike } from '@/utils'
+
 export function cropAddress(
   string: string,
   reduceValueStart = 4,
@@ -10,4 +12,8 @@ export function cropAddress(
   } else {
     return string
   }
+}
+export function formatWeiAmount(amount: BnLike, decimals: number) {
+  const number = new BN(amount).fromFraction(decimals).toFixed(decimals)
+  return new BN(number).toDefaultFormat()
 }

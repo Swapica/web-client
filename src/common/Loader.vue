@@ -1,41 +1,46 @@
 <template>
   <div class="loader">
-    <template v-if="scheme === SCHEMES.spinner">
-      <spinner />
-    </template>
+    <p v-if="message" class="loader__message">
+      {{ message }}
+    </p>
+    <spinner />
   </div>
 </template>
 
-<script lang="ts">
-/* create skeletons */
+<script lang="ts" setup>
 import Spinner from '@/common/loader/Spinner.vue'
-
-import { defineComponent } from 'vue'
-
-const SCHEMES = {
-  spinner: 'spinner',
-}
-
-export default defineComponent({
-  name: 'loader',
-  components: { Spinner },
-  props: {
-    scheme: {
-      type: String,
-      default: SCHEMES.spinner,
-    },
+withDefaults(
+  defineProps<{
+    message?: string
+  }>(),
+  {
+    message: '',
   },
-  setup() {
-    return {
-      SCHEMES,
-    }
-  },
-})
+)
 </script>
 
 <style lang="scss" scoped>
 .loader {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: toRem(20);
+  width: 100%;
+
+  @include respond-to(tablet) {
+    gap: toRem(16);
+  }
+}
+
+.loader__message {
+  color: var(--text-primary-dark);
+  font-size: toRem(32);
+  line-height: 1;
+  text-align: center;
+
+  @include respond-to(tablet) {
+    font-size: toRem(20);
+  }
 }
 </style>

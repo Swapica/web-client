@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { BN } from '@/utils'
-import { computed, getCurrentInstance, useAttrs, useSlots } from 'vue'
+import { computed, getCurrentInstance, ref, useAttrs, useSlots } from 'vue'
 
 type INPUT_TYPES = 'text' | 'number' | 'password'
 
-type SCHEMES = 'primary' | 'secondary'
+type SCHEMES = 'primary' | 'flat'
 
 const props = withDefaults(
   defineProps<{
@@ -14,6 +14,7 @@ const props = withDefaults(
     placeholder?: string
     type?: INPUT_TYPES
     errorMessage?: string
+    isErrorMessageShown?: boolean
   }>(),
   {
     scheme: 'primary',
@@ -21,6 +22,7 @@ const props = withDefaults(
     label: '',
     placeholder: ' ',
     errorMessage: '',
+    isErrorMessageShown: true,
   },
 )
 
@@ -29,6 +31,7 @@ const emit = defineEmits<{
 }>()
 
 const attrs = useAttrs()
+const inputRef = ref<HTMLInputElement>()
 
 const slots = useSlots()
 
@@ -96,6 +99,10 @@ const setHeightCSSVar = (element: HTMLElement) => {
     `${element.scrollHeight}px`,
   )
 }
+
+defineExpose({
+  inputRef,
+})
 </script>
 
 <template>
@@ -108,6 +115,7 @@ const setHeightCSSVar = (element: HTMLElement) => {
         <slot name="nodeLeft" />
       </div>
       <input
+        ref="inputRef"
         class="input-field__input"
         :id="`input-field--${uid}`"
         v-bind="$attrs"
@@ -131,7 +139,10 @@ const setHeightCSSVar = (element: HTMLElement) => {
       @enter="setHeightCSSVar"
       @before-leave="setHeightCSSVar"
     >
-      <span v-if="errorMessage" class="input-field__err-msg">
+      <span
+        v-if="errorMessage && isErrorMessageShown"
+        class="input-field__err-msg"
+      >
         {{ errorMessage }}
       </span>
     </transition>
@@ -218,6 +229,11 @@ $z-index-side-nodes: 1;
     padding: toRem(5) toRem(8) toRem(4);
     background: url('/backgrounds/input-bg.svg');
     background-size: 100% 100%;
+  }
+
+  .input-field--flat & {
+    font-size: toRem(18);
+    padding: 0;
   }
 
   .input-field--node-left & {

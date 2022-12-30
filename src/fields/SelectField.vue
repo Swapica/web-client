@@ -14,27 +14,33 @@ import { onClickOutside } from '@vueuse/core'
 import { ICON_NAMES } from '@/enums'
 
 type SCHEMES = 'primary'
+type SIZES = 'medium' | 'default'
 
 const props = withDefaults(
   defineProps<{
     scheme?: SCHEMES
+    size?: SIZES
     modelValue: string | number
     valueOptions?: {
       label: string
       icon?: ICON_NAMES
+      imageUrl?: string
       value: number | string
     }[]
     label?: string
     placeholder?: string
     errorMessage?: string
+    isErrorMessageShown?: boolean
   }>(),
   {
     scheme: 'primary',
+    size: 'default',
     valueOptions: () => [],
     type: 'text',
     label: '',
     placeholder: ' ',
     errorMessage: '',
+    isErrorMessageShown: true,
   },
 )
 
@@ -77,6 +83,7 @@ const selectFieldClasses = computed(() => ({
   'select-field--readonly': isReadonly.value,
   'select-field--label-active': isLabelActive.value,
   [`select-field--${props.scheme}`]: true,
+  [`select-field--${props.size}`]: true,
 }))
 
 const setHeightCSSVar = (element: HTMLElement) => {
@@ -159,7 +166,15 @@ watch(
                   class="select-field__select-head-value-icon"
                   :name="selectedOption?.icon"
                 />
-                {{ selectedOption?.label }}
+                <img
+                  v-if="selectedOption?.imageUrl"
+                  class="select-field__select-head-value-icon"
+                  :src="selectedOption?.imageUrl"
+                  :alt="selectedOption?.label"
+                />
+                <span class="select-field__select-head-text">
+                  {{ selectedOption?.label }}
+                </span>
               </div>
             </template>
             <template v-else-if="!label">
@@ -212,7 +227,15 @@ watch(
                   class="select-field__select-dropdown-item-icon"
                   :name="option.icon"
                 />
-                {{ option.label }}
+                <img
+                  v-if="option.imageUrl"
+                  class="select-field__select-dropdown-item-icon"
+                  :src="option.imageUrl"
+                  :alt="option.label"
+                />
+                <span class="select-field__select-dropdown-item-text">
+                  {{ option.label }}
+                </span>
               </button>
             </template>
           </div>
@@ -224,7 +247,10 @@ watch(
       @enter="setHeightCSSVar"
       @before-leave="setHeightCSSVar"
     >
-      <span v-if="errorMessage" class="select-field__err-msg">
+      <span
+        v-if="errorMessage && isErrorMessageShown"
+        class="select-field__err-msg"
+      >
         {{ errorMessage }}
       </span>
     </transition>
@@ -289,6 +315,13 @@ $z-local-index: 2;
   @include field-text;
 
   transition-property: color;
+
+  .select-field--medium & {
+    font-size: toRem(18);
+    padding: toRem(7.5) toRem(12);
+    padding-right: toRem(32);
+    min-height: toRem(32);
+  }
 
   .select-field--open.select-field--primary & {
     background: url('/backgrounds/select-field-hover-bg.svg') no-repeat;
@@ -378,11 +411,9 @@ $z-local-index: 2;
   width: 100%;
   padding: toRem(8) toRem(12);
   color: var(--text-primary-main);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   display: flex;
   align-items: center;
+  gap: toRem(8);
 
   &:hover {
     color: var(--text-primary-dark);
@@ -393,19 +424,36 @@ $z-local-index: 2;
   }
 }
 
+.select-field__select-dropdown-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .select-field__select-dropdown-item-icon {
   width: toRem(24);
   height: toRem(24);
+  min-width: toRem(24);
+  min-height: toRem(24);
 }
 
 .select-field__select-head-value {
   display: flex;
   align-items: center;
+  gap: toRem(8);
+}
+
+.select-field__select-head-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .select-field__select-head-value-icon {
   width: toRem(24);
   height: toRem(24);
+  min-width: toRem(24);
+  min-height: toRem(24);
 }
 
 .select-field__err-msg {

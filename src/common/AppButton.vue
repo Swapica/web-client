@@ -63,17 +63,22 @@ import { ICON_NAMES } from '@/enums'
 
 type SCHEMES =
   | 'primary'
+  | 'primary-mobile'
   | 'secondary'
+  | 'secondary-mobile'
   | 'flat'
   | 'icon'
   | 'raised'
   | 'select'
   | 'default'
 
+type SIZES = 'small' | 'default'
+
 const props = withDefaults(
   defineProps<{
     text?: string
     scheme?: SCHEMES
+    size?: SIZES
     route?: LocationAsRelativeRaw
     href?: string
     iconLeft?: ICON_NAMES
@@ -82,6 +87,7 @@ const props = withDefaults(
   {
     text: '',
     scheme: 'default',
+    size: 'default',
     route: undefined,
     href: '',
     iconLeft: undefined,
@@ -99,6 +105,7 @@ const buttonClasses = computed(() =>
   [
     'app-button',
     `app-button--${props.scheme}`,
+    `app-button--${props.size}`,
     ...(isDisabled.value ? ['app-button--disabled'] : []),
   ].join(' '),
 )
@@ -143,16 +150,51 @@ const buttonClasses = computed(() =>
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
     background-size: 100% 100%;
 
+    &.app-button--small {
+      padding: toRem(9.17) toRem(21.31) toRem(13.83)
+        calc(toRem(19.59) + toRem(6.1));
+    }
+
     &:disabled,
     &--disabled {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
       background: url('/backgrounds/button-disabled-bg.svg') no-repeat;
       background-size: 100% 100%;
+
+      &.app-button--small {
+        padding: toRem(10.17) toRem(19.31) toRem(12.83)
+          calc(toRem(15.59) + toRem(4.1));
+      }
     }
 
     &:not([disabled]):hover {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
       background: url('/backgrounds/button-primary-hover-bg.svg') no-repeat;
+      background-size: 100% 100%;
+
+      &.app-button--small {
+        padding: toRem(10.17) toRem(19.31) toRem(12.83)
+          calc(toRem(15.59) + toRem(4.1));
+      }
+    }
+  }
+
+  &--primary-mobile {
+    background: url('/backgrounds/button-primary-mobile-bg.svg') no-repeat;
+    padding: toRem(13) toRem(28) toRem(18) calc(toRem(25.38) + toRem(10.92));
+    background-size: 100% 100%;
+
+    &:disabled,
+    &--disabled {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-mobile-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    &:not([disabled]):hover {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-primary-mobile-hover-bg.svg')
+        no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -162,16 +204,51 @@ const buttonClasses = computed(() =>
     padding: toRem(11) toRem(28) toRem(20) calc(toRem(25.38) + toRem(11.62));
     background-size: 100% 100%;
 
+    &.app-button--small {
+      padding: toRem(9.17) toRem(21.31) toRem(13.83)
+        calc(toRem(19.59) + toRem(6.1));
+    }
+
     &:disabled,
     &--disabled {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
       background: url('/backgrounds/button-disabled-bg.svg') no-repeat;
       background-size: 100% 100%;
+
+      &.app-button--small {
+        padding: toRem(10.17) toRem(19.31) toRem(12.83)
+          calc(toRem(15.59) + toRem(4.1));
+      }
     }
 
     &:not([disabled]):hover {
       padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
       background: url('/backgrounds/button-secondary-hover-bg.svg') no-repeat;
+      background-size: 100% 100%;
+
+      &.app-button--small {
+        padding: toRem(10.17) toRem(19.31) toRem(12.83)
+          calc(toRem(15.59) + toRem(4.1));
+      }
+    }
+  }
+
+  &--secondary-mobile {
+    background: url('/backgrounds/button-secondary-mobile-bg.svg') no-repeat;
+    padding: toRem(13) toRem(28) toRem(18) calc(toRem(25.38) + toRem(10.92));
+    background-size: 100% 100%;
+
+    &:disabled,
+    &--disabled {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-mobile-disabled-bg.svg') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    &:not([disabled]):hover {
+      padding: toRem(14) toRem(24) toRem(17) calc(toRem(19) + toRem(7.51));
+      background: url('/backgrounds/button-secondary-mobile-hover-bg.svg')
+        no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -215,6 +292,15 @@ const buttonClasses = computed(() =>
       background-size: 100% 100%;
     }
   }
+
+  &--icon {
+    color: var(--primary-main);
+    transition-property: color;
+
+    &:not([disabled]):hover {
+      color: var(--primary-dark);
+    }
+  }
 }
 
 .app-button__icon-left,
@@ -229,6 +315,7 @@ const buttonClasses = computed(() =>
   pointer-events: none;
   word-break: break-all;
   min-width: 0;
+  line-height: toRem(17);
 
   @include text-ellipsis;
 }

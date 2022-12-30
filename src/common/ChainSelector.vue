@@ -3,16 +3,30 @@
     <dropdown class="chain-selector__dropdown">
       <template #head="{ dropdown }">
         <button class="chain-selector__header" @click="dropdown.toggle">
-          <img
-            class="chain-selector__dropdown-header-icon"
-            :src="chainStore.selectedChain?.icon"
-            :alt="chainStore.selectedChain?.name"
-          />
+          <template v-if="chainStore.selectedChain?.icon">
+            <img
+              class="chain-selector__dropdown-header-icon"
+              :src="chainStore.selectedChain?.icon"
+              :alt="chainStore.selectedChain?.name"
+            />
+          </template>
+          <template v-else>
+            <icon
+              class="chain-selector__dropdown-header-icon"
+              :name="$icons.user"
+            />
+          </template>
+
           <span
             v-if="!isMediumWidth"
             class="chain-selector__dropdown-header-text"
           >
-            {{ chainStore.selectedChain?.name || 'uknow' }}
+            <template v-if="chainStore.selectedChain?.name">
+              {{ chainStore.selectedChain?.name }}
+            </template>
+            <template v-else>
+              {{ $t('chain-selector.unsupported-chain') }}
+            </template>
           </span>
           <icon
             :class="[
@@ -59,12 +73,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { EIP1474, WINDOW_BREAKPOINTS } from '@/enums'
+import { WINDOW_BREAKPOINTS } from '@/enums'
 import { Dropdown, Icon } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { ChainResposne, EthProviderRpcError } from '@/types'
+import { ChainResposne } from '@/types'
 import { storeToRefs } from 'pinia'
-import { ErrorHandler } from '@/helpers'
+import { ErrorHandler, switchNetwork } from '@/helpers'
 
 const chainStore = useChainsStore()
 const { provider } = storeToRefs(useWeb3ProvidersStore())
@@ -79,29 +93,10 @@ const switchChain = async (
   dropdown: { close: () => void },
 ) => {
   try {
-    if (provider.value.isConnected) {
-      await provider.value.switchChain(chain.chain_params.chain_id)
-    }
+    await switchNetwork(chain)
     chainStore.selectChain(chain.chain_params.chain_id)
   } catch (error) {
-    const e = error as EthProviderRpcError
-    if (e?.code === 4902 || e?.code === EIP1474.internalError) {
-      try {
-        await provider.value.addChain(
-          chain.chain_params.chain_id,
-          chain.name,
-          chain.chain_params.rpc,
-          chain.chain_params.native_symbol,
-          chain.chain_params.native_symbol, // TODO add name
-          chain.chain_params.native_decimals,
-          chain.chain_params.explorer_url,
-        )
-      } catch (e) {
-        ErrorHandler.process(e)
-      }
-    } else {
-      ErrorHandler.process(e)
-    }
+    ErrorHandler.process(error)
   }
   dropdown.close()
 }
@@ -175,6 +170,8 @@ if (!provider.value.currentProvider) {
 .chain-selector__dropdown-header-icon {
   width: toRem(24);
   height: toRem(24);
+  min-width: toRem(24);
+  min-height: toRem(24);
 }
 
 .chain-selector__header {

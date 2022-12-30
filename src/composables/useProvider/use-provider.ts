@@ -1,11 +1,6 @@
 import { PROVIDERS } from '@/enums'
 import { computed, ComputedRef, Ref, ref } from 'vue'
-import {
-  useMetamask,
-  useCoinbase,
-  usePhantom,
-  useSolflare,
-} from '@/composables/useProvider'
+import { useMetamask } from '@/composables/useProvider'
 import {
   DesignatedProvider,
   ChainId,
@@ -74,15 +69,6 @@ export const useProvider = (): UseProvider => {
     switch (provider.name as PROVIDERS) {
       case PROVIDERS.metamask:
         providerWrp.value = useMetamask(provider.instance)
-        break
-      case PROVIDERS.coinbase:
-        providerWrp.value = useCoinbase(provider.instance)
-        break
-      case PROVIDERS.phantom:
-        providerWrp.value = usePhantom(provider.instance)
-        break
-      case PROVIDERS.solflare:
-        providerWrp.value = useSolflare(provider.instance)
         break
       default:
         throw new Error('Invalid Provider')

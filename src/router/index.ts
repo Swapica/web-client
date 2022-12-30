@@ -16,17 +16,17 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: ROUTE_NAMES.dashboard,
-    component: () => import('@/pages/UiKitPage.vue'),
+    component: () => import('@/pages/DashboardPage.vue'),
   },
   {
     path: '/my-orders',
     name: ROUTE_NAMES.myOrders,
-    component: () => import('@/pages/UiKitPage.vue'),
+    component: () => import('@/pages/MyOrdersPage.vue'),
   },
   {
     path: '/claim',
     name: ROUTE_NAMES.claim,
-    component: () => import('@/pages/UiKitPage.vue'),
+    component: () => import('@/pages/MyOrdersPage.vue'),
   },
 ]
 

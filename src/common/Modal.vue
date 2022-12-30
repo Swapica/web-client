@@ -73,6 +73,42 @@ export default defineComponent({
   background: url('/backgrounds/modal-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(24) toRem(48) toRem(50);
+  display: flex;
+  flex-flow: column nowrap;
+
+  @include respond-to(tablet) {
+    margin: 0 toRem(32);
+    max-height: vh(80);
+  }
+
+  &:before {
+    content: url('/images/pin.svg');
+    display: block;
+    width: toRem(46);
+    height: toRem(54);
+    position: absolute;
+    top: toRem(-28);
+    left: toRem(18.49);
+
+    @include respond-to(700px) {
+      left: toRem(-4);
+    }
+  }
+
+  &:after {
+    content: url('/images/pin.svg');
+    display: block;
+    width: toRem(46);
+    height: toRem(54);
+    position: absolute;
+    top: toRem(-28);
+    right: toRem(-2.34);
+    transform: rotate(35deg);
+
+    @include respond-to(700px) {
+      right: toRem(-15.34);
+    }
+  }
 }
 
 .modal-enter-active,

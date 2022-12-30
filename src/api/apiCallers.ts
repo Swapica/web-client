@@ -1,3 +1,4 @@
+import { TxResposne } from '@/types'
 import {
   AxiosStatic,
   AxiosInstance,
@@ -51,6 +52,21 @@ export function makeApiCallers(axios: AxiosInstance) {
         ...config,
         headers: {
           'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    approve(
+      sender: string,
+      chainId: string,
+      tokenAddress: string,
+      tokenType = 'erc20',
+    ) {
+      return api.post<TxResposne>('/v1/approve', {
+        data: {
+          sender,
+          chain_id: chainId,
+          token_address: tokenAddress,
+          token_type: tokenType,
         },
       })
     },

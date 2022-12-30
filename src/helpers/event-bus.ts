@@ -7,6 +7,7 @@ enum EVENTS {
   success = 'success',
   info = 'info',
   default = 'default',
+  offerCreated = 'offerCreated',
 }
 
 export class EventBus {

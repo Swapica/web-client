@@ -28,6 +28,12 @@ $media-breakpoints: (
   }
 }
 
+@mixin respond-to-height ($media) {
+  @media (max-height: ($media - 1)) {
+    @content;
+  }
+}
+
 @mixin text-ellipsis {
   overflow: hidden;
   white-space: nowrap;
