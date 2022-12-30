@@ -4,7 +4,34 @@
       {{ $t('match-order-form-match-step.title') }}
     </h4>
 
-    <p>{{ $t('match-order-form-match-step.description') }}</p>
+    <i18n-t
+      keypath="match-order-form-match-step.description"
+      tag="p"
+      class="match-order-form-match-step__desc"
+    >
+      <template #tokenSell>
+        <span class="match-order-form-match-step__desc-token-bold">
+          {{
+            $t('match-order-form-match-step.recieve-token-msg', {
+              token: order.tokenToSell.symbol,
+              amount: formatWeiAmount(
+                order.info.amountToSell.toString(),
+                order.tokenToSell.decimals,
+              ),
+            })
+          }}
+        </span>
+      </template>
+      <template #tokenBuy>
+        {{
+          formatWeiAmount(
+            order.info.amountToBuy.toString(),
+            order.tokenToBuy.decimals,
+          )
+        }}
+        {{ order.tokenToBuy.symbol }}
+      </template>
+    </i18n-t>
 
     <div class="match-order-form-match-step__actions">
       <app-button
@@ -25,6 +52,7 @@
 <script lang="ts" setup>
 import { AppButton } from '@/common'
 import { UserOrder } from '@/types'
+import { formatWeiAmount } from '@/helpers'
 
 defineProps<{
   order: UserOrder
@@ -69,5 +97,13 @@ const emit = defineEmits<{
 
 .match-order-form-match-step__action {
   width: 100%;
+}
+
+.match-order-form-match-step__desc {
+  text-align: center;
+}
+
+.match-order-form-match-step__desc-token-bold {
+  color: var(--text-primary-dark);
 }
 </style>

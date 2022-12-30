@@ -29,7 +29,9 @@
       @confirm="onNext"
     />
     <approve-step
-      v-if="currentStep.name === STEPS.approve"
+      v-if="currentStep.name === STEPS.approveBuyToken"
+      :back-btn-text="$t('match-order-form.cancel-btn')"
+      @back="close"
       @approve="handleApprove"
     >
       <i18n-t
@@ -44,7 +46,14 @@
         </template>
       </i18n-t>
     </approve-step>
-    <confirmation-step v-if="currentStep.name === STEPS.confirmation" />
+    <confirmation-step
+      v-if="currentStep.name === STEPS.confirmationMatch"
+      :title="
+        isApproving
+          ? $t('match-order-form.approve-confirmation-title')
+          : $t('match-order-form.match-confirmation-title')
+      "
+    />
   </form>
 </template>
 
@@ -68,8 +77,8 @@ import MatchOrderFormMatchStep from '@/forms/match-order-form/MatchOrderFormMatc
 enum STEPS {
   matchChangeNetwork = 'match-change-network',
   match = 'match',
-  confirmation = 'confirmation',
-  approve = 'approve',
+  confirmationMatch = 'confirmation-match',
+  approveBuyToken = 'approve-buy-token',
 }
 
 const props = defineProps<{
@@ -90,16 +99,17 @@ const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { t } = useI18n({ useScope: 'global' })
 
 const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
-  STEPS.matchChangeNetwork,
+  { name: STEPS.matchChangeNetwork, isHidden: true },
   STEPS.match,
-  { name: STEPS.approve, isHidden: true },
-  STEPS.confirmation,
+  { name: STEPS.approveBuyToken, isHidden: true },
+  STEPS.confirmationMatch,
 ])
 
 if (provider.value.chainId === networkBuy.value?.chain_params.chain_id) {
   toStep(STEPS.match)
 }
 const approveTx = ref<TxResposne | null>(null)
+const isApproving = ref(false)
 
 const onNext = () => {
   switch (currentStep.value.name) {
@@ -116,11 +126,11 @@ const close = () => {
 }
 
 const match = async () => {
-  toStep(STEPS.confirmation)
+  toStep(STEPS.confirmationMatch)
   try {
     await checkApprove(networkBuy.value?.id!, props.order.info.tokenToBuy)
     if (approveTx.value) {
-      toStep(STEPS.approve)
+      toStep(STEPS.approveBuyToken)
       return
     }
 
@@ -141,7 +151,7 @@ const checkApprove = async (networkId: string, tokenAddrs: string) => {
 }
 
 const handleApprove = async () => {
-  toStep(STEPS.confirmation)
+  toStep(STEPS.confirmationMatch)
   try {
     await approveToken()
     await matchOrder()
@@ -150,12 +160,15 @@ const handleApprove = async () => {
   }
 }
 const approveToken = async () => {
+  isApproving.value = true
+
   try {
     await provider.value.signAndSendTx(approveTx.value?.tx_body)
   } catch (e) {
-    toStep(STEPS.approve)
+    toStep(STEPS.approveBuyToken)
     throw e
   }
+  isApproving.value = false
 }
 
 const matchOrder = async () => {
@@ -170,7 +183,7 @@ const matchOrder = async () => {
     })
     await provider.value.signAndSendTx(data.tx_body)
     Bus.emit(Bus.eventList.orderMatched)
-    Bus.success(t('match-order-form.matchd-msg'))
+    Bus.success(t('match-order-form.matched-msg'))
     emit('close')
   } catch (e) {
     toStep(STEPS.match)

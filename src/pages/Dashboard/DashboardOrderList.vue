@@ -60,7 +60,7 @@ import {
 import { useSwapica } from '@/composables'
 import { computed, ref, watch } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
-import { ErrorHandler } from '@/helpers'
+import { Bus, ErrorHandler } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import DashboardOrderListTable from '@/pages/Dashboard/DashboardOrderListTable.vue'
 import { ethers } from 'ethers'
@@ -142,6 +142,10 @@ const getTotalItems = async () => {
   const data = await swapicaContract.getOrdersLength()
   totalItems.value = data?.toNumber() || 0
 }
+
+Bus.on(Bus.eventList.orderMatched, () => {
+  loadList()
+})
 
 watch(
   () => [props.tokenSell, props.tokenBuy],

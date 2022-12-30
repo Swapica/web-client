@@ -153,11 +153,19 @@
     "cancel-btn": "Cancel"
   },
   "match-order-form": {
-    "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will bw able to call the action and match this order."
+    "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will bw able to call the action and match this order.",
+    "approve-msg-token": "ERC20 Token",
+    "approve-msg": "Approve {token} to match this order. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+    "approve-confirmation-title": "Approve Token",
+    "match-confirmation-title": "Match Order",
+    "cancel-btn": "Cancel",
+    "matched-msg": "Order successfuly matched"
   },
   "match-order-form-match-step": {
     "title": "Match Order",
     "confirm-btn": "Confirm",
-    "cancel-btn": "Cancel"
+    "cancel-btn": "Cancel",
+    "description": "You are about to match an order. After matching you will receive {tokenSell} and lose {tokenBuy}. This action can be undone in case the Creator cancels the order or someone else matches this order before you.",
+    "recieve-token-msg": "receive {amount} {token}"
   }
 }
