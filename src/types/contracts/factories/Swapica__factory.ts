@@ -334,6 +334,16 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "tokenToSell",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenToBuy",
+        type: "address",
+      },
+      {
         internalType: "uint256",
         name: "begin",
         type: "uint256",
@@ -394,6 +404,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "getOrdersLength",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "getSigners",
     outputs: [
       {
@@ -411,6 +434,11 @@ const _abi = [
         internalType: "address",
         name: "user",
         type: "address",
+      },
+      {
+        internalType: "enum Swapica.State",
+        name: "state",
+        type: "uint8",
       },
       {
         internalType: "uint256",
@@ -473,6 +501,30 @@ const _abi = [
         name: "user",
         type: "address",
       },
+    ],
+    name: "getUserMatchesLength",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        internalType: "enum Swapica.State",
+        name: "state",
+        type: "uint8",
+      },
       {
         internalType: "uint256",
         name: "begin",
@@ -527,6 +579,25 @@ const _abi = [
         internalType: "struct Swapica.Order[]",
         name: "result",
         type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "getUserOrdersLength",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

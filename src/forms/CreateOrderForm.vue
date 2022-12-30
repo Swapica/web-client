@@ -33,7 +33,14 @@
         </template>
       </i18n-t>
     </approve-step>
-    <confirmation-step v-if="currentStep.name === STEPS.confirmation" />
+    <confirmation-step
+      v-if="currentStep.name === STEPS.confirmation"
+      :title="
+        isApproving
+          ? $t('create-order-form.approve-confirmation-title')
+          : $t('create-order-form.create-confirmation-title')
+      "
+    />
   </form>
 </template>
 
@@ -74,6 +81,7 @@ const { currentStep, steps, currentIdx, forward, back, toStep } = useStepper([
 ])
 
 const approveTx = ref<TxResposne | null>(null)
+const isApproving = ref(false)
 
 const onBack = () => {
   switch (currentStep.value.name) {
@@ -130,12 +138,14 @@ const handleApprove = async () => {
   }
 }
 const approveToken = async () => {
+  isApproving.value = true
   try {
     await provider.value.signAndSendTx(approveTx.value?.tx_body)
   } catch (e) {
     toStep(STEPS.approve)
     throw e
   }
+  isApproving.value = false
 }
 
 const createOrder = async () => {

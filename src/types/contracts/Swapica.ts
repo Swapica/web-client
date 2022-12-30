@@ -107,10 +107,13 @@ export interface SwapicaInterface extends utils.Interface {
     "createOrder(address,uint256,address,uint256,uint256)": FunctionFragment;
     "executeMatch(bytes,bytes[])": FunctionFragment;
     "executeOrder(bytes,bytes[])": FunctionFragment;
-    "getActiveOrders(uint256,uint256)": FunctionFragment;
+    "getActiveOrders(address,address,uint256,uint256)": FunctionFragment;
+    "getOrdersLength()": FunctionFragment;
     "getSigners()": FunctionFragment;
-    "getUserMatches(address,uint256,uint256)": FunctionFragment;
-    "getUserOrders(address,uint256,uint256)": FunctionFragment;
+    "getUserMatches(address,uint8,uint256,uint256)": FunctionFragment;
+    "getUserMatchesLength(address)": FunctionFragment;
+    "getUserOrders(address,uint8,uint256,uint256)": FunctionFragment;
+    "getUserOrdersLength(address)": FunctionFragment;
     "locked(address,address)": FunctionFragment;
     "matchStatus(uint256)": FunctionFragment;
     "matches(uint256)": FunctionFragment;
@@ -140,9 +143,12 @@ export interface SwapicaInterface extends utils.Interface {
       | "executeMatch"
       | "executeOrder"
       | "getActiveOrders"
+      | "getOrdersLength"
       | "getSigners"
       | "getUserMatches"
+      | "getUserMatchesLength"
       | "getUserOrders"
+      | "getUserOrdersLength"
       | "locked"
       | "matchStatus"
       | "matches"
@@ -204,7 +210,16 @@ export interface SwapicaInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getActiveOrders",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getOrdersLength",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getSigners",
@@ -215,16 +230,26 @@ export interface SwapicaInterface extends utils.Interface {
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserMatchesLength",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getUserOrders",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserOrdersLength",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "locked",
@@ -318,13 +343,25 @@ export interface SwapicaInterface extends utils.Interface {
     functionFragment: "getActiveOrders",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getOrdersLength",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getSigners", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getUserMatches",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getUserMatchesLength",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getUserOrders",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserOrdersLength",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "locked", data: BytesLike): Result;
@@ -541,6 +578,8 @@ export interface Swapica extends BaseContract {
     ): Promise<ContractTransaction>;
 
     getActiveOrders(
+      tokenToSell: PromiseOrValue<string>,
+      tokenToBuy: PromiseOrValue<string>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -548,10 +587,13 @@ export interface Swapica extends BaseContract {
       [Swapica.OrderStructOutput[]] & { result: Swapica.OrderStructOutput[] }
     >;
 
+    getOrdersLength(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getSigners(overrides?: CallOverrides): Promise<[string[]]>;
 
     getUserMatches(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -559,14 +601,25 @@ export interface Swapica extends BaseContract {
       [Swapica.MatchStructOutput[]] & { result: Swapica.MatchStructOutput[] }
     >;
 
+    getUserMatchesLength(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getUserOrders(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
       [Swapica.OrderStructOutput[]] & { result: Swapica.OrderStructOutput[] }
     >;
+
+    getUserOrdersLength(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     locked(
       arg0: PromiseOrValue<string>,
@@ -719,26 +772,42 @@ export interface Swapica extends BaseContract {
   ): Promise<ContractTransaction>;
 
   getActiveOrders(
+    tokenToSell: PromiseOrValue<string>,
+    tokenToBuy: PromiseOrValue<string>,
     begin: PromiseOrValue<BigNumberish>,
     end: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<Swapica.OrderStructOutput[]>;
+
+  getOrdersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
   getSigners(overrides?: CallOverrides): Promise<string[]>;
 
   getUserMatches(
     user: PromiseOrValue<string>,
+    state: PromiseOrValue<BigNumberish>,
     begin: PromiseOrValue<BigNumberish>,
     end: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<Swapica.MatchStructOutput[]>;
 
+  getUserMatchesLength(
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getUserOrders(
     user: PromiseOrValue<string>,
+    state: PromiseOrValue<BigNumberish>,
     begin: PromiseOrValue<BigNumberish>,
     end: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<Swapica.OrderStructOutput[]>;
+
+  getUserOrdersLength(
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   locked(
     arg0: PromiseOrValue<string>,
@@ -891,26 +960,42 @@ export interface Swapica extends BaseContract {
     ): Promise<void>;
 
     getActiveOrders(
+      tokenToSell: PromiseOrValue<string>,
+      tokenToBuy: PromiseOrValue<string>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<Swapica.OrderStructOutput[]>;
+
+    getOrdersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
     getSigners(overrides?: CallOverrides): Promise<string[]>;
 
     getUserMatches(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<Swapica.MatchStructOutput[]>;
 
+    getUserMatchesLength(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getUserOrders(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<Swapica.OrderStructOutput[]>;
+
+    getUserOrdersLength(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     locked(
       arg0: PromiseOrValue<string>,
@@ -1117,24 +1202,40 @@ export interface Swapica extends BaseContract {
     ): Promise<BigNumber>;
 
     getActiveOrders(
+      tokenToSell: PromiseOrValue<string>,
+      tokenToBuy: PromiseOrValue<string>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getOrdersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
     getSigners(overrides?: CallOverrides): Promise<BigNumber>;
 
     getUserMatches(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getUserMatchesLength(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getUserOrders(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getUserOrdersLength(
+      user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1259,24 +1360,40 @@ export interface Swapica extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getActiveOrders(
+      tokenToSell: PromiseOrValue<string>,
+      tokenToBuy: PromiseOrValue<string>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    getOrdersLength(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getSigners(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getUserMatches(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getUserMatchesLength(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getUserOrders(
       user: PromiseOrValue<string>,
+      state: PromiseOrValue<BigNumberish>,
       begin: PromiseOrValue<BigNumberish>,
       end: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getUserOrdersLength(
+      user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

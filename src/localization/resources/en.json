@@ -116,7 +116,9 @@
   "create-order-form": {
     "created-msg": "Offer successfuly created",
     "approve-msg": "Approve {token} to match this order. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-    "approve-msg-token": "ERC20 Token"
+    "approve-msg-token": "ERC20 Token",
+    "approve-confirmation-title": "Approve Token",
+    "create-confirmation-title": "Create Order"
   },
   "copy-button": {
     "copied-message": "Copied!"
@@ -126,10 +128,10 @@
     "network-title-lbl": "Select networks to start swaping your tokens",
     "tokens-title-number-lbl": "2",
     "tokens-title-lbl": "Select tokens to filter the orders",
-    "network-from-lbl": "Transfer from",
-    "network-to-lbl": "Transfer to",
-    "token-sell-lbl": "To sell",
-    "token-buy-lbl": "To buy",
+    "network-from-lbl": "Original chain",
+    "network-to-lbl": "Match chain",
+    "token-sell-lbl": "Order sells",
+    "token-buy-lbl": "Order buys",
     "title": "Available Orders"
   },
   "dashboard-order-list": {
