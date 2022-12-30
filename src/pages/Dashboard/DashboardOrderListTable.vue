@@ -26,6 +26,53 @@
               class="dashboard-order-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
+                  i.info.amountToBuy.toString(),
+                  i.tokenToBuy.decimals,
+                )
+              "
+            >
+              {{
+                formatWeiAmount(
+                  i.info.amountToBuy.toString(),
+                  i.tokenToBuy.decimals,
+                )
+              }}
+            </span>
+            <span class="dashboard-order-list-table__body-item-code">
+              {{ i.tokenToBuy.symbol }}
+            </span>
+            <copy-button
+              v-if="!isSmall"
+              class="dashboard-order-list-table__body-item-address"
+              :text="i.info.tokenToBuy"
+              :title="i.info.tokenToBuy"
+            >
+              {{
+                $t('dashboard-order-list-table.address', {
+                  address: isMediumWidth
+                    ? cropAddress(i.info.tokenToBuy)
+                    : cropAddress(i.info.tokenToBuy, 7, 12),
+                })
+              }}
+            </copy-button>
+            <app-button
+              class="dashboard-order-list-table__body-item-icon"
+              scheme="icon"
+              target="_blank"
+              :href="getEthExplorerAddressUrl(
+                networkBuy(i.info.destChain.toNumber())
+                  ?.chain_params.explorer_url!,
+                i.info.tokenToBuy
+              )"
+              :icon-left="$icons.link"
+            />
+          </div>
+          <!-- eslint-disable-next-line max-len -->
+          <div class="dashboard-order-list-table__body-item-info dashboard-order-list-table__body-item-info-buy">
+            <span
+              class="dashboard-order-list-table__body-item-amount"
+              :title="
+                formatWeiAmount(
                   i.info.amountToSell.toString(),
                   i.tokenToSell.decimals,
                 )
@@ -66,53 +113,6 @@
                   i.info.tokenToSell,
                 )
               "
-            />
-          </div>
-          <!-- eslint-disable-next-line max-len -->
-          <div class="dashboard-order-list-table__body-item-info dashboard-order-list-table__body-item-info-buy">
-            <span
-              class="dashboard-order-list-table__body-item-amount"
-              :title="
-                formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
-                )
-              "
-            >
-              {{
-                formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
-                )
-              }}
-            </span>
-            <span class="dashboard-order-list-table__body-item-code">
-              {{ i.tokenToBuy.symbol }}
-            </span>
-            <copy-button
-              v-if="!isSmall"
-              class="dashboard-order-list-table__body-item-address"
-              :text="i.info.tokenToBuy"
-              :title="i.info.tokenToBuy"
-            >
-              {{
-                $t('dashboard-order-list-table.address', {
-                  address: isMediumWidth
-                    ? cropAddress(i.info.tokenToBuy)
-                    : cropAddress(i.info.tokenToBuy, 7, 12),
-                })
-              }}
-            </copy-button>
-            <app-button
-              class="dashboard-order-list-table__body-item-icon"
-              scheme="icon"
-              target="_blank"
-              :href="getEthExplorerAddressUrl(
-                networkBuy(i.info.destChain.toNumber())
-                  ?.chain_params.explorer_url!,
-                i.info.tokenToBuy
-              )"
-              :icon-left="$icons.link"
             />
           </div>
         </div>

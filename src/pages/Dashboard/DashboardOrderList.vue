@@ -9,12 +9,14 @@
       </template>
       <template v-else>
         <template v-if="list.length">
-          <dashboard-order-list-table :network-sell="network!" :list="list">
+          <dashboard-order-list-table
+            :network-sell="network!"
+            :list="orderList"
+          >
             <template #pagination>
               <pagination
-                :current-page="currentPage"
-                @update:current-page=";(currentPage = $event), loadList()"
-                :total-items="totalItems"
+                v-model:current-page="currentPage"
+                :total-items="list.length"
                 :page-limit="PAGE_LIMIT"
               />
             </template>
@@ -75,27 +77,24 @@ const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
 
+const orderList = computed(() => {
+  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
+  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
+})
+
 const loadList = async () => {
   emit('update:is-submitting', true)
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    await getTotalItems()
     const rpcProvider = new ethers.providers.JsonRpcProvider(
       props.network.chain_params.rpc,
     )
-    const lastPage = Math.ceil(totalItems.value / PAGE_LIMIT)
-    if (currentPage.value > lastPage) {
-      currentPage.value = lastPage
-    }
     swapicaContract.init(props.network.swap_contract!, rpcProvider)
-    const firstItemIndex = totalItems.value - PAGE_LIMIT * currentPage.value
-    const data = await swapicaContract.getActiveOrders(
-      firstItemIndex < 0 ? 0 : firstItemIndex,
-      firstItemIndex + PAGE_LIMIT,
-      props.network,
-    )
-    list.value = data.reverse()
+    await getTotalItems()
+
+    const data = await loadingOrdersLoop()
+    list.value = data.flat().reverse()
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
@@ -104,8 +103,26 @@ const loadList = async () => {
   isLoaded.value = true
 }
 
+const loadingOrdersLoop = async () => {
+  const promises = []
+
+  for (let i = 0; i < totalItems.value; i += 100) {
+    promises.push(
+      swapicaContract.getActiveOrders(
+        props.tokenSell,
+        props.tokenBuy,
+        i,
+        i + 100,
+        props.network,
+      ),
+    )
+  }
+  return Promise.all(promises)
+}
+
 const getTotalItems = async () => {
-  totalItems.value = 9
+  const data = await swapicaContract.getOrdersLength()
+  totalItems.value = data?.toNumber() || 0
 }
 
 watch(
