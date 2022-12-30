@@ -30,6 +30,7 @@ const props = withDefaults(
     label?: string
     placeholder?: string
     errorMessage?: string
+    isErrorMessageShown?: boolean
   }>(),
   {
     scheme: 'primary',
@@ -39,6 +40,7 @@ const props = withDefaults(
     label: '',
     placeholder: ' ',
     errorMessage: '',
+    isErrorMessageShown: true,
   },
 )
 
@@ -245,7 +247,10 @@ watch(
       @enter="setHeightCSSVar"
       @before-leave="setHeightCSSVar"
     >
-      <span v-if="errorMessage" class="select-field__err-msg">
+      <span
+        v-if="errorMessage && isErrorMessageShown"
+        class="select-field__err-msg"
+      >
         {{ errorMessage }}
       </span>
     </transition>

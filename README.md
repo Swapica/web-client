@@ -1,6 +1,4 @@
-# ViteJS + Vue 3 + Typescript + Vue-Router + PiniaJS
-
-# Eslint + Stylelint
+# Web-client
 
 ## Project setup
 ```
@@ -35,4 +33,10 @@ yarn rsc %release-version%
 ### Build docker image with version
 ```dockerfile
  docker build --no-cache --progress=plain --build-arg BUILD_VERSION=1.0.0-rc.0 -t vue-template .
+```
+
+### env.js variables
+```
+ VITE_APP_API_URL='http://localhost:8000/_/api/'
+ VITE_APP_APP_NAME='Swapica'
 ```

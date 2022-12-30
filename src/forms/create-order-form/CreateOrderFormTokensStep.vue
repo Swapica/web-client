@@ -53,12 +53,8 @@
           />
           <token-select
             v-model="form.tokenSell"
-            :value-options="[
-              {
-                value: '0x6aba99FB7Aab12191b022C7A4D92f6f8775a2F0B',
-                label: 'SLP',
-              },
-            ]"
+            emit-empty-value-on-start-search
+            :value-options="tokensSell"
             :disabled="isDisabled"
             :rpc-url="networkSell?.chain_params.rpc"
             :error-message="getFieldErrorMessage('tokenSell')"
@@ -96,12 +92,8 @@
           />
           <token-select
             v-model="form.tokenBuy"
-            :value-options="[
-              {
-                value: '0xd33b754F4dC75E116c2CC366b4C930EB02C7b16f',
-                label: 'USDC',
-              },
-            ]"
+            emit-empty-value-on-start-search
+            :value-options="tokensBuy"
             :rpc-url="networkBuy?.chain_params.rpc"
             :error-message="getFieldErrorMessage('tokenBuy')"
             :disabled="isDisabled"
@@ -146,8 +138,10 @@ import { computed, toRefs } from 'vue'
 import { required } from '@/validators'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
+import { useTokensStore } from '@/store'
 
 const { width: windowWidth } = useWindowSize()
+const { tokensByChainId } = useTokensStore()
 
 const props = defineProps<{
   former: UseCreateOrderForm
@@ -164,6 +158,21 @@ const isSmallWidth = computed(
 )
 
 const { form, networkBuy, networkSell } = toRefs(props.former)
+const tokensSell = computed(() =>
+  tokensByChainId(networkSell.value!.id).map(i => ({
+    label: i.symbol,
+    value: i.chain.contract_address,
+    imageUrl: i.icon,
+  })),
+)
+
+const tokensBuy = computed(() =>
+  tokensByChainId(networkBuy.value!.id).map(i => ({
+    label: i.symbol,
+    value: i.chain.contract_address,
+    imageUrl: i.icon,
+  })),
+)
 
 const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   form,

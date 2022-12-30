@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import { AppButton } from '@/common'
 
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 const FIRST_PAGE_NUMBER = 1
 
@@ -47,7 +47,6 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: 'update:current-page', value: number): void
 }>()
-const currentPage = ref(props.currentPage)
 
 const totalPages = computed(() => {
   return props.totalItems < props.pageLimit
@@ -55,20 +54,23 @@ const totalPages = computed(() => {
     : Math.ceil(props.totalItems / props.pageLimit)
 })
 
-const isFirstPage = computed(() => currentPage.value === FIRST_PAGE_NUMBER)
-const isLastPage = computed(() => currentPage.value === totalPages.value)
+const isFirstPage = computed(() => props.currentPage === FIRST_PAGE_NUMBER)
+const isLastPage = computed(() => props.currentPage === totalPages.value)
 const handleNextPage = () => {
   if (isLastPage.value) return
-  emit('update:current-page', (currentPage.value += 1))
+  emit('update:current-page', props.currentPage + 1)
 }
 
 const handlePrevStep = () => {
   if (isFirstPage.value) return
-  emit('update:current-page', (currentPage.value -= 1))
+  emit('update:current-page', props.currentPage - 1)
 }
 
 const formatPage = (val: number) => {
   return val < 10 ? `0${val}` : val
+}
+if (props.currentPage > totalPages.value) {
+  emit('update:current-page', totalPages.value)
 }
 </script>
 

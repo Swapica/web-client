@@ -5,6 +5,7 @@ import {
   Swapica__factory,
   UserOrder,
   Order,
+  ChainResposne,
 } from '@/types'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { loadTokenInfo } from '@/helpers'
@@ -43,18 +44,62 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     }
   }
 
-  const getUserOrders = async (address: string, from: number, to: number) => {
+  const getUserOrders = async (
+    address: string,
+    from: number,
+    to: number,
+    network: ChainResposne,
+  ) => {
     const { chainByChainId } = storeToRefs(useChainsStore())
 
-    const response = await _instance.value?.getUserOrders(address, from, to)
+    const response = await _instance.value?.getUserOrders(address, 1, from, to)
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
         const [tokenToSell, tokenToBuy] = await Promise.all([
+          loadTokenInfo(network.chain_params.rpc, i.tokenToSell),
           loadTokenInfo(
-            'https://goerli.infura.io/v3/5d2d42ec8be94b77a70ff167f9e19396',
-            i.tokenToSell,
+            chainByChainId.value(i.destChain.toNumber())?.chain_params.rpc!,
+            i.tokenToBuy,
           ),
+        ])
+        return {
+          info: i,
+          tokenToSell,
+          tokenToBuy,
+        } as UserOrder
+      }),
+    )
+    return data
+  }
+
+  const getUserOrdersLength = async (user: string) => {
+    return _instance.value?.getUserOrdersLength(user)
+  }
+  const getOrdersLength = async () => {
+    return _instance.value?.getOrdersLength()
+  }
+
+  const getActiveOrders = async (
+    tokenSell: string,
+    tokenBuy: string,
+    from: number,
+    to: number,
+    network: ChainResposne,
+  ) => {
+    const { chainByChainId } = storeToRefs(useChainsStore())
+
+    const response = await _instance.value?.getActiveOrders(
+      tokenSell,
+      tokenBuy,
+      from,
+      to,
+    )
+
+    const data = await Promise.all(
+      (response as unknown as Order[])?.map(async i => {
+        const [tokenToSell, tokenToBuy] = await Promise.all([
+          loadTokenInfo(network.chain_params.rpc, i.tokenToSell),
           loadTokenInfo(
             chainByChainId.value(i.destChain.toNumber())?.chain_params.rpc!,
             i.tokenToBuy,
@@ -74,5 +119,8 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     init,
     useSwapica,
     getUserOrders,
+    getActiveOrders,
+    getUserOrdersLength,
+    getOrdersLength,
   }
 }

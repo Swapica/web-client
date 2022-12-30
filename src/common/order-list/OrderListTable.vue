@@ -170,7 +170,7 @@ withDefaults(
   defineProps<{
     list: UserOrder[]
     networkSell: ChainResposne
-    isBtnDisabled: boolean
+    isBtnDisabled?: boolean
   }>(),
   {
     isBtnDisabled: false,
@@ -218,7 +218,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .order-list-table__head {
   display: grid;
-  grid-template-columns: minmax(toRem(150), 1fr) toRem(154);
+  grid-template-columns: minmax(toRem(100), 1fr) toRem(154);
   grid-area: head;
   gap: toRem(32);
 
@@ -245,12 +245,12 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .order-list-table__body {
   display: grid;
-  grid-template-columns: minmax(toRem(150), 1fr) toRem(154) toRem(95);
+  grid-template-columns: minmax(toRem(100), 1fr) toRem(154) toRem(95);
   align-items: center;
   gap: toRem(32);
 
   @include respond-to(xmedium) {
-    grid-template-columns: minmax(toRem(150), 1fr) toRem(154) toRem(110);
+    grid-template-columns: minmax(toRem(100), 1fr) toRem(154) toRem(110);
     gap: toRem(16);
   }
 

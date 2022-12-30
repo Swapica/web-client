@@ -40,3 +40,26 @@ export type TxResposne = JsonApiRecordBase<'evm_transaction'> & {
   tx_body: TxBody
   confirmed: boolean
 }
+
+export type TokenChain = {
+  chain_id: string
+  token_id: string
+  token_type: string
+  contract_address: string
+}
+
+export type TokenResponse = JsonApiRecordBase<'token'> & {
+  icon: string
+  name: string
+  symbol: string
+  token_type: string
+  chains: TokenChain[]
+}
+
+export type Token = JsonApiRecordBase<'token'> & {
+  icon: string
+  name: string
+  symbol: string
+  token_type: string
+  chain: TokenChain
+}
