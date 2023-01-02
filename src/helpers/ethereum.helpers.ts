@@ -8,7 +8,7 @@ import { errors } from '@/errors'
 import { ethers } from 'ethers'
 import { EIP1193, EIP1193String, EIP1474 } from '@/enums'
 import { mapKeys, get } from 'lodash-es'
-import { toCamelCaseDeep } from '@/helpers'
+import { sleep, toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
@@ -155,6 +155,10 @@ export async function switchNetwork(chain: ChainResposne) {
           chain.chain_params.native_decimals,
           chain.chain_params.explorer_url,
         )
+        await sleep(1500)
+        if (provider.value.chainId !== chain.chain_params.chain_id) {
+          throw new errors.ProviderUserRejectedRequest()
+        }
       } catch (e) {
         handleEthError(e as EthProviderRpcError)
       }

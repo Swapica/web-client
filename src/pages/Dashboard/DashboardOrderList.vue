@@ -12,6 +12,9 @@
           <dashboard-order-list-table
             :network-sell="network!"
             :list="orderList"
+            @match-btn-click="
+              ;(selectedOrder = $event), (isMatchOrderModalShown = true)
+            "
           >
             <template #pagination>
               <pagination
@@ -36,15 +39,28 @@
         :message="$t('dashboard-order-list.loading-msg')"
       />
     </template>
+
+    <match-order-modal
+      v-if="selectedOrder"
+      v-model:is-shown="isMatchOrderModalShown"
+      :order="selectedOrder"
+      :network-sell="network"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ErrorMessage, Loader, Pagination, NoDataMessage } from '@/common'
+import {
+  ErrorMessage,
+  Loader,
+  Pagination,
+  NoDataMessage,
+  MatchOrderModal,
+} from '@/common'
 import { useSwapica } from '@/composables'
 import { computed, ref, watch } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
-import { ErrorHandler } from '@/helpers'
+import { Bus, ErrorHandler } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import DashboardOrderListTable from '@/pages/Dashboard/DashboardOrderListTable.vue'
 import { ethers } from 'ethers'
@@ -67,6 +83,7 @@ const { provider } = storeToRefs(useWeb3ProvidersStore())
 
 const currentPage = ref(1)
 const totalItems = ref(0)
+const isMatchOrderModalShown = ref(false)
 
 const emit = defineEmits<{
   (e: 'update:is-submitting', value: boolean): void
@@ -76,6 +93,7 @@ const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
+const selectedOrder = ref<UserOrder>()
 
 const orderList = computed(() => {
   const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
@@ -124,6 +142,10 @@ const getTotalItems = async () => {
   const data = await swapicaContract.getOrdersLength()
   totalItems.value = data?.toNumber() || 0
 }
+
+Bus.on(Bus.eventList.orderMatched, () => {
+  loadList()
+})
 
 watch(
   () => [props.tokenSell, props.tokenBuy],

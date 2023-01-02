@@ -13,7 +13,7 @@
             :is-btn-disabled="isSubmitting"
             :network-sell="network!"
             :list="orderList"
-            @btn-click="handleBtnClick"
+            @cancel-btn-click="handleBtnClick"
           >
             <template #pagination>
               <pagination

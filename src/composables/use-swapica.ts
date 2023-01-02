@@ -6,6 +6,8 @@ import {
   UserOrder,
   Order,
   ChainResposne,
+  UserMatch,
+  Match,
 } from '@/types'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { loadTokenInfo } from '@/helpers'
@@ -79,6 +81,9 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
   const getOrdersLength = async () => {
     return _instance.value?.getOrdersLength()
   }
+  const getUserMatchesLength = async (user: string) => {
+    return _instance.value?.getUserMatchesLength(user)
+  }
 
   const getActiveOrders = async (
     tokenSell: string,
@@ -115,6 +120,37 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     return data
   }
 
+  const getUserMatchesWithOrder = async (
+    address: string,
+    from: number,
+    to: number,
+    network: ChainResposne,
+  ) => {
+    const response = await _instance.value?.getUserMatches(address, 2, from, to)
+
+    const data = await Promise.all(
+      (response as unknown as Match[])?.map(async i => {
+        const activeOrders = await getActiveOrders(
+          '0x0000000000000000000000000000000000000000',
+          '0x0000000000000000000000000000000000000000',
+          i.originOrderId.toNumber(),
+          i.originOrderId.toNumber() + 1,
+          network,
+        )
+        return {
+          info: i,
+          order: activeOrders[0],
+        } as UserMatch
+      }),
+    )
+    return data
+  }
+
+  const getUserMatches = async (address: string, from: number, to: number) => {
+    const response = await _instance.value?.getUserMatches(address, 2, from, to)
+    return response as unknown as Match[]
+  }
+
   return {
     init,
     useSwapica,
@@ -122,5 +158,8 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     getActiveOrders,
     getUserOrdersLength,
     getOrdersLength,
+    getUserMatchesLength,
+    getUserMatchesWithOrder,
+    getUserMatches,
   }
 }

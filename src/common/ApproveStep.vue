@@ -11,7 +11,7 @@
     <div class="approve-step__actions">
       <app-button
         class="approve-step__action"
-        :text="$t('approve-step.back-btn')"
+        :text="backBtnText || $t('approve-step.back-btn')"
         scheme="secondary"
         @click="emit('back')"
       />
@@ -26,6 +26,10 @@
 </template>
 <script lang="ts" setup>
 import { AppButton } from '@/common'
+
+defineProps<{
+  backBtnText?: string
+}>()
 
 const emit = defineEmits<{
   (e: 'back'): void

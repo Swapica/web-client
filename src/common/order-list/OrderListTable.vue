@@ -147,7 +147,7 @@
               ? $t('order-list-table.cancel-order-btn')
               : $t('order-list-table.cancel-btn')
           "
-          @click="emit('btn-click', i)"
+          @click="emit('cancel-btn-click', i)"
         />
       </div>
     </div>
@@ -178,7 +178,7 @@ withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'btn-click', value: UserOrder): void
+  (e: 'cancel-btn-click', value: UserOrder): void
 }>()
 
 const { width: windowWidth } = useWindowSize()
