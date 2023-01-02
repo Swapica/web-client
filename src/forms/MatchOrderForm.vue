@@ -135,8 +135,15 @@ const swapicaContract = useSwapica(provider.value)
 
 const { t } = useI18n({ useScope: 'global' })
 
+const isValidChangeMatchNetwork = computed(
+  () => provider.value.chainId === networkBuy.value?.chain_params.chain_id,
+)
+
 const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
-  { name: STEPS.matchChangeNetwork, isHidden: true },
+  {
+    name: STEPS.matchChangeNetwork,
+    isHidden: isValidChangeMatchNetwork.value,
+  },
   STEPS.match,
   { name: STEPS.approveBuyToken, isHidden: true },
   STEPS.confirmationMatch,
@@ -145,7 +152,7 @@ const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
   STEPS.confirmationClaim,
 ])
 
-if (provider.value.chainId === networkBuy.value?.chain_params.chain_id) {
+if (isValidChangeMatchNetwork.value) {
   toStep(STEPS.match)
 }
 const approveTx = ref<TxResposne | null>(null)
