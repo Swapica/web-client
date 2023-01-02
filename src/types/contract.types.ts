@@ -20,3 +20,17 @@ export type UserOrder = {
   tokenToBuy: TokenInfo
   tokenToSell: TokenInfo
 }
+
+export type Match = {
+  account: string
+  tokenToSell: string
+  amountToSell: BigNumber
+  originChain: BigNumber
+  id: BigNumber
+  originOrderId: BigNumber
+}
+
+export type UserMatch = {
+  info: Match
+  order: UserOrder
+}

@@ -54,11 +54,42 @@
           : $t('match-order-form.match-confirmation-title')
       "
     />
+    <change-network-step
+      v-if="currentStep.name === STEPS.claimChangeNetwork"
+      :network="networkSell!"
+      @cancel="close"
+      @changed="onNext"
+    >
+      <i18n-t
+        keypath="match-order-form.change-claim-network-msg"
+        tag="p"
+        class="match-order-form__change-network-msg"
+      >
+        <template #network>
+          {{ networkSell?.name }}
+        </template>
+        <template #networkBold>
+          <span class="match-order-form__network-lbl">
+            {{ networkSell?.name }}
+          </span>
+        </template>
+      </i18n-t>
+    </change-network-step>
+    <match-order-form-claim-step
+      v-if="currentStep.name === STEPS.claim"
+      :order="order"
+      @cancel="close"
+      @claim="onNext"
+    />
+    <confirmation-step
+      v-if="currentStep.name === STEPS.confirmationClaim"
+      :title="$t('match-order-form.claim-confirmation-title')"
+    />
   </form>
 </template>
 
 <script lang="ts" setup>
-import { useStepper } from '@/composables'
+import { useStepper, useSwapica } from '@/composables'
 import {
   StepperIndicator,
   ConfirmationStep,
@@ -73,12 +104,17 @@ import { ChainResposne, TxResposne, UserOrder } from '@/types'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MatchOrderFormMatchStep from '@/forms/match-order-form/MatchOrderFormMatchStep.vue'
+import MatchOrderFormClaimStep from '@/forms/match-order-form/MatchOrderFormClaimStep.vue'
+import { ethers } from 'ethers'
 
 enum STEPS {
   matchChangeNetwork = 'match-change-network',
+  claimChangeNetwork = 'claim-change-network',
   match = 'match',
+  claim = 'claim',
   confirmationMatch = 'confirmation-match',
   approveBuyToken = 'approve-buy-token',
+  confirmationClaim = 'confirmation-claim',
 }
 
 const props = defineProps<{
@@ -90,6 +126,7 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 const { chainByChainId } = storeToRefs(useChainsStore())
+const swapicaContract = useSwapica()
 
 const networkBuy = computed(() =>
   chainByChainId.value(props.order.info.destChain.toNumber()),
@@ -103,6 +140,9 @@ const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
   STEPS.match,
   { name: STEPS.approveBuyToken, isHidden: true },
   STEPS.confirmationMatch,
+  STEPS.claimChangeNetwork,
+  STEPS.claim,
+  STEPS.confirmationClaim,
 ])
 
 if (provider.value.chainId === networkBuy.value?.chain_params.chain_id) {
@@ -115,6 +155,9 @@ const onNext = () => {
   switch (currentStep.value.name) {
     case STEPS.match:
       match()
+      break
+    case STEPS.claim:
+      claim()
       break
     default:
       forward()
@@ -182,13 +225,51 @@ const matchOrder = async () => {
       },
     })
     await provider.value.signAndSendTx(data.tx_body)
-    Bus.emit(Bus.eventList.orderMatched)
-    Bus.success(t('match-order-form.matched-msg'))
-    emit('close')
+    onNext()
   } catch (e) {
     toStep(STEPS.match)
     throw e
   }
+}
+
+const claim = async () => {
+  toStep(STEPS.confirmationClaim)
+  try {
+    const matchId = await getMatchId()
+    const { data: test } = await callers.post<TxResposne>('/v1/execute/order', {
+      data: {
+        dest_chain: networkBuy.value?.id,
+        order_id: props.order.info.id.toNumber(),
+        src_chain: props.networkSell.id,
+        receiver: provider.value.selectedAddress,
+        sender: provider.value.selectedAddress,
+        match_id: matchId,
+      },
+    })
+    await provider.value.signAndSendTx(test.tx_body)
+    Bus.emit(Bus.eventList.orderMatched)
+    Bus.success(t('match-order-form.matched-msg'))
+    emit('close')
+  } catch (e) {
+    toStep(STEPS.claim)
+    ErrorHandler.process(e)
+  }
+}
+
+const getMatchId = async () => {
+  const rpcProvider = new ethers.providers.JsonRpcProvider(
+    networkBuy.value?.chain_params.rpc,
+  )
+  swapicaContract.init(networkBuy.value?.swap_contract!, rpcProvider)
+  const matchLength = await swapicaContract.getUserMatchesLength(
+    provider.value.selectedAddress!,
+  )
+  const data = await swapicaContract.getUserMatches(
+    provider.value.selectedAddress!,
+    matchLength!.toNumber() - 1,
+    matchLength!.toNumber(),
+  )
+  return data[0].id.toNumber()
 }
 </script>
 <style lang="scss" scoped>
