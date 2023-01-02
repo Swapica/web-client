@@ -126,13 +126,13 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 const { chainByChainId } = storeToRefs(useChainsStore())
-const swapicaContract = useSwapica()
-
 const networkBuy = computed(() =>
   chainByChainId.value(props.order.info.destChain.toNumber()),
 )
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
+const swapicaContract = useSwapica(provider.value)
+
 const { t } = useI18n({ useScope: 'global' })
 
 const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
