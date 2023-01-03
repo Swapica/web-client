@@ -98,7 +98,7 @@ const loadList = async () => {
 
     const data = await loadingOrdersLoop()
     list.value = data.flat().reverse()
-    if (!data.length) emit('list-empty', true)
+    if (!list.value.length) emit('list-empty', true)
   } catch (e) {
     isLoadFailed.value = true
     emit('load-failed', true)
