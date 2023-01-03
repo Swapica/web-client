@@ -12,6 +12,7 @@ import { sleep, toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
 import { useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { useSwapica } from '@/composables'
 
 export const connectEthAccounts = async (
   provider: ethers.providers.Web3Provider,
@@ -133,6 +134,18 @@ export async function loadTokenInfo(rpcUrl: string, address: string) {
     decimals: erc20.decimals.value,
     symbol: erc20.symbol.value,
   } as TokenInfo
+}
+
+export async function loadMatchStatus(
+  rpcUrl: string,
+  address: string,
+  id: number,
+) {
+  const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
+  const swapica = useSwapica(rpcProvider, address)
+  const data = await swapica.getMatchStatus(id)
+
+  return data
 }
 
 export async function switchNetwork(chain: ChainResposne) {

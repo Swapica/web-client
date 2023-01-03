@@ -51,7 +51,7 @@ import ClaimOrderListTable from '@/pages/Claim/ClaimOrderListTable.vue'
 import { ethers } from 'ethers'
 import { TxResposne, UserOrder } from '@/types'
 import { callers } from '@/api'
-import { OrderStatus } from '@/enums'
+import { OrderStatus, MatchStatus } from '@/enums'
 
 const PAGE_LIMIT = 5
 
@@ -94,7 +94,10 @@ const loadList = async () => {
     await getTotalItems()
 
     const data = await loadingOrdersLoop()
-    list.value = data.flat().reverse()
+    list.value = data
+      .flat()
+      .reverse()
+      .filter(i => i.matchStatus?.state !== MatchStatus.executed)
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
@@ -136,7 +139,7 @@ const handleBtnClick = async (item: UserOrder) => {
       data: {
         src_chain: network.value?.id,
         dest_chain: destChain?.id,
-        match_id: 27,
+        match_id: item.orderStatus?.executedBy.toNumber(),
         order_id: item.info.id.toNumber(),
         sender: provider.value.selectedAddress,
         receiver: provider.value.selectedAddress,

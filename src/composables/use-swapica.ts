@@ -8,25 +8,34 @@ import {
   ChainResposne,
   UserMatch,
   Match,
+  MatchStatusInfo,
+  OrderStatusInfo,
 } from '@/types'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { loadTokenInfo } from '@/helpers'
+import { loadMatchStatus, loadTokenInfo } from '@/helpers'
 import { useChainsStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { OrderStatus } from '@/enums'
 
-export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
+export const useSwapica = (
+  provider: UseUnrefProvider | JsonRpcProvider,
+  address?: string,
+) => {
   const _instance = ref<Swapica | undefined>()
   const _instance_rw = ref<Swapica | undefined>()
-  if (address && provider.currentProvider && provider.currentSigner) {
+  if (address) {
     _instance.value = Swapica__factory.connect(
       address,
-      provider.currentProvider,
+      provider && 'currentSigner' in provider
+        ? provider.currentProvider!
+        : provider!,
     )
-    _instance_rw.value = Swapica__factory.connect(
-      address,
-      provider.currentSigner,
-    )
+    if (provider && 'currentSigner' in provider) {
+      _instance_rw.value = Swapica__factory.connect(
+        address,
+        provider.currentSigner!,
+      )
+    }
   }
 
   const init = (
@@ -65,21 +74,36 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
-        const [tokenToSell, tokenToBuy] = await Promise.all([
+        const destChain = chainByChainId.value(i.destChain.toNumber())
+        const [tokenToSell, tokenToBuy, statuses] = await Promise.all([
           loadTokenInfo(network.chain_params.rpc, i.tokenToSell),
-          loadTokenInfo(
-            chainByChainId.value(i.destChain.toNumber())?.chain_params.rpc!,
-            i.tokenToBuy,
-          ),
+          loadTokenInfo(destChain?.chain_params.rpc!, i.tokenToBuy),
+          ...(status === OrderStatus.executed
+            ? [_getStatusInfo(destChain!, i.id.toNumber())]
+            : []),
         ])
         return {
           info: i,
           tokenToSell,
           tokenToBuy,
+          ...statuses,
         } as UserOrder
       }),
     )
     return data
+  }
+
+  const _getStatusInfo = async (network: ChainResposne, orderId: number) => {
+    const orderStatus = await getOrderStatus(orderId)
+    const matchStatus = await loadMatchStatus(
+      network.chain_params.rpc,
+      network.swap_contract,
+      orderStatus.executedBy.toNumber(),
+    )
+    return {
+      orderStatus,
+      matchStatus,
+    }
   }
 
   const getUserOrdersLength = async (user: string) => {
@@ -90,6 +114,13 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
   }
   const getUserMatchesLength = async (user: string) => {
     return _instance.value?.getUserMatchesLength(user)
+  }
+
+  const getOrderStatus = async (id: number) => {
+    return _instance.value?.orderStatus(id) as unknown as OrderStatusInfo
+  }
+  const getMatchStatus = async (id: number) => {
+    return _instance.value?.matchStatus(id) as unknown as MatchStatusInfo
   }
 
   const getActiveOrders = async (
@@ -168,5 +199,7 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     getUserMatchesLength,
     getUserMatchesWithOrder,
     getUserMatches,
+    getOrderStatus,
+    getMatchStatus,
   }
 }
