@@ -13,6 +13,7 @@ import { JsonRpcProvider } from '@ethersproject/providers'
 import { loadTokenInfo } from '@/helpers'
 import { useChainsStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { OrderStatus } from '@/enums'
 
 export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
   const _instance = ref<Swapica | undefined>()
@@ -51,10 +52,16 @@ export const useSwapica = (provider: UseUnrefProvider, address?: string) => {
     from: number,
     to: number,
     network: ChainResposne,
+    status = OrderStatus.awaitingMatch,
   ) => {
     const { chainByChainId } = storeToRefs(useChainsStore())
 
-    const response = await _instance.value?.getUserOrders(address, 1, from, to)
+    const response = await _instance.value?.getUserOrders(
+      address,
+      status,
+      from,
+      to,
+    )
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {

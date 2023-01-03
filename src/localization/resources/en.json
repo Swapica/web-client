@@ -181,5 +181,18 @@
     "dashboard-link": "Go to Dashboard",
     "connect-wallet-msg": "Connect wallet to see what u have here",
     "no-data-msg": "U have no orders to claim,<br> let’s c what’s on the Dashboard"
+  },
+  "claim-order-list": {
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
+    "loading-msg": "Hold a sec, we’re trying to solve it."
+  },
+  "claim-order-list-table": {
+    "original-lbl": "Original",
+    "match-lbl": "Match",
+    "network-lbl": "Network",
+    "claim-order-btn": "Claim order",
+    "claim-btn": "Claim",
+    "address": "({address})",
+    "network": "{to}/{from}"
   }
 }
