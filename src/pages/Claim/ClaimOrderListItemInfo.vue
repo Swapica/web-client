@@ -155,7 +155,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   width: calc(100% + #{toRem(3)});
 
   &--disabled {
-    opacity: 0.5;
+    opacity: 0.4;
   }
 
   @include respond-to(tablet) {

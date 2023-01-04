@@ -45,19 +45,21 @@ import { ErrorMessage, Loader, Pagination } from '@/common'
 import { useSwapica } from '@/composables'
 import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { ErrorHandler, switchNetwork } from '@/helpers'
+import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import ClaimOrderListTable from '@/pages/Claim/ClaimOrderListTable.vue'
 import { ethers } from 'ethers'
 import { TxResposne, UserMatch, UserOrder } from '@/types'
 import { callers } from '@/api'
 import { OrderStatus, MatchStatus } from '@/enums'
+import { useI18n } from 'vue-i18n'
 
 const PAGE_LIMIT = 5
 
 const props = defineProps<{
   chainId: number
 }>()
+const { t } = useI18n({ useScope: 'global' })
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { chainByChainId } = storeToRefs(useChainsStore())
@@ -157,6 +159,7 @@ const handleBtnClick = async (item: UserOrder | UserMatch) => {
     const response =
       'order' in item ? await getClaimOrder(item) : await getClaimMatch(item)
     await provider.value.signAndSendTx(response.tx_body)
+    Bus.success(t('claim-order-list.claimed-msg'))
     loadList()
   } catch (e) {
     ErrorHandler.process(e)

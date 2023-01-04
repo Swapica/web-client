@@ -51,6 +51,7 @@ import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { ethers } from 'ethers'
 import { TxResposne, UserOrder } from '@/types'
 import { callers } from '@/api'
+import { useI18n } from 'vue-i18n'
 
 const PAGE_LIMIT = 5
 
@@ -65,6 +66,7 @@ const orderList = computed(() => {
   const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
   return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
 })
+const { t } = useI18n({ useScope: 'global' })
 
 const currentPage = ref(1)
 const totalItems = ref(0)
@@ -143,6 +145,7 @@ const handleBtnClick = async (item: UserOrder) => {
       },
     })
     await provider.value.signAndSendTx(data.tx_body)
+    Bus.success(t('order-list.canceled-msg'))
     loadList()
   } catch (e) {
     ErrorHandler.process(e)

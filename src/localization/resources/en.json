@@ -76,7 +76,8 @@
   },
   "order-list": {
     "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
-    "loading-msg": "Hold a sec, we’re trying to solve it."
+    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "canceled-msg": "Order successfuly canceled"
   },
   "order-list-table": {
     "buy-lbl": "To Buy",
@@ -184,7 +185,8 @@
   },
   "claim-order-list": {
     "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
-    "loading-msg": "Hold a sec, we’re trying to solve it."
+    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "claimed-msg": "Order successfuly claimed"
   },
   "claim-order-list-table": {
     "original-lbl": "Original",
