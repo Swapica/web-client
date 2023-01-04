@@ -148,6 +148,19 @@ export async function loadMatchStatus(
   return data
 }
 
+export async function loadOrder(
+  rpcUrl: string,
+  address: string,
+  id: number,
+  network: ChainResposne,
+) {
+  const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
+  const swapica = useSwapica(rpcProvider, address)
+  const data = await swapica.getOrder(id, network)
+
+  return data
+}
+
 export async function switchNetwork(chain: ChainResposne) {
   const { provider } = storeToRefs(useWeb3ProvidersStore())
 

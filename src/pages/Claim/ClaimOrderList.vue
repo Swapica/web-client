@@ -49,7 +49,7 @@ import { ErrorHandler, switchNetwork } from '@/helpers'
 import { storeToRefs } from 'pinia'
 import ClaimOrderListTable from '@/pages/Claim/ClaimOrderListTable.vue'
 import { ethers } from 'ethers'
-import { TxResposne, UserOrder } from '@/types'
+import { TxResposne, UserMatch, UserOrder } from '@/types'
 import { callers } from '@/api'
 import { OrderStatus, MatchStatus } from '@/enums'
 
@@ -79,7 +79,7 @@ const emit = defineEmits<{
 const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref<UserOrder[]>([])
+const list = ref<(UserOrder | UserMatch)[]>([])
 
 const loadList = async () => {
   emit('is-loading', true)
@@ -93,11 +93,15 @@ const loadList = async () => {
 
     await getTotalItems()
 
-    const data = await loadingOrdersLoop()
-    list.value = data
+    const orders = await loadingOrdersLoop()
+    const matches = await loadingMatchesLoop()
+    const orderList = orders
       .flat()
       .reverse()
       .filter(i => i.matchStatus?.state !== MatchStatus.executed)
+
+    const matchesList = matches.flat()
+    list.value = [...orderList, ...matchesList]
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
@@ -117,6 +121,21 @@ const loadingOrdersLoop = async () => {
         i + 100,
         network.value!,
         OrderStatus.executed,
+      ),
+    )
+  }
+  return Promise.all(promises)
+}
+
+const loadingMatchesLoop = async () => {
+  const promises = []
+
+  for (let i = 0; i < totalItems.value; i += 100) {
+    promises.push(
+      swapicaContract.getUserMatchesWithOrder(
+        provider.value.selectedAddress!,
+        i,
+        i + 100,
       ),
     )
   }
