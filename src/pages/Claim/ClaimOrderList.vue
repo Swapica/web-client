@@ -100,7 +100,9 @@ const loadList = async () => {
       .reverse()
       .filter(i => i.matchStatus?.state !== MatchStatus.executed)
 
-    const matchesList = matches.flat()
+    const matchesList = matches
+      .flat()
+      .filter(i => i.order.orderStatus?.state === OrderStatus.awaitingMatch)
     list.value = [...orderList, ...matchesList]
   } catch (e) {
     isLoadFailed.value = true

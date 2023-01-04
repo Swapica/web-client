@@ -27,7 +27,7 @@
       >
         <claim-order-list-item-info
           :order="'order' in i ? i.order : i"
-          :network-sell="networkSell"
+          :network-sell="getSellNetwork(i)"
         />
         <app-button
           class="claim-order-list-table__body-item-claim-btn"
@@ -55,8 +55,10 @@ import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { ChainResposne, UserMatch, UserOrder } from '@/types'
 import ClaimOrderListItemInfo from '@/pages/Claim/ClaimOrderListItemInfo.vue'
+import { useChainsStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     list: (UserOrder | UserMatch)[]
     networkSell: ChainResposne
@@ -72,8 +74,15 @@ const emit = defineEmits<{
 }>()
 
 const { width: windowWidth } = useWindowSize()
+const { chainByChainId } = storeToRefs(useChainsStore())
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
+
+const getSellNetwork = (i: UserOrder | UserMatch) => {
+  return 'order' in i
+    ? chainByChainId.value(i.info.originChain.toNumber())!
+    : props.networkSell
+}
 </script>
 <style lang="scss" scoped>
 .claim-order-list-table {
