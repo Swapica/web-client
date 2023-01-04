@@ -1,55 +1,13 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="claim-order-list-table__body-item-info-wrp">
-    <!-- eslint-disable-next-line max-len -->
-    <div class="claim-order-list-table__body-item-info claim-order-list-table__body-item-info-buy">
+  <div class="claim-order-list-item-info__body-item-info-wrp">
+    <!-- eslint-disable max-len -->
+    <div
+      class="claim-order-list-item-info__body-item-info claim-order-list-item-info__body-item-info-buy"
+      :class="{ 'claim-order-list-item-info__body-item-info--disabled': !isMatch }"
+    >
       <span
-        class="claim-order-list-table__body-item-amount"
-        :title="
-          formatWeiAmount(
-            order.info.amountToBuy.toString(),
-            order.tokenToBuy.decimals,
-          )
-        "
-      >
-        {{
-          formatWeiAmount(
-            order.info.amountToBuy.toString(),
-            order.tokenToBuy.decimals,
-          )
-        }}
-      </span>
-      <span class="claim-order-list-table__body-item-code">
-        {{ order.tokenToBuy.symbol }}
-      </span>
-      <copy-button
-        v-if="!isSmall"
-        class="claim-order-list-table__body-item-address"
-        :text="order.info.tokenToBuy"
-        :title="order.info.tokenToBuy"
-      >
-        {{
-          $t('claim-order-list-table.address', {
-            address: cropAddress(order.info.tokenToBuy, 4, 3),
-          })
-        }}
-      </copy-button>
-      <app-button
-        class="claim-order-list-table__body-item-icon"
-        scheme="icon"
-        target="_blank"
-        :href="provider.getAddressUrl(
-          networkBuy(order.info.destChain.toNumber())
-            ?.chain_params.explorer_url!,
-          order.info.tokenToBuy
-        )"
-        :icon-left="$icons.link"
-      />
-    </div>
-    <!-- eslint-disable-next-line max-len -->
-    <div class="claim-order-list-table__body-item-info claim-order-list-table__body-item-info-sell">
-      <span
-        class="claim-order-list-table__body-item-amount"
+        class="claim-order-list-item-info__body-item-amount"
         :title="
           formatWeiAmount(
             order.info.amountToSell.toString(),
@@ -64,23 +22,23 @@
           )
         }}
       </span>
-      <span class="claim-order-list-table__body-item-code">
+      <span class="claim-order-list-item-info__body-item-code">
         {{ order.tokenToSell.symbol }}
       </span>
       <copy-button
         v-if="!isSmall"
-        class="claim-order-list-table__body-item-address"
+        class="claim-order-list-item-info__body-item-address"
         :text="order.info.tokenToSell"
         :title="order.info.tokenToSell"
       >
         {{
-          $t('claim-order-list-table.address', {
+          $t('claim-order-list-item-info.address', {
             address: cropAddress(order.info.tokenToSell, 4, 3),
           })
         }}
       </copy-button>
       <app-button
-        class="claim-order-list-table__body-item-icon"
+        class="claim-order-list-item-info__body-item-icon"
         scheme="icon"
         target="_blank"
         :icon-left="$icons.link"
@@ -92,21 +50,68 @@
         "
       />
     </div>
+    <div
+      class="claim-order-list-item-info__body-item-info claim-order-list-item-info__body-item-info-sell"
+      :class="{ 'claim-order-list-item-info__body-item-info--disabled': isMatch }"
+    >
+      <span
+        class="claim-order-list-item-info__body-item-amount"
+        :title="
+          formatWeiAmount(
+            order.info.amountToBuy.toString(),
+            order.tokenToBuy.decimals,
+          )
+        "
+      >
+        {{
+          formatWeiAmount(
+            order.info.amountToBuy.toString(),
+            order.tokenToBuy.decimals,
+          )
+        }}
+      </span>
+      <span class="claim-order-list-item-info__body-item-code">
+        {{ order.tokenToBuy.symbol }}
+      </span>
+      <copy-button
+        v-if="!isSmall"
+        class="claim-order-list-item-info__body-item-address"
+        :text="order.info.tokenToBuy"
+        :title="order.info.tokenToBuy"
+      >
+        {{
+          $t('claim-order-list-item-info.address', {
+            address: cropAddress(order.info.tokenToBuy, 4, 3),
+          })
+        }}
+      </copy-button>
+      <app-button
+        class="claim-order-list-item-info__body-item-icon"
+        scheme="icon"
+        target="_blank"
+        :href="provider.getAddressUrl(
+          networkBuy(order.info.destChain.toNumber())
+            ?.chain_params.explorer_url!,
+          order.info.tokenToBuy
+        )"
+        :icon-left="$icons.link"
+      />
+    </div>
   </div>
-  <div class="claim-order-list-table__body-item-network">
+  <div class="claim-order-list-item-info__body-item-network">
     <span
-      class="claim-order-list-table__body-item-network-text"
+      class="claim-order-list-item-info__body-item-network-text"
       :title="
-        $t('claim-order-list-table.network', {
-          from: networkSell.name,
-          to: networkBuy(order.info.destChain.toNumber())?.name,
+        $t('claim-order-list-item-info.network', {
+          to: networkSell.name,
+          from: networkBuy(order.info.destChain.toNumber())?.name,
         })
       "
     >
       {{
-        $t('claim-order-list-table.network', {
-          from: networkSell.name,
-          to: networkBuy(order.info.destChain.toNumber())?.name,
+        $t('claim-order-list-item-info.network', {
+          to: networkSell.name,
+          from: networkBuy(order.info.destChain.toNumber())?.name,
         })
       }}
     </span>
@@ -125,6 +130,7 @@ import { storeToRefs } from 'pinia'
 defineProps<{
   order: UserOrder
   networkSell: ChainResposne
+  isMatch: boolean
 }>()
 
 const { width: windowWidth } = useWindowSize()
@@ -136,17 +142,21 @@ const networkBuy = (chainId: number) => chainByChainId.value(chainId)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 </script>
 <style lang="scss" scoped>
-.claim-order-list-table__body-item-info-wrp {
+.claim-order-list-item-info__body-item-info-wrp {
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
 }
 
-.claim-order-list-table__body-item-info {
+.claim-order-list-item-info__body-item-info {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: toRem(4);
   width: calc(100% + #{toRem(3)});
+
+  &--disabled {
+    opacity: 0.5;
+  }
 
   @include respond-to(tablet) {
     width: calc(100% + #{toRem(5)});
@@ -158,7 +168,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.claim-order-list-table__body-item-code {
+.claim-order-list-item-info__body-item-code {
   font-size: toRem(18);
   line-height: 1;
   color: var(--text-primary-dark);
@@ -174,20 +184,20 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.claim-order-list-table__body-item-address {
+.claim-order-list-item-info__body-item-address {
   font-size: toRem(12);
   line-height: 1;
   color: var(--text-primary-main);
 }
 
-.claim-order-list-table__body-item-icon {
+.claim-order-list-item-info__body-item-icon {
   width: toRem(20);
   height: toRem(20);
   min-width: toRem(20);
   min-height: toRem(20);
 }
 
-.claim-order-list-table__body-item-amount {
+.claim-order-list-item-info__body-item-amount {
   font-size: toRem(16);
   line-height: 0.9375;
   color: var(--text-primary-dark);
@@ -200,7 +210,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   white-space: nowrap;
 }
 
-.claim-order-list-table__body-item-info-buy {
+.claim-order-list-item-info__body-item-info-buy {
   background: url('/backgrounds/order-1-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(8) toRem(24) toRem(8) toRem(12);
@@ -210,7 +220,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.claim-order-list-table__body-item-info-sell {
+.claim-order-list-item-info__body-item-info-sell {
   background: url('/backgrounds/order-2-bg.svg') no-repeat;
   background-size: 100% 100%;
   position: relative;
@@ -227,7 +237,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.claim-order-list-table__body-item-network {
+.claim-order-list-item-info__body-item-network {
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
   display: flex;
@@ -236,7 +246,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   padding: toRem(8) toRem(16);
 }
 
-.claim-order-list-table__body-item-network-text {
+.claim-order-list-item-info__body-item-network-text {
   font-size: toRem(16);
   line-height: 1;
   color: var(--text-primary-dark);

@@ -191,7 +191,9 @@
     "match-lbl": "Match",
     "network-lbl": "Network",
     "claim-order-btn": "Claim order",
-    "claim-btn": "Claim",
+    "claim-btn": "Claim"
+  },
+  "claim-order-list-item-info": {
     "address": "({address})",
     "network": "{to}/{from}"
   }

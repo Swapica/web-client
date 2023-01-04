@@ -151,27 +151,49 @@ const getTotalItems = async () => {
   totalItems.value = data?.toNumber() || 0
 }
 
-const handleBtnClick = async (item: UserOrder) => {
+const handleBtnClick = async (item: UserOrder | UserMatch) => {
   isSubmitting.value = true
   try {
-    const destChain = chainByChainId.value(item.info.destChain.toNumber())
-    await switchNetwork(destChain!)
-    const { data } = await callers.post<TxResposne>('/v1/execute/match', {
-      data: {
-        src_chain: network.value?.id,
-        dest_chain: destChain?.id,
-        match_id: item.orderStatus?.executedBy.toNumber(),
-        order_id: item.info.id.toNumber(),
-        sender: provider.value.selectedAddress,
-        receiver: provider.value.selectedAddress,
-      },
-    })
-    await provider.value.signAndSendTx(data.tx_body)
+    const response =
+      'order' in item ? await getClaimOrder(item) : await getClaimMatch(item)
+    await provider.value.signAndSendTx(response.tx_body)
     loadList()
   } catch (e) {
     ErrorHandler.process(e)
   }
   isSubmitting.value = false
+}
+
+const getClaimMatch = async (item: UserOrder) => {
+  const destChain = chainByChainId.value(item.info.destChain.toNumber())
+  await switchNetwork(destChain!)
+  const { data } = await callers.post<TxResposne>('/v1/execute/match', {
+    data: {
+      src_chain: network.value?.id,
+      dest_chain: destChain?.id,
+      match_id: item.orderStatus?.executedBy.toNumber(),
+      order_id: item.info.id.toNumber(),
+      sender: provider.value.selectedAddress,
+      receiver: provider.value.selectedAddress,
+    },
+  })
+  return data
+}
+
+const getClaimOrder = async (item: UserMatch) => {
+  const srcChain = chainByChainId.value(item.info.originChain.toNumber())
+  await switchNetwork(srcChain!)
+  const { data } = await callers.post<TxResposne>('/v1/execute/order', {
+    data: {
+      src_chain: srcChain?.id,
+      dest_chain: network.value?.id,
+      match_id: item.info.id.toNumber(),
+      order_id: item.info.originOrderId.toNumber(),
+      sender: provider.value.selectedAddress,
+      receiver: provider.value.selectedAddress,
+    },
+  })
+  return data
 }
 
 watch(

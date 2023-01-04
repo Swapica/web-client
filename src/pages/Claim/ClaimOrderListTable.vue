@@ -28,6 +28,7 @@
         <claim-order-list-item-info
           :order="'order' in i ? i.order : i"
           :network-sell="getSellNetwork(i)"
+          :is-match="Boolean('order' in i)"
         />
         <app-button
           class="claim-order-list-table__body-item-claim-btn"

@@ -127,7 +127,7 @@ export const useSwapica = (
     const order = (await _instance.value?.orders(id)) as unknown as Order
     const { chainByChainId } = storeToRefs(useChainsStore())
     const destChain = chainByChainId.value(order.destChain.toNumber())
-    const [tokenToSell, tokenToBuy, status] = await Promise.all([
+    const [tokenToSell, tokenToBuy, orderStatus] = await Promise.all([
       loadTokenInfo(network.chain_params.rpc, order.tokenToSell),
       loadTokenInfo(destChain?.chain_params.rpc!, order.tokenToBuy),
       getOrderStatus(order.id.toNumber()),
@@ -136,7 +136,7 @@ export const useSwapica = (
       info: order,
       tokenToSell,
       tokenToBuy,
-      ...status,
+      orderStatus,
     } as UserOrder
   }
 
