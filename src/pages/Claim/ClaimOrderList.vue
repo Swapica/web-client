@@ -99,13 +99,16 @@ const loadList = async () => {
     const matches = await loadingMatchesLoop()
     const orderList = orders
       .flat()
-      .reverse()
       .filter(i => i.matchStatus?.state !== MatchStatus.executed)
 
     const matchesList = matches
       .flat()
       .filter(i => i.order.orderStatus?.state === OrderStatus.awaitingMatch)
-    list.value = [...orderList, ...matchesList]
+
+    const filteredList = [...orderList, ...matchesList].sort(
+      (a, b) => b.info.id.toNumber() - a.info.id.toNumber(),
+    )
+    list.value = filteredList
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
