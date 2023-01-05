@@ -99,22 +99,32 @@
     </div>
   </div>
   <div class="claim-order-list-item-info__body-item-network">
-    <span
+    <i18n-t
+      keypath="claim-order-list-item-info.network"
+      tag="p"
       class="claim-order-list-item-info__body-item-network-text"
-      :title="
-        $t('claim-order-list-item-info.network', {
-          to: networkSell.name,
-          from: networkBuy(order.info.destChain.toNumber())?.name,
-        })
-      "
+      :title="$t('claim-order-list-item-info.network', {
+        to: networkSell.name,
+        from: networkBuy(order.info.destChain.toNumber())?.name,
+      })"
     >
-      {{
-        $t('claim-order-list-item-info.network', {
-          to: networkSell.name,
-          from: networkBuy(order.info.destChain.toNumber())?.name,
-        })
-      }}
-    </span>
+      <template #from>
+        <span
+          class="claim-order-list-item-info__network-lbl"
+          :class="{'claim-order-list-item-info__network-lbl--bold': !isMatch }"
+        >
+          {{ networkBuy(order.info.destChain.toNumber())?.name }}
+        </span>
+      </template>
+      <template #to>
+        <span
+          class="claim-order-list-item-info__network-lbl"
+          :class="{'claim-order-list-item-info__network-lbl--bold': isMatch }"
+        >
+          {{ networkSell.name }}
+        </span>
+      </template>
+    </i18n-t>
   </div>
 </template>
 <script lang="ts" setup>
@@ -257,9 +267,19 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 .claim-order-list-item-info__body-item-network-text {
   font-size: toRem(16);
   line-height: 1;
-  color: var(--text-primary-dark);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+  color: rgba(var(--primary-dark-rgb), 0.3);
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.claim-order-list-item-info__network-lbl {
+  font-size: inherit;
+  line-height: inherit;
+
+  &--bold {
+    color: var(--text-primary-dark);
+  }
 }
 </style>
