@@ -211,9 +211,13 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 }
 
 .claim-order-list-item-info__body-item-info-buy {
-  background: url('/backgrounds/order-1-bg.svg') no-repeat;
+  background: url('/backgrounds/order-3-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(8) toRem(24) toRem(8) toRem(12);
+
+  &.claim-order-list-item-info__body-item-info--disabled {
+    background: url('/backgrounds/order-5-bg.svg') no-repeat;
+  }
 
   @include respond-to(small) {
     padding: toRem(8) toRem(4.45) toRem(8) toRem(5);
@@ -221,11 +225,15 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 }
 
 .claim-order-list-item-info__body-item-info-sell {
-  background: url('/backgrounds/order-2-bg.svg') no-repeat;
+  background: url('/backgrounds/order-4-bg.svg') no-repeat;
   background-size: 100% 100%;
   position: relative;
   padding: toRem(8) toRem(18);
   left: toRem(-3);
+
+  &.claim-order-list-item-info__body-item-info--disabled {
+    background: url('/backgrounds/order-2-bg.svg') no-repeat;
+  }
 
   @include respond-to(tablet) {
     left: toRem(-5);
