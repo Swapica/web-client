@@ -102,7 +102,7 @@ import {
   isEthAddress,
   loadTokenInfo,
 } from '@/helpers'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { ICON_NAMES } from '@/enums'
 
 type SIZES = 'big' | 'default'

@@ -1,8 +1,7 @@
 <template>
   <div class="no-data-message">
-    <span class="no-data-message__message">
-      {{ message }}
-    </span>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <span class="no-data-message__message" v-html="message" />
     <template v-if="$slots.default">
       <slot />
     </template>

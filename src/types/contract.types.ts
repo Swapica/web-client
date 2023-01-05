@@ -19,6 +19,8 @@ export type UserOrder = {
   info: Order
   tokenToBuy: TokenInfo
   tokenToSell: TokenInfo
+  matchStatus?: MatchStatusInfo
+  orderStatus?: OrderStatusInfo
 }
 
 export type Match = {
@@ -33,4 +35,16 @@ export type Match = {
 export type UserMatch = {
   info: Match
   order: UserOrder
+}
+
+export type OrderStatusInfo = {
+  state: number
+  executedBy: BigNumber
+  matchSwapica: string
+}
+
+export type MatchStatusInfo = {
+  state: number
+  executedBy: BigNumber
+  matchSwapica: string
 }

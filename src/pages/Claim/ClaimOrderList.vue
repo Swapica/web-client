@@ -1,19 +1,19 @@
 <template>
-  <div class="order-list">
+  <div class="claim-order-list">
     <template v-if="isLoaded">
       <template v-if="isLoadFailed">
         <error-message
-          class="order-list__error-msg"
-          :message="$t('order-list.loading-error-msg')"
+          class="claim-order-list__error-msg"
+          :message="$t('claim-order-list.loading-error-msg')"
         />
       </template>
       <template v-else>
         <template v-if="list.length">
-          <order-list-table
+          <claim-order-list-table
             :is-btn-disabled="isSubmitting"
             :network-sell="network!"
             :list="orderList"
-            @cancel-btn-click="handleBtnClick"
+            @claim-btn-click="handleBtnClick"
           >
             <template #pagination>
               <pagination
@@ -22,7 +22,7 @@
                 :page-limit="PAGE_LIMIT"
               />
             </template>
-          </order-list-table>
+          </claim-order-list-table>
         </template>
         <template v-else>
           <template v-if="$slots.noDataMsg">
@@ -33,8 +33,8 @@
     </template>
     <template v-else>
       <loader
-        class="order-list__loader"
-        :message="$t('order-list.loading-msg')"
+        class="claim-order-list__loader"
+        :message="$t('claim-order-list.loading-msg')"
       />
     </template>
   </div>
@@ -47,10 +47,11 @@ import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import { storeToRefs } from 'pinia'
-import OrderListTable from '@/common/order-list/OrderListTable.vue'
+import ClaimOrderListTable from '@/pages/Claim/ClaimOrderListTable.vue'
 import { ethers } from 'ethers'
-import { TxResposne, UserOrder } from '@/types'
+import { TxResposne, UserMatch, UserOrder } from '@/types'
 import { callers } from '@/api'
+import { OrderStatus, MatchStatus } from '@/enums'
 import { useI18n } from 'vue-i18n'
 
 const PAGE_LIMIT = 5
@@ -58,6 +59,7 @@ const PAGE_LIMIT = 5
 const props = defineProps<{
   chainId: number
 }>()
+const { t } = useI18n({ useScope: 'global' })
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { chainByChainId } = storeToRefs(useChainsStore())
@@ -66,7 +68,6 @@ const orderList = computed(() => {
   const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
   return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
 })
-const { t } = useI18n({ useScope: 'global' })
 
 const currentPage = ref(1)
 const totalItems = ref(0)
@@ -74,19 +75,15 @@ const totalItems = ref(0)
 const isSubmitting = ref(false)
 
 const emit = defineEmits<{
-  (e: 'list-empty', value: boolean): void
-  (e: 'load-failed', value: boolean): void
   (e: 'is-loading', value: boolean): void
 }>()
 
 const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref<UserOrder[]>([])
+const list = ref<(UserOrder | UserMatch)[]>([])
 
 const loadList = async () => {
-  emit('load-failed', false)
-  emit('list-empty', false)
   emit('is-loading', true)
   isLoaded.value = false
   isLoadFailed.value = false
@@ -98,12 +95,22 @@ const loadList = async () => {
 
     await getTotalItems()
 
-    const data = await loadingOrdersLoop()
-    list.value = data.flat().reverse()
-    if (!list.value.length) emit('list-empty', true)
+    const orders = await loadingOrdersLoop()
+    const matches = await loadingMatchesLoop()
+    const orderList = orders
+      .flat()
+      .filter(i => i.matchStatus?.state !== MatchStatus.executed)
+
+    const matchesList = matches
+      .flat()
+      .filter(i => i.order.orderStatus?.state === OrderStatus.awaitingMatch)
+
+    const filteredList = [...orderList, ...matchesList].sort(
+      (a, b) => b.info.id.toNumber() - a.info.id.toNumber(),
+    )
+    list.value = filteredList
   } catch (e) {
     isLoadFailed.value = true
-    emit('load-failed', true)
     ErrorHandler.processWithoutFeedback(e)
   }
   emit('is-loading', false)
@@ -120,6 +127,22 @@ const loadingOrdersLoop = async () => {
         i,
         i + 100,
         network.value!,
+        OrderStatus.executed,
+      ),
+    )
+  }
+  return Promise.all(promises)
+}
+
+const loadingMatchesLoop = async () => {
+  const promises = []
+
+  for (let i = 0; i < totalItems.value; i += 100) {
+    promises.push(
+      swapicaContract.getUserMatchesWithOrder(
+        provider.value.selectedAddress!,
+        i,
+        i + 100,
       ),
     )
   }
@@ -133,19 +156,13 @@ const getTotalItems = async () => {
   totalItems.value = data?.toNumber() || 0
 }
 
-const handleBtnClick = async (item: UserOrder) => {
+const handleBtnClick = async (item: UserOrder | UserMatch) => {
   isSubmitting.value = true
   try {
-    await switchNetwork(network.value!)
-    const { data } = await callers.post<TxResposne>('/v1/cancel/order', {
-      data: {
-        src_chain: network.value?.id,
-        order_id: item.info.id.toNumber(),
-        sender: provider.value.selectedAddress,
-      },
-    })
-    await provider.value.signAndSendTx(data.tx_body)
-    Bus.success(t('order-list.canceled-msg'))
+    const response =
+      'order' in item ? await getClaimOrder(item) : await getClaimMatch(item)
+    await provider.value.signAndSendTx(response.tx_body)
+    Bus.success(t('claim-order-list.claimed-msg'))
     loadList()
   } catch (e) {
     ErrorHandler.process(e)
@@ -153,9 +170,37 @@ const handleBtnClick = async (item: UserOrder) => {
   isSubmitting.value = false
 }
 
-Bus.on(Bus.eventList.offerCreated, () => {
-  loadList()
-})
+const getClaimMatch = async (item: UserOrder) => {
+  const destChain = chainByChainId.value(item.info.destChain.toNumber())
+  await switchNetwork(destChain!)
+  const { data } = await callers.post<TxResposne>('/v1/execute/match', {
+    data: {
+      src_chain: network.value?.id,
+      dest_chain: destChain?.id,
+      match_id: item.orderStatus?.executedBy.toNumber(),
+      order_id: item.info.id.toNumber(),
+      sender: provider.value.selectedAddress,
+      receiver: provider.value.selectedAddress,
+    },
+  })
+  return data
+}
+
+const getClaimOrder = async (item: UserMatch) => {
+  const srcChain = chainByChainId.value(item.info.originChain.toNumber())
+  await switchNetwork(srcChain!)
+  const { data } = await callers.post<TxResposne>('/v1/execute/order', {
+    data: {
+      src_chain: srcChain?.id,
+      dest_chain: network.value?.id,
+      match_id: item.info.id.toNumber(),
+      order_id: item.info.originOrderId.toNumber(),
+      sender: provider.value.selectedAddress,
+      receiver: provider.value.selectedAddress,
+    },
+  })
+  return data
+}
 
 watch(
   () => [provider.value.selectedAddress, props.chainId],
@@ -170,12 +215,12 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.order-list {
+.claim-order-list {
   display: flex;
   flex: 1;
 }
 
-.order-list__error-msg {
+.claim-order-list__error-msg {
   max-width: toRem(353);
   margin: 0 auto;
 
@@ -184,7 +229,7 @@ watch(
   }
 }
 
-.order-list__loader {
+.claim-order-list__loader {
   max-width: toRem(353);
   margin: 0 auto;
 

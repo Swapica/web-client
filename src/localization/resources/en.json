@@ -76,7 +76,8 @@
   },
   "order-list": {
     "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
-    "loading-msg": "Hold a sec, we’re trying to solve it."
+    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "canceled-msg": "Order successfuly canceled"
   },
   "order-list-table": {
     "buy-lbl": "To Buy",
@@ -175,5 +176,27 @@
     "claim-btn": "Claim Tokens",
     "cancel-btn": "Cancel",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
+  },
+  "claim-orders": {
+    "title": "Available to Claim",
+    "dashboard-link": "Go to Dashboard",
+    "connect-wallet-msg": "Connect wallet to see what u have here",
+    "no-data-msg": "U have no orders to claim,<br> let’s c what’s on the Dashboard"
+  },
+  "claim-order-list": {
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
+    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "claimed-msg": "Order successfuly claimed"
+  },
+  "claim-order-list-table": {
+    "original-lbl": "Original",
+    "match-lbl": "Match",
+    "network-lbl": "Network",
+    "claim-order-btn": "Claim order",
+    "claim-btn": "Claim"
+  },
+  "claim-order-list-item-info": {
+    "address": "({address})",
+    "network": "{to}/{from}"
   }
 }
