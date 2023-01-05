@@ -10,7 +10,7 @@ on:
 env:
   REGISTRY: docker.io
   REP_NAME: swapica/web
-  IMAGE_NAME: ${{ env.REP_NAME}}:${{  github.ref_name }}
+  IMAGE_NAME: swapica/web:${{  github.ref_name }}
 
 jobs:
   build:
