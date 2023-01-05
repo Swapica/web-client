@@ -23,7 +23,7 @@
       <div
         class="claim-order-list-table__body"
         v-for="i in list"
-        :key="i.info.id.toString()"
+        :key="'order' in i ? 'match' : 'order' + i.info.id.toNumber()"
       >
         <claim-order-list-item-info
           :order="'order' in i ? i.order : i"
