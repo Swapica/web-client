@@ -198,5 +198,11 @@
   "claim-order-list-item-info": {
     "address": "({address})",
     "network": "{to}/{from}"
+  },
+  "expired-orders": {
+    "title": "Expired Match Orders",
+    "connect-wallet-msg": "Connect wallet to see what u have here",
+    "no-data-msg": "Here will be ur Expired Match Orders, let’s c what’s on the Dashboard",
+    "dashboard-link": "Go to Dashboard"
   }
 }
