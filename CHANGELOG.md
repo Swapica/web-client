@@ -17,4 +17,4 @@ for further information about branching and tagging conventions.
 - Initiated and setup project
 
 [Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.0...main
-[1.0.0-rc.0]: https://github.com/Swapica/web-client/tags/v1.0.0-rc.0
+[1.0.0-rc.0]: https://github.com/Swapica/web-client/releases/tag/v1.0.0-rc.0

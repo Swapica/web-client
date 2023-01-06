@@ -81,7 +81,7 @@ function validateChangelogAnchorsLegend() {
       .map(tag => tag.match(/\[(.*)\]/)[1])
       .map((cur, curId, arr) => {
         return curId === arr.length - 1
-          ? `[${cur}]: ${baseRepoUrl}/tags/v${cur}`
+          ? `[${cur}]: ${baseRepoUrl}/releases/tag/v${cur}`
           : `[${cur}]: ${baseRepoUrl}/compare/v${arr[curId + 1]}...v${cur}`
       })
       .join('\n')
