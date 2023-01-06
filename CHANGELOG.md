@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
-## [Unreleased]
+## [1.0.0-rc.0] - 2023-01-06
+#### Added
+- Dashboard page
+- Claim page
+- My orders page
+
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/1.0.0-rc.0...main
-[1.0.0-rc.0]: https://github.com/Swapica/web-client/tags/1.0.0-rc.0
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.0...main
+[1.0.0-rc.0]: https://github.com/Swapica/web-client/tags/v1.0.0-rc.0

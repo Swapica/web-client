@@ -76,13 +76,13 @@ function validateChangelogAnchorsLegend() {
     /## \[\d+\.\d+\.\d+((-rc|-x)\.\d+)?\] - \d{4}-\d{2}-\d{2}/gi
 
   const expectedAnchorsLegend =
-    `[Unreleased]: ${baseRepoUrl}/compare/${VERSION}...main\n` +
+    `[Unreleased]: ${baseRepoUrl}/compare/v${VERSION}...main\n` +
     CHANGELOG_MD_CONTENT.match(anyReleaseTagRe)
       .map(tag => tag.match(/\[(.*)\]/)[1])
       .map((cur, curId, arr) => {
         return curId === arr.length - 1
-          ? `[${cur}]: ${baseRepoUrl}/tags/${cur}`
-          : `[${cur}]: ${baseRepoUrl}/compare/${arr[curId + 1]}...${cur}`
+          ? `[${cur}]: ${baseRepoUrl}/tags/v${cur}`
+          : `[${cur}]: ${baseRepoUrl}/compare/v${arr[curId + 1]}...v${cur}`
       })
       .join('\n')
 
