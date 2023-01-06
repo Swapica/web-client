@@ -37,6 +37,6 @@ yarn rsc %release-version%
 
 ### env.js variables
 ```
- VITE_APP_API_URL='http://localhost:8000/_/api/'
- VITE_APP_APP_NAME='Swapica'
+ VITE_APP_API_URL: 'http://localhost:8000/_/api/'
+ VITE_APP_APP_NAME: 'Swapica'
 ```
