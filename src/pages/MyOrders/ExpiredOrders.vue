@@ -15,7 +15,10 @@
     </div>
     <div class="expired-orders__content">
       <template v-if="provider.isConnected">
-        <order-list :chain-id="networkId" @is-loading="isLoading = $event">
+        <expired-orders-list
+          :chain-id="networkId"
+          @is-loading="isLoading = $event"
+        >
           <template #noDataMsg>
             <no-data-message
               class="expired-orders__no-data-block"
@@ -29,7 +32,7 @@
               />
             </no-data-message>
           </template>
-        </order-list>
+        </expired-orders-list>
       </template>
       <template v-else>
         <no-data-message
@@ -44,11 +47,13 @@
 </template>
 
 <script lang="ts" setup>
-import { AppButton, ConnectWalletBtn, NoDataMessage, OrderList } from '@/common'
+import { AppButton, ConnectWalletBtn, NoDataMessage } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { SelectField } from '@/fields'
+import ExpiredOrdersList from '@/pages/MyOrders/ExpiredOrdersList.vue'
+
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const chainStore = useChainsStore()
 const networkId = ref(
