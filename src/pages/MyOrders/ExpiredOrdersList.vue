@@ -13,7 +13,7 @@
             :is-btn-disabled="isSubmitting"
             :network-sell="network!"
             :list="orderList"
-            @cancel-btn-click="handleBtnClick"
+            @cancel-btn-click="cancelMatch"
           >
             <template #pagination>
               <pagination
@@ -130,11 +130,11 @@ const getTotalItems = async () => {
   totalItems.value = data?.toNumber() || 0
 }
 
-const handleBtnClick = async (item: UserMatch) => {
+const cancelMatch = async (item: UserMatch) => {
   isSubmitting.value = true
   try {
     await switchNetwork(network.value!)
-    const { data } = await callers.post<TxResposne>('/v1/cancel/order', {
+    const { data } = await callers.post<TxResposne>('/v1/cancel/match', {
       data: {
         src_chain: network.value?.id,
         order_id: item.info.id.toNumber(),

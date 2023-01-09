@@ -13,7 +13,7 @@
             :is-btn-disabled="isSubmitting"
             :network-sell="network!"
             :list="orderList"
-            @claim-btn-click="handleBtnClick"
+            @claim-btn-click="claimOrderOrMatch"
           >
             <template #pagination>
               <pagination
@@ -156,7 +156,7 @@ const getTotalItems = async () => {
   totalItems.value = data?.toNumber() || 0
 }
 
-const handleBtnClick = async (item: UserOrder | UserMatch) => {
+const claimOrderOrMatch = async (item: UserOrder | UserMatch) => {
   isSubmitting.value = true
   try {
     const response =
