@@ -97,7 +97,11 @@ const loadList = async () => {
     const data = await loadingMatchsLoop()
     list.value = data
       .flat()
-      .filter(i => i.order.orderStatus?.state !== OrderStatus.awaitingMatch)
+      .filter(
+        i =>
+          i.order.orderStatus?.state !== OrderStatus.awaitingMatch &&
+          i.order.orderStatus?.executedBy.toNumber() !== i.info.id.toNumber(),
+      )
       .reverse()
   } catch (e) {
     isLoadFailed.value = true
@@ -132,11 +136,14 @@ const getTotalItems = async () => {
 const cancelMatch = async (item: UserMatch) => {
   isSubmitting.value = true
   try {
+    const originChain = chainByChainId.value(item.info.originChain.toNumber())
+
     await switchNetwork(network.value!)
     const { data } = await callers.post<TxResposne>('/v1/cancel/match', {
       data: {
-        src_chain: network.value?.id,
-        order_id: item.info.id.toNumber(),
+        dest_chain: network.value?.id,
+        src_chain: originChain?.id,
+        match_id: item.info.id.toNumber(),
         sender: provider.value.selectedAddress,
       },
     })
