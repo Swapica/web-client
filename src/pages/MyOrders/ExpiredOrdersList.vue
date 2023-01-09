@@ -1,19 +1,18 @@
 <template>
-  <div class="claim-order-list">
+  <div class="expired-orders-list">
     <template v-if="isLoaded">
       <template v-if="isLoadFailed">
         <error-message
-          class="claim-order-list__error-msg"
-          :message="$t('claim-order-list.loading-error-msg')"
+          class="expired-orders-list__error-msg"
+          :message="$t('expired-orders-list.loading-error-msg')"
         />
       </template>
       <template v-else>
         <template v-if="list.length">
-          <claim-order-list-table
+          <expired-orders-list-table
             :is-btn-disabled="isSubmitting"
-            :network-sell="network!"
             :list="orderList"
-            @claim-btn-click="claimOrderOrMatch"
+            @cancel-btn-click="cancelMatch"
           >
             <template #pagination>
               <pagination
@@ -22,7 +21,7 @@
                 :page-limit="PAGE_LIMIT"
               />
             </template>
-          </claim-order-list-table>
+          </expired-orders-list-table>
         </template>
         <template v-else>
           <template v-if="$slots.noDataMsg">
@@ -33,8 +32,8 @@
     </template>
     <template v-else>
       <loader
-        class="claim-order-list__loader"
-        :message="$t('claim-order-list.loading-msg')"
+        class="expired-orders-list__loader"
+        :message="$t('expired-orders-list.loading-msg')"
       />
     </template>
   </div>
@@ -47,19 +46,18 @@ import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import { storeToRefs } from 'pinia'
-import ClaimOrderListTable from '@/pages/Claim/ClaimOrderListTable.vue'
+import ExpiredOrdersListTable from '@/pages/MyOrders/ExpiredOrdersListTable.vue'
 import { ethers } from 'ethers'
-import { TxResposne, UserMatch, UserOrder } from '@/types'
+import { TxResposne, UserMatch } from '@/types'
 import { callers } from '@/api'
-import { OrderStatus, MatchStatus } from '@/enums'
 import { useI18n } from 'vue-i18n'
+import { OrderStatus } from '@/enums'
 
 const PAGE_LIMIT = 5
 
 const props = defineProps<{
   chainId: number
 }>()
-const { t } = useI18n({ useScope: 'global' })
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const { chainByChainId } = storeToRefs(useChainsStore())
@@ -68,6 +66,7 @@ const orderList = computed(() => {
   const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
   return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
 })
+const { t } = useI18n({ useScope: 'global' })
 
 const currentPage = ref(1)
 const totalItems = ref(0)
@@ -81,7 +80,7 @@ const emit = defineEmits<{
 const swapicaContract = useSwapica(provider.value)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref<(UserOrder | UserMatch)[]>([])
+const list = ref<UserMatch[]>([])
 
 const loadList = async () => {
   emit('is-loading', true)
@@ -95,20 +94,15 @@ const loadList = async () => {
 
     await getTotalItems()
 
-    const orders = await loadingOrdersLoop()
-    const matches = await loadingMatchesLoop()
-    const orderList = orders
+    const data = await loadingMatchsLoop()
+    list.value = data
       .flat()
-      .filter(i => i.matchStatus?.state !== MatchStatus.executed)
-
-    const matchesList = matches
-      .flat()
-      .filter(i => i.order.orderStatus?.state === OrderStatus.awaitingMatch)
-
-    const filteredList = [...orderList, ...matchesList].sort(
-      (a, b) => b.info.id.toNumber() - a.info.id.toNumber(),
-    )
-    list.value = filteredList
+      .filter(
+        i =>
+          i.order.orderStatus?.state !== OrderStatus.awaitingMatch &&
+          i.order.orderStatus?.executedBy.toNumber() !== i.info.id.toNumber(),
+      )
+      .reverse()
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
@@ -117,24 +111,7 @@ const loadList = async () => {
   isLoaded.value = true
 }
 
-const loadingOrdersLoop = async () => {
-  const promises = []
-
-  for (let i = 0; i < totalItems.value; i += 100) {
-    promises.push(
-      swapicaContract.getUserOrders(
-        provider.value.selectedAddress!,
-        i,
-        i + 100,
-        network.value!,
-        OrderStatus.executed,
-      ),
-    )
-  }
-  return Promise.all(promises)
-}
-
-const loadingMatchesLoop = async () => {
+const loadingMatchsLoop = async () => {
   const promises = []
 
   for (let i = 0; i < totalItems.value; i += 100) {
@@ -150,56 +127,33 @@ const loadingMatchesLoop = async () => {
 }
 
 const getTotalItems = async () => {
-  const data = await swapicaContract.getUserOrdersLength(
+  const data = await swapicaContract.getUserMatchesLength(
     provider.value.selectedAddress!,
   )
   totalItems.value = data?.toNumber() || 0
 }
 
-const claimOrderOrMatch = async (item: UserOrder | UserMatch) => {
+const cancelMatch = async (item: UserMatch) => {
   isSubmitting.value = true
   try {
-    const response =
-      'order' in item ? await getClaimOrder(item) : await getClaimMatch(item)
-    await provider.value.signAndSendTx(response.tx_body)
-    Bus.success(t('claim-order-list.claimed-msg'))
+    const originChain = chainByChainId.value(item.info.originChain.toNumber())
+
+    await switchNetwork(network.value!)
+    const { data } = await callers.post<TxResposne>('/v1/cancel/match', {
+      data: {
+        dest_chain: network.value?.id,
+        src_chain: originChain?.id,
+        match_id: item.info.id.toNumber(),
+        sender: provider.value.selectedAddress,
+      },
+    })
+    await provider.value.signAndSendTx(data.tx_body)
+    Bus.success(t('expired-orders-list.canceled-msg'))
     loadList()
   } catch (e) {
     ErrorHandler.process(e)
   }
   isSubmitting.value = false
-}
-
-const getClaimMatch = async (item: UserOrder) => {
-  const destChain = chainByChainId.value(item.info.destChain.toNumber())
-  await switchNetwork(destChain!)
-  const { data } = await callers.post<TxResposne>('/v1/execute/match', {
-    data: {
-      src_chain: network.value?.id,
-      dest_chain: destChain?.id,
-      match_id: item.orderStatus?.executedBy.toNumber(),
-      order_id: item.info.id.toNumber(),
-      sender: provider.value.selectedAddress,
-      receiver: provider.value.selectedAddress,
-    },
-  })
-  return data
-}
-
-const getClaimOrder = async (item: UserMatch) => {
-  const srcChain = chainByChainId.value(item.info.originChain.toNumber())
-  await switchNetwork(srcChain!)
-  const { data } = await callers.post<TxResposne>('/v1/execute/order', {
-    data: {
-      src_chain: srcChain?.id,
-      dest_chain: network.value?.id,
-      match_id: item.info.id.toNumber(),
-      order_id: item.info.originOrderId.toNumber(),
-      sender: provider.value.selectedAddress,
-      receiver: provider.value.selectedAddress,
-    },
-  })
-  return data
 }
 
 watch(
@@ -215,12 +169,12 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.claim-order-list {
+.expired-orders-list {
   display: flex;
   flex: 1;
 }
 
-.claim-order-list__error-msg {
+.expired-orders-list__error-msg {
   max-width: toRem(353);
   margin: 0 auto;
 
@@ -229,7 +183,7 @@ watch(
   }
 }
 
-.claim-order-list__loader {
+.expired-orders-list__loader {
   max-width: toRem(353);
   margin: 0 auto;
 

@@ -198,5 +198,25 @@
   "claim-order-list-item-info": {
     "address": "({address})",
     "network": "{to}/{from}"
+  },
+  "expired-orders": {
+    "title": "Expired Match Orders",
+    "connect-wallet-msg": "Connect wallet to see what u have here",
+    "no-data-msg": "Here will be ur Expired Match Orders, let’s c what’s on the Dashboard",
+    "dashboard-link": "Go to Dashboard"
+  },
+  "expired-orders-list": {
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
+    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "canceled-msg": "Order successfuly canceled"
+  },
+  "expired-orders-list-table": {
+    "buy-lbl": "To Buy",
+    "sell-lbl": "To Sell",
+    "network-lbl": "Network",
+    "cancel-order-btn": "Cancel order",
+    "cancel-btn": "Cancel",
+    "address": "({address})",
+    "network": "{to}/{from}"
   }
 }
