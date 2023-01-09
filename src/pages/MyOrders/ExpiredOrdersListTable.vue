@@ -1,36 +1,36 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="order-list-table">
-    <div class="order-list-table__head">
-      <div class="order-list-table__head-items-wrp">
-        <div class="order-list-table__head-item">
-          <span class="order-list-table__head-title">
-            {{ $t('order-list-table.buy-lbl') }}
+  <div class="expired-orders-list-table">
+    <div class="expired-orders-list-table__head">
+      <div class="expired-orders-list-table__head-items-wrp">
+        <div class="expired-orders-list-table__head-item">
+          <span class="expired-orders-list-table__head-title">
+            {{ $t('expired-orders-list-table.buy-lbl') }}
           </span>
         </div>
-        <div class="order-list-table__head-item">
-          <span class="order-list-table__head-title">
-            {{ $t('order-list-table.sell-lbl') }}
+        <div class="expired-orders-list-table__head-item">
+          <span class="expired-orders-list-table__head-title">
+            {{ $t('expired-orders-list-table.sell-lbl') }}
           </span>
         </div>
       </div>
-      <div v-if="!isTablet" class="order-list-table__head-item">
-        <span class="order-list-table__head-title">
-          {{ $t('order-list-table.network-lbl') }}
+      <div v-if="!isTablet" class="expired-orders-list-table__head-item">
+        <span class="expired-orders-list-table__head-title">
+          {{ $t('expired-orders-list-table.network-lbl') }}
         </span>
       </div>
     </div>
-    <div class="order-list-table__body-wrp">
+    <div class="expired-orders-list-table__body-wrp">
       <div
-        class="order-list-table__body"
+        class="expired-orders-list-table__body"
         v-for="i in list"
         :key="i.info.id.toString()"
       >
-        <div class="order-list-table__body-item-info-wrp">
+        <div class="expired-orders-list-table__body-item-info-wrp">
           <!-- eslint-disable-next-line max-len -->
-          <div class="order-list-table__body-item-info order-list-table__body-item-info-buy">
+          <div class="expired-orders-list-table__body-item-info expired-orders-list-table__body-item-info-buy">
             <span
-              class="order-list-table__body-item-amount"
+              class="expired-orders-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
                   i.order.info.amountToBuy.toString(),
@@ -45,27 +45,27 @@
                 )
               }}
             </span>
-            <span class="order-list-table__body-item-code">
+            <span class="expired-orders-list-table__body-item-code">
               {{ i.order.tokenToBuy.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
-              class="order-list-table__body-item-address"
+              class="expired-orders-list-table__body-item-address"
               :text="i.order.info.tokenToBuy"
               :title="i.order.info.tokenToBuy"
             >
               {{
-                $t('order-list-table.address', {
+                $t('expired-orders-list-table.address', {
                   address: cropAddress(i.order.info.tokenToBuy, 4, 3),
                 })
               }}
             </copy-button>
             <app-button
-              class="order-list-table__body-item-icon"
+              class="expired-orders-list-table__body-item-icon"
               scheme="icon"
               target="_blank"
               :href="provider.getAddressUrl(
-                networkBuy(i.order.info.destChain.toNumber())
+                getNetwork(i.order.info.destChain.toNumber())
                   ?.chain_params.explorer_url!,
                 i.order.info.tokenToBuy
               )"
@@ -73,9 +73,9 @@
             />
           </div>
           <!-- eslint-disable-next-line max-len -->
-          <div class="order-list-table__body-item-info order-list-table__body-item-info-sell">
+          <div class="expired-orders-list-table__body-item-info expired-orders-list-table__body-item-info-sell">
             <span
-              class="order-list-table__body-item-amount"
+              class="expired-orders-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
                   i.order.info.amountToSell.toString(),
@@ -90,62 +90,64 @@
                 )
               }}
             </span>
-            <span class="order-list-table__body-item-code">
+            <span class="expired-orders-list-table__body-item-code">
               {{ i.order.tokenToSell.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
-              class="order-list-table__body-item-address"
+              class="expired-orders-list-table__body-item-address"
               :text="i.order.info.tokenToSell"
               :title="i.order.info.tokenToSell"
             >
               {{
-                $t('order-list-table.address', {
+                $t('expired-orders-list-table.address', {
                   address: cropAddress(i.order.info.tokenToSell, 4, 3),
                 })
               }}
             </copy-button>
             <app-button
-              class="order-list-table__body-item-icon"
+              class="expired-orders-list-table__body-item-icon"
               scheme="icon"
               target="_blank"
               :icon-left="$icons.link"
               :href="
                 provider.getAddressUrl(
-                  networkSell.chain_params.explorer_url,
+                  getNetwork(i.info.originChain.toNumber())
+                    ?.chain_params
+                    .explorer_url!,
                   i.order.info.tokenToSell,
                 )
               "
             />
           </div>
         </div>
-        <div class="order-list-table__body-item-network">
+        <div class="expired-orders-list-table__body-item-network">
           <span
-            class="order-list-table__body-item-network-text"
+            class="expired-orders-list-table__body-item-network-text"
             :title="
-              $t('order-list-table.network', {
-                from: networkSell.name,
-                to: networkBuy(i.order.info.destChain.toNumber())?.name,
+              $t('expired-orders-list-table.network', {
+                from: getNetwork(i.info.originChain.toNumber())?.name,
+                to: getNetwork(i.order.info.destChain.toNumber())?.name,
               })
             "
           >
             {{
-              $t('order-list-table.network', {
-                from: networkSell.name,
-                to: networkBuy(i.order.info.destChain.toNumber())?.name,
+              $t('expired-orders-list-table.network', {
+                from: getNetwork(i.info.originChain.toNumber())?.name,
+                to: getNetwork(i.order.info.destChain.toNumber())?.name,
               })
             }}
           </span>
         </div>
         <app-button
-          class="order-list-table__body-item-cancel-btn"
+          class="expired-orders-list-table__body-item-cancel-btn"
           :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
           :size="isTablet ? 'default' : 'small'"
           :disabled="isBtnDisabled"
           :text="
             isTablet
-              ? $t('order-list-table.cancel-order-btn')
-              : $t('order-list-table.cancel-btn')
+              ? $t('expired-orders-list-table.cancel-order-btn')
+              : $t('expired-orders-list-table.cancel-btn')
           "
           @click="emit('cancel-btn-click', i)"
         />
@@ -161,7 +163,7 @@ import { AppButton, CopyButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { ChainResposne, UserMatch } from '@/types'
+import { UserMatch } from '@/types'
 import { cropAddress, formatWeiAmount } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
@@ -169,7 +171,6 @@ import { storeToRefs } from 'pinia'
 withDefaults(
   defineProps<{
     list: UserMatch[]
-    networkSell: ChainResposne
     isBtnDisabled?: boolean
   }>(),
   {
@@ -185,13 +186,13 @@ const { width: windowWidth } = useWindowSize()
 const { chainByChainId } = storeToRefs(useChainsStore())
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 
-const networkBuy = (chainId: number) => chainByChainId.value(chainId)
+const getNetwork = (chainId: number) => chainByChainId.value(chainId)
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 </script>
 <style lang="scss" scoped>
-.order-list-table {
+.expired-orders-list-table {
   display: grid;
   grid-template-columns: 1fr toRem(126);
   grid-template-areas:
@@ -216,7 +217,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__head {
+.expired-orders-list-table__head {
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) toRem(154);
   grid-area: head;
@@ -231,19 +232,19 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__head-items-wrp,
-.order-list-table__body-item-info-wrp {
+.expired-orders-list-table__head-items-wrp,
+.expired-orders-list-table__body-item-info-wrp {
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
 }
 
-.order-list-table__body-wrp {
+.expired-orders-list-table__body-wrp {
   grid-area: body;
   display: grid;
   gap: toRem(12);
 }
 
-.order-list-table__body {
+.expired-orders-list-table__body {
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) toRem(154) toRem(95);
   align-items: center;
@@ -260,11 +261,11 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__pagination {
+.expired-orders-list-table__pagination {
   grid-area: pagination;
 }
 
-.order-list-table__head-title {
+.expired-orders-list-table__head-title {
   font-size: toRem(24);
   line-height: 1;
   color: var(--text-primary-dark);
@@ -275,7 +276,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-info {
+.expired-orders-list-table__body-item-info {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -292,7 +293,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-code {
+.expired-orders-list-table__body-item-code {
   font-size: toRem(18);
   line-height: 1;
   color: var(--text-primary-dark);
@@ -308,20 +309,20 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-address {
+.expired-orders-list-table__body-item-address {
   font-size: toRem(12);
   line-height: 1;
   color: var(--text-primary-main);
 }
 
-.order-list-table__body-item-icon {
+.expired-orders-list-table__body-item-icon {
   width: toRem(20);
   height: toRem(20);
   min-width: toRem(20);
   min-height: toRem(20);
 }
 
-.order-list-table__body-item-amount {
+.expired-orders-list-table__body-item-amount {
   font-size: toRem(16);
   line-height: 0.9375;
   color: var(--text-primary-dark);
@@ -334,8 +335,8 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   white-space: nowrap;
 }
 
-.order-list-table__body-item-info-buy {
-  background: url('/backgrounds/order-1-bg.svg') no-repeat;
+.expired-orders-list-table__body-item-info-buy {
+  background: url('/backgrounds/order-5-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(8) toRem(24) toRem(8) toRem(12);
 
@@ -344,8 +345,8 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-info-sell {
-  background: url('/backgrounds/order-2-bg.svg') no-repeat;
+.expired-orders-list-table__body-item-info-sell {
+  background: url('/backgrounds/order-6-bg.svg') no-repeat;
   background-size: 100% 100%;
   position: relative;
   padding: toRem(8) toRem(18);
@@ -361,7 +362,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   }
 }
 
-.order-list-table__body-item-network {
+.expired-orders-list-table__body-item-network {
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
   display: flex;
@@ -370,7 +371,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   padding: toRem(8) toRem(16);
 }
 
-.order-list-table__body-item-network-text {
+.expired-orders-list-table__body-item-network-text {
   font-size: toRem(16);
   line-height: 1;
   color: var(--text-primary-dark);
@@ -379,7 +380,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   overflow: hidden;
 }
 
-.order-list-table__body-item-cancel-btn {
+.expired-orders-list-table__body-item-cancel-btn {
   width: 100%;
   height: toRem(40);
 

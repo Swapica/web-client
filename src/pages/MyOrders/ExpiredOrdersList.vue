@@ -11,7 +11,6 @@
         <template v-if="list.length">
           <expired-orders-list-table
             :is-btn-disabled="isSubmitting"
-            :network-sell="network!"
             :list="orderList"
             @cancel-btn-click="cancelMatch"
           >

@@ -209,5 +209,14 @@
     "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
     "loading-msg": "Hold a sec, we’re trying to solve it.",
     "canceled-msg": "Match successfuly canceled"
+  },
+  "expired-orders-list-table": {
+    "buy-lbl": "To Buy",
+    "sell-lbl": "To Sell",
+    "network-lbl": "Network",
+    "cancel-order-btn": "Cancel order",
+    "cancel-btn": "Cancel",
+    "address": "({address})",
+    "network": "{to}/{from}"
   }
 }
