@@ -45,7 +45,7 @@ $pathlen: 1775;
   stroke-opacity: 1;
   stroke-dasharray: 50, $pathlen - 50;
   stroke-dashoffset: 1000;
-  animation: logo 15s linear infinite;
+  animation: logo 13s linear infinite;
 }
 
 @keyframes logo {

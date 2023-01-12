@@ -97,7 +97,7 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
     background-size: 100% 100%;
     width: 0;
     height: toRem(6.5);
-    left: 0;
+    right: 0;
     bottom: 0;
     transition: width 0.2s ease-in-out;
   }
@@ -106,6 +106,7 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
     opacity: 1;
 
     &:after {
+      left: 0;
       width: 100%;
     }
   }
