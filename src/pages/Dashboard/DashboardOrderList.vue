@@ -28,8 +28,24 @@
         <template v-else>
           <no-data-message
             class="dashboard-order-list__no-data-block"
-            :message="$t('dashboard-order-list.no-data-msg')"
-          />
+            :message="
+              provider.isConnected
+                ? $t('dashboard-order-list.no-data-connected-msg')
+                : $t('dashboard-order-list.no-data-msg')
+            "
+          >
+            <template v-if="provider.isConnected">
+              <app-button
+                class="dashboard-order-list__no-data-link"
+                scheme="primary"
+                :text="$t('dashboard-order-list.my-orders-link')"
+                :route="{ name: $routes.myOrders }"
+              />
+            </template>
+            <template v-else>
+              <connect-wallet-btn />
+            </template>
+          </no-data-message>
         </template>
       </template>
     </template>
@@ -56,6 +72,8 @@ import {
   Pagination,
   NoDataMessage,
   MatchOrderModal,
+  ConnectWalletBtn,
+  AppButton,
 } from '@/common'
 import { useSwapica } from '@/composables'
 import { computed, ref, watch } from 'vue'
@@ -186,5 +204,9 @@ watch(
   @include respond-to(small) {
     max-width: toRem(245);
   }
+}
+
+.dashboard-order-list__no-data-link {
+  width: toRem(181);
 }
 </style>
