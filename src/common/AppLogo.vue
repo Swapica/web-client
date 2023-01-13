@@ -1,7 +1,7 @@
 <template>
   <div class="app-logo">
     <img class="app-logo__img" :src="logo" :alt="$config.APP_NAME" />
-    <router-link class="app-logo__link" :to="{ name: $routes.dashboard }" />
+    <a class="app-logo__link" :href="$config.LANDING_URL" />
   </div>
 </template>
 

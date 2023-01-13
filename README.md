@@ -39,4 +39,5 @@ yarn rsc %release-version%
 ```
  VITE_APP_API_URL: 'http://localhost:8000/_/api/'
  VITE_APP_APP_NAME: 'Swapica'
+ VITE_APP_LANDING_URL: ''
 ```
