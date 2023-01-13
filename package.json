@@ -26,7 +26,7 @@
     "@vueuse/core": "^9.1.1",
     "axios": "^0.24.0",
     "bignumber.js": "^9.0.2",
-    "body-scroll-lock": "^4.0.0-beta.0",
+    "body-scroll-lock": "v3.1.5",
     "bs58": "^5.0.0",
     "dayjs": "^1.11.5",
     "ethers": "^5.7.0",

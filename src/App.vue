@@ -67,10 +67,19 @@ init()
 }
 
 .app__main {
-  padding: toRem(24) var(--app-padding-right) toRem(24) var(--app-padding-left);
+  --padding: #{toRem(120)} var(--app-padding-right) #{toRem(24)}
+    var(--app-padding-left);
+  --padding-mobile: #{toRem(104)} var(--app-padding-right) #{toRem(24)}
+    var(--app-padding-left);
+
+  padding: var(--padding);
   max-width: calc(#{toRem(887)} + var(--app-padding-right) * 2);
   margin: 0 auto;
   width: 100%;
+
+  @include respond-to(tablet) {
+    padding: var(--padding-mobile);
+  }
 }
 
 .app__loader,
