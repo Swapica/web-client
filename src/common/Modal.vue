@@ -1,7 +1,7 @@
 <template>
   <transition name="modal">
     <div v-show="isShown" class="modal">
-      <div class="modal__pane" ref="modalPane">
+      <div class="modal__pane" ref="modalPane" scroll-lock-ignore>
         <slot :modal="{ close: closeModal }" />
       </div>
     </div>
@@ -9,8 +9,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, nextTick, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 const EVENTS = {
   updateIsShown: 'update:is-shown',
@@ -44,6 +45,28 @@ export default defineComponent({
     const closeModal = () => {
       emit(EVENTS.updateIsShown, false)
     }
+
+    watch(
+      () => props.isShown,
+      isShown => {
+        if (isShown) {
+          nextTick(() => {
+            disableBodyScroll(modalPane.value!, {
+              allowTouchMove: el => {
+                while (el && el !== document.body) {
+                  const scrollLockAttr = el.getAttribute('scroll-lock-ignore')
+                  if (scrollLockAttr !== null) return true
+                  el = el.parentNode as HTMLElement
+                }
+                return false
+              },
+            })
+          })
+        } else {
+          enableBodyScroll(modalPane.value!)
+        }
+      },
+    )
 
     return {
       modalPane,
