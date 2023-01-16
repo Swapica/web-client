@@ -138,7 +138,9 @@
   "dashboard-order-list": {
     "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
     "loading-msg": "Hold a sec, we’re trying to solve it.",
-    "no-data-msg": "No orders created"
+    "no-data-connected-msg": "Here are no orders to match yet.<br>Go to My Orders and be the first to create one.",
+    "no-data-msg": "Here are no orders to match yet.<br>Connect wallet and be the first to create one.",
+    "my-orders-link": "My Orders"
   },
   "dashboard-order-list-table": {
     "buy-lbl": "To Buy",

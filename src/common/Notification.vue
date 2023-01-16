@@ -75,7 +75,7 @@ export default defineComponent({
 .Vue-Toastification__container.top-right {
   padding: 0;
   right: toRem(-50);
-  top: toRem(96);
+  top: toRem(120);
 
   @include respond-to(tablet) {
     top: toRem(12);

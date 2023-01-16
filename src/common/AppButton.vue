@@ -264,20 +264,21 @@ const buttonClasses = computed(() =>
       background-size: 100% 100%;
       width: 0;
       height: toRem(6.5);
-      left: 0;
+      right: 0;
       bottom: 0;
       transition: width 0.2s ease-in-out;
     }
 
     &:not([disabled]):hover {
       &:after {
+        left: 0;
         width: 100%;
       }
     }
   }
 
   &--raised {
-    background: url('/backgrounds/button-raised-bg.svg') no-repeat;
+    background: url('/backgrounds/button-secondary-hover-bg.svg') no-repeat;
     padding: toRem(13) toRem(24) toRem(18) calc(toRem(19) + toRem(8));
     background-size: 100% 100%;
   }

@@ -48,7 +48,11 @@
           />
         </div>
       </div>
-      <transition name="token-select__select-dropdown">
+      <transition
+        name="token-select__select-dropdown"
+        @enter="setDropdownHeightCSSVar"
+        @before-leave="setDropdownHeightCSSVar"
+      >
         <div
           v-if="isDropdownOpen && optionList.length"
           class="token-select__select-dropdown-wrp"
@@ -245,6 +249,13 @@ const handleSearch = async () => {
   }
 }
 
+const setDropdownHeightCSSVar = (element: HTMLElement) => {
+  element.style.setProperty(
+    '--dropdown-body-height',
+    `${element.scrollHeight}px`,
+  )
+}
+
 onMounted(() => {
   if (selectElement.value) {
     onClickOutside(selectElement, () => {
@@ -380,13 +391,10 @@ $z-local-index: 2;
 }
 
 .token-select__select-dropdown-wrp {
-  display: flex;
-  flex-direction: column;
   position: absolute;
   top: 110%;
   right: 0;
   width: 100%;
-  max-height: 500%;
   z-index: $z-local-index;
   background: url('/backgrounds/select-field-dropdown-bg.svg') no-repeat;
   background-size: 100% 100%;
@@ -401,29 +409,28 @@ $z-local-index: 2;
 .token-select__select-dropdown {
   overflow: hidden auto;
   width: calc(100% - #{toRem(5)});
+  max-height: toRem(188);
 
   @include scrollbar;
 }
 
 .token-select__select-dropdown-enter-active {
+  overflow: hidden;
   animation: dropdown var(--field-transition-duration);
 }
 
 .token-select__select-dropdown-leave-active {
+  overflow: hidden;
   animation: dropdown var(--field-transition-duration) 0.1s reverse;
 }
 
 @keyframes dropdown {
   from {
-    opacity: 0;
-    transform: translateY(20%);
-    max-height: 0;
+    height: 0;
   }
 
   to {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 500%;
+    height: var(--dropdown-body-height);
   }
 }
 

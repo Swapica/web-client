@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.2] - 2023-01-16
+#### Changed
+- No data message on dashboard
+- Design updates
+
 ## [1.0.0-rc.1] - 2023-01-09
 #### Added
 - Expired Match Orders
@@ -20,6 +25,7 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.1...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.2...main
+[1.0.0-rc.2]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.1...v1.0.0-rc.2
 [1.0.0-rc.1]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.0...v1.0.0-rc.1
 [1.0.0-rc.0]: https://github.com/Swapica/web-client/releases/tag/v1.0.0-rc.0
