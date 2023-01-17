@@ -13,7 +13,7 @@
         class="match-order-form__change-network-msg"
       >
         <template #network>
-          {{ networkBuy?.name }}
+          {{ networkSell?.name }}
         </template>
         <template #networkBold>
           <span class="match-order-form__network-lbl">
@@ -53,6 +53,11 @@
           ? $t('match-order-form.approve-confirmation-title')
           : $t('match-order-form.match-confirmation-title')
       "
+      :description="
+        isApproving
+          ? $t('match-order-form.approve-confirmation-desc')
+          : $t('match-order-form.match-confirmation-desc')
+      "
     />
     <change-network-step
       v-if="currentStep.name === STEPS.claimChangeNetwork"
@@ -84,6 +89,7 @@
     <confirmation-step
       v-if="currentStep.name === STEPS.confirmationClaim"
       :title="$t('match-order-form.claim-confirmation-title')"
+      :description="$t('match-order-form.claim-confirmation-desc')"
     />
   </form>
 </template>

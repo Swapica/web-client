@@ -132,7 +132,7 @@ const isLoading = ref(false)
 }
 
 .expired-orders__no-data-block {
-  max-width: toRem(519);
+  max-width: toRem(552);
   margin: 0 auto;
 
   @include respond-to(small) {
