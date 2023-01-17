@@ -16,7 +16,7 @@
     "provider-invalid-params": "Invalid method parameters standard",
     "provider-internal-error": "Internal JSON-RPC error standard",
     "provider-invalid-input": "Missing or invalid parameters non-standard",
-    "provider-resource-not-found": "equested resource not found non-standard",
+    "provider-resource-not-found": "Requested resource not found non-standard",
     "provider-resource-unavailable": "Requested resource not available non-standard",
     "provider-transaction-rejected": "Transaction creation failed non-standard",
     "provider-method-not-supported": "Method is not implemented non-standard",
@@ -36,12 +36,6 @@
     "default-message-warning": "Something you are doing is not recommended",
     "default-message-info": "Something is happening. Just want you to know that",
     "default-message-default": "Just a message"
-  },
-  "login-form": {
-    "login-lbl": "Login",
-    "password-lbl": "Password",
-    "login-success-msg": "Access granted",
-    "submit-btn": "Submit"
   },
   "app-navigation-mobile": {
     "dashboard-link": "Dashboard",
@@ -63,7 +57,7 @@
     "metamask": "MetaMask"
   },
   "app": {
-    "error-msg": "Ooops, something went wrong, please reload page or try again later"
+    "error-msg": "Ooops, something went wrong, please reload page or try again later."
   },
   "chain-selector": {
     "unsupported-chain": "Unsupported"
@@ -71,13 +65,13 @@
   "created-orders": {
     "title": "Created Orders",
     "create-btn": "Create Order",
-    "connect-wallet-msg": "Connect wallet to see what u have here",
-    "no-data-msg": "U have no orders created, let’s create your first order"
+    "connect-wallet-msg": "Connect wallet to see what you have here.",
+    "no-data-msg": "There is nothing here. <br> Let's create your first order."
   },
   "order-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
-    "loading-msg": "Hold a sec, we’re trying to solve it.",
-    "canceled-msg": "Order successfuly canceled"
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-msg": "Hang in there, <br>we're feeding a hamster...",
+    "canceled-msg": "Order successfuly canceled."
   },
   "order-list-table": {
     "buy-lbl": "To Buy",
@@ -98,7 +92,7 @@
   },
   "create-order-form-tokens-step": {
     "title": "Create Order",
-    "description": "Lorem ipsum dolor sit amet consectetur. Purus condimentum nunc quam a enim ullamcorper.  Purus condimentum nunc",
+    "description": "To create your order select the token you want to sell and the token you want to receive and its amount. Custom tokens are available too.",
     "back-btn": "Back",
     "next-btn": "Confirm",
     "token-to-sell-lbl": "Token to sell",
@@ -107,7 +101,7 @@
   },
   "confirmation-step": {
     "title": "Confirmation",
-    "description": "Lorem ipsum dolor sit amet consectetur. Purus condimentum nunc quam a enim ullamcorper.  Purus condimentum nunc"
+    "description": "The transaction is processing, it may take some time. Thank you for your patience."
   },
   "approve-step": {
     "title": "Approve Token",
@@ -115,11 +109,13 @@
     "approve-btn": "Approve"
   },
   "create-order-form": {
-    "created-msg": "Order successfuly created",
-    "approve-msg": "Approve {token} to match this order. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+    "created-msg": "Order successfuly created.",
+    "approve-msg": "To create this order {token} needs to be approved. By approving this token, you are allowing Swapica to access your funds. Unless you won’t be able to create any orders containing this token.",
     "approve-msg-token": "ERC20 Token",
     "approve-confirmation-title": "Approve Token",
-    "create-confirmation-title": "Create Order"
+    "create-confirmation-title": "Create Order",
+    "approve-confirmation-desc": "You’re approving the token. The transaction is processing, it may take some time. Thank you for your patience.",
+    "create-confirmation-desc": "You’re creating the order. The transaction is processing, it may take some time. Thank you for your patience."
   },
   "copy-button": {
     "copied-message": "Copied!"
@@ -136,10 +132,10 @@
     "title": "Available Orders"
   },
   "dashboard-order-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
-    "loading-msg": "Hold a sec, we’re trying to solve it.",
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-msg": "Hang in there, <br>we're feeding a hamster...",
     "no-data-connected-msg": "Here are no orders to match yet.<br>Go to My Orders and be the first to create one.",
-    "no-data-msg": "Here are no orders to match yet.<br>Connect wallet and be the first to create one.",
+    "no-data-msg": "No orders to match found.<br>Connect wallet and be the first to create one.",
     "my-orders-link": "My Orders"
   },
   "dashboard-order-list-table": {
@@ -148,7 +144,7 @@
     "match-btn": "Match",
     "address": "({address})",
     "tooltip-title": "Connect wallet",
-    "tooltip-msg": "u haven’t connect your wallet, u will be able to match orders after connection."
+    "tooltip-msg": "you haven’t connected your wallet, you will be able to match orders after connection."
   },
   "change-network-step": {
     "title": "Change Network",
@@ -158,13 +154,16 @@
   "match-order-form": {
     "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will bw able to call the action and match this order.",
     "approve-msg-token": "ERC20 Token",
-    "approve-msg": "Approve {token} to match this order. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+    "approve-msg": "To match this order {token} needs to be approved. By approving this token, you are allowing Swapica to access your funds. Unless you won’t be able to match any orders containing this token.",
     "approve-confirmation-title": "Approve Token",
     "match-confirmation-title": "Match Order",
     "cancel-btn": "Cancel",
-    "matched-msg": "Order successfuly matched",
+    "matched-msg": "Order successfuly matched.",
     "change-claim-network-msg": "The order is listed on {network}. To claim this order you need to change your network to {networkBold}. After this step you will bw able to call the action and claim this order.",
-    "claim-confirmation-title": "Claim Tokens"
+    "claim-confirmation-title": "Claim Tokens",
+    "approve-confirmation-desc": "You’re approving the token. The transaction is processing, it may take some time. Thank you for your patience.",
+    "match-confirmation-desc": "You’re matching the order. The transaction is processing, it may take some time. Thank you for your patience.",
+    "claim-confirmation-desc": "You’re claiming the order. The transaction is processing, it may take some time. Thank you for your patience."
   },
   "match-order-form-match-step": {
     "title": "Match Order",
@@ -177,18 +176,18 @@
     "title": "Claim Tokens",
     "claim-btn": "Claim Tokens",
     "cancel-btn": "Cancel",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
+    "description": "You are about to claim tokens. After claiming you will receive {tokenSell}. Once the transaction is confirmed you will receive a status message. You also can see the status of your transaction on Etherscan after claim."
   },
   "claim-orders": {
     "title": "Available to Claim",
     "dashboard-link": "Go to Dashboard",
-    "connect-wallet-msg": "Connect wallet to see what u have here",
-    "no-data-msg": "U have no orders to claim,<br> let’s c what’s on the Dashboard"
+    "connect-wallet-msg": "Connect wallet to see what you have here.",
+    "no-data-msg": "You have no orders to claim, <br>do you want to match one?"
   },
   "claim-order-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
-    "loading-msg": "Hold a sec, we’re trying to solve it.",
-    "claimed-msg": "Order successfuly claimed"
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-msg": "Hang in there, <br>we're feeding a hamster...",
+    "claimed-msg": "Order successfuly claimed."
   },
   "claim-order-list-table": {
     "original-lbl": "Original",
@@ -203,14 +202,14 @@
   },
   "expired-orders": {
     "title": "Expired Match Orders",
-    "connect-wallet-msg": "Connect wallet to see what u have here",
-    "no-data-msg": "Here will be ur Expired Match Orders, let’s c what’s on the Dashboard",
+    "connect-wallet-msg": "Connect wallet to see what you have here.",
+    "no-data-msg": "Here will be your Expired Match Orders, check the Dashboard to find one.",
     "dashboard-link": "Go to Dashboard"
   },
   "expired-orders-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later",
-    "loading-msg": "Hold a sec, we’re trying to solve it.",
-    "canceled-msg": "Order successfuly canceled"
+    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-msg": "Hang in there, <br>we're feeding a hamster...",
+    "canceled-msg": "Order successfuly canceled."
   },
   "expired-orders-list-table": {
     "buy-lbl": "To Buy",

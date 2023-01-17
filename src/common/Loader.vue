@@ -1,8 +1,7 @@
 <template>
   <div class="loader">
-    <p v-if="message" class="loader__message">
-      {{ message }}
-    </p>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <p v-if="message" class="loader__message" v-html="message" />
     <spinner />
   </div>
 </template>

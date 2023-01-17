@@ -4,9 +4,23 @@
       {{ $t('match-order-form-claim-step.title') }}
     </h4>
 
-    <p class="match-order-form-claim-step__desc">
-      {{ $t('match-order-form-claim-step.description') }}
-    </p>
+    <i18n-t
+      keypath="match-order-form-claim-step.description"
+      tag="p"
+      class="match-order-form-claim-step__desc"
+    >
+      <template #tokenSell>
+        <span class="match-order-form-claim-step__desc-token-bold">
+          {{
+            formatWeiAmount(
+              order.info.amountToSell.toString(),
+              order.tokenToSell.decimals,
+            )
+          }}
+          {{ order.tokenToSell.symbol }}
+        </span>
+      </template>
+    </i18n-t>
 
     <div class="match-order-form-claim-step__actions">
       <app-button
@@ -26,6 +40,12 @@
 </template>
 <script lang="ts" setup>
 import { AppButton } from '@/common'
+import { UserOrder } from '@/types'
+import { formatWeiAmount } from '@/helpers'
+
+defineProps<{
+  order: UserOrder
+}>()
 
 const emit = defineEmits<{
   (e: 'cancel'): void
@@ -70,5 +90,9 @@ const emit = defineEmits<{
 
 .match-order-form-claim-step__desc {
   text-align: center;
+}
+
+.match-order-form-claim-step__desc-token-bold {
+  color: var(--text-primary-dark);
 }
 </style>

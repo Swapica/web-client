@@ -40,6 +40,11 @@
           ? $t('create-order-form.approve-confirmation-title')
           : $t('create-order-form.create-confirmation-title')
       "
+      :description="
+        isApproving
+          ? $t('create-order-form.approve-confirmation-desc')
+          : $t('create-order-form.create-confirmation-desc')
+      "
     />
   </form>
 </template>

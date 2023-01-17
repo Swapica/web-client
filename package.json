@@ -1,6 +1,6 @@
 {
   "name": "swapica",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "gitHooks": {
     "pre-commit": "yarn lint",
     "pre-push": "yarn test && yarn rsc"
