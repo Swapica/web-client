@@ -14,7 +14,6 @@
     "provider-invalid-request": "JSON is not a valid request object standard",
     "provider-method-not-found": "Method does not exist standard",
     "provider-invalid-params": "Invalid method parameters standard",
-    "provider-internal-error": "Internal JSON-RPC error standard",
     "provider-invalid-input": "Missing or invalid parameters non-standard",
     "provider-resource-not-found": "Requested resource not found non-standard",
     "provider-resource-unavailable": "Requested resource not available non-standard",
@@ -24,6 +23,10 @@
     "provider-json-rpc-version-not-supported": "Version of JSON-RPC protocol is not supported non-standard",
     "provider-wrapper-method-not-found": "provider not exist or hasn't this method",
     "metamask-provider-not-found": "Metamask provider not found"
+  },
+  "provider-internal-errors": {
+    "default": "Internal JSON-RPC error standard",
+    "not-enough-balance": "Transfer amount exceeds balance"
   },
   "notification": {
     "default-title-success": "Action Compeleted",
