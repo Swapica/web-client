@@ -57,7 +57,7 @@ export class ErrorHandler {
           break
         case errors.ProviderInternalError:
           errorMessage = handleProviderInternalError(
-            (error.cause as EthError).message || '',
+            (error.cause as EthError)?.message || '',
           )
           break
         case errors.ProviderInvalidInput:
