@@ -13,6 +13,7 @@ import { useErc20 } from '@/composables/use-erc20'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { useSwapica } from '@/composables'
+import { config } from '@/config'
 
 export const connectEthAccounts = async (
   provider: ethers.providers.Web3Provider,
@@ -139,14 +140,14 @@ export async function loadTokenInfo(rpcUrl: string, address: string) {
 }
 
 export async function getTokenInfo(chain: ChainResposne, address: string) {
-  const { tokensByChainId } = useTokensStore()
-  const token = tokensByChainId(chain.id).find(
-    i => i.chain.contract_address === address,
-  )
-  if (token) {
+  if (address === config.NATIVE_TOKEN) {
+    const { tokensByChainId } = useTokensStore()
+    const token = tokensByChainId(chain.id).find(
+      i => i.chain.contract_address === address,
+    )
     return {
-      decimals: token?.decimals,
-      symbol: token.symbol,
+      decimals: chain?.chain_params.native_decimals,
+      symbol: token?.symbol,
     } as TokenInfo
   } else {
     const data = await loadTokenInfo(chain.chain_params.rpc, address)
