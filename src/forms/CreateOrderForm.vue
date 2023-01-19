@@ -61,6 +61,7 @@ import { callers } from '@/api'
 import { TxResposne } from '@/types'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { config } from '@/config'
 
 enum STEPS {
   network = 'network',
@@ -125,6 +126,8 @@ const submit = async () => {
 }
 
 const checkApprove = async () => {
+  if (former.form.tokenSell === config.NATIVE_TOKEN) return
+
   const { data } = await callers.approve(
     provider.value.selectedAddress!,
     former.networkSell.value?.id!,

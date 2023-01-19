@@ -8,6 +8,7 @@ export const config = {
   LOG_LEVEL: 'trace' as LogLevelDesc,
   BUILD_VERSION: packageJson.version || import.meta.env.VITE_APP_BUILD_VERSION,
   LANDING_URL: '',
+  NATIVE_TOKEN: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
 } as const
 
 Object.assign(config, _mapEnvCfg(import.meta.env))

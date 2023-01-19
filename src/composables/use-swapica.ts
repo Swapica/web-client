@@ -12,7 +12,7 @@ import {
   OrderStatusInfo,
 } from '@/types'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { loadMatchStatus, loadOrder, loadTokenInfo } from '@/helpers'
+import { loadMatchStatus, loadOrder, getTokenInfo } from '@/helpers'
 import { useChainsStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { MatchStatus, OrderStatus } from '@/enums'
@@ -76,8 +76,8 @@ export const useSwapica = (
       (response as unknown as Order[])?.map(async i => {
         const destChain = chainByChainId.value(i.destChain.toNumber())
         const [tokenToSell, tokenToBuy, statuses] = await Promise.all([
-          loadTokenInfo(network.chain_params.rpc, i.tokenToSell),
-          loadTokenInfo(destChain?.chain_params.rpc!, i.tokenToBuy),
+          getTokenInfo(network, i.tokenToSell),
+          getTokenInfo(destChain!, i.tokenToBuy),
           ...(status === OrderStatus.executed
             ? [_getStatusInfo(destChain!, i.id.toNumber())]
             : []),
@@ -128,8 +128,8 @@ export const useSwapica = (
     const { chainByChainId } = storeToRefs(useChainsStore())
     const destChain = chainByChainId.value(order.destChain.toNumber())
     const [tokenToSell, tokenToBuy, orderStatus] = await Promise.all([
-      loadTokenInfo(network.chain_params.rpc, order.tokenToSell),
-      loadTokenInfo(destChain?.chain_params.rpc!, order.tokenToBuy),
+      getTokenInfo(network, order.tokenToSell),
+      getTokenInfo(destChain!, order.tokenToBuy),
       getOrderStatus(order.id.toNumber()),
     ])
     return {
@@ -159,9 +159,9 @@ export const useSwapica = (
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
         const [tokenToSell, tokenToBuy] = await Promise.all([
-          loadTokenInfo(network.chain_params.rpc, i.tokenToSell),
-          loadTokenInfo(
-            chainByChainId.value(i.destChain.toNumber())?.chain_params.rpc!,
+          getTokenInfo(network, i.tokenToSell),
+          getTokenInfo(
+            chainByChainId.value(i.destChain.toNumber())!,
             i.tokenToBuy,
           ),
         ])
