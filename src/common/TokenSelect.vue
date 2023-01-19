@@ -493,6 +493,7 @@ $z-local-index: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: toRem(18);
+  line-height: toRem(17.5);
 
   .token-select--big & {
     font-size: toRem(16);
