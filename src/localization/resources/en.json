@@ -26,7 +26,7 @@
     "metamask-provider-not-found": "Metamask provider not found"
   },
   "notification": {
-    "default-title-success": "Action Compeleted",
+    "default-title-success": "Action Completed",
     "default-title-error": "Action Failed",
     "default-title-warning": "Warning",
     "default-title-info": "Info",
@@ -169,7 +169,7 @@
     "title": "Match Order",
     "confirm-btn": "Confirm",
     "cancel-btn": "Cancel",
-    "description": "You are about to match an order. After matching you will receive {tokenSell} and lose {tokenBuy}. This action can be undone in case the Creator cancels the order or someone else matches this order before you.",
+    "description": "You are about to match an order. After matching you will {tokenSell} and give {tokenBuy}. This action can be undone in case the Creator cancels the order or someone else matches this order before you.",
     "recieve-token-msg": "receive {amount} {token}"
   },
   "match-order-form-claim-step": {
