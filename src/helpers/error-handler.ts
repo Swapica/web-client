@@ -2,7 +2,7 @@ import log from 'loglevel'
 import { Bus, handleProviderInternalError } from '@/helpers'
 import { i18n } from '@/localization'
 import { errors } from '@/errors'
-import { EthError } from '@/types'
+import { EthProviderRpcError } from '@/types'
 
 export class ErrorHandler {
   static process(error: Error | unknown, errorMessage = ''): void {
@@ -57,7 +57,7 @@ export class ErrorHandler {
           break
         case errors.ProviderInternalError:
           errorMessage = handleProviderInternalError(
-            (error.cause as EthError)?.message || '',
+            (error.cause as EthProviderRpcError)?.reason || '',
           )
           break
         case errors.ProviderInvalidInput:

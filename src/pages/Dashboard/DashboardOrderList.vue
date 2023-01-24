@@ -92,6 +92,7 @@ const PAGE_LIMIT = isTablet.value ? 5 : 10
 
 const props = defineProps<{
   network: ChainResposne
+  matchNetwork: ChainResposne
   tokenBuy: string
   tokenSell: string
   isSubmitting?: boolean
@@ -130,7 +131,14 @@ const loadList = async () => {
     await getTotalItems()
 
     const data = await loadingOrdersLoop()
-    list.value = data.flat().reverse()
+    const filteredList = data
+      .flat()
+      .filter(
+        i =>
+          i.info.destChain.toNumber() ===
+          props.matchNetwork.chain_params.chain_id,
+      )
+    list.value = filteredList.reverse()
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
