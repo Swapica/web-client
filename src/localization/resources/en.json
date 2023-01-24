@@ -14,7 +14,6 @@
     "provider-invalid-request": "JSON is not a valid request object standard",
     "provider-method-not-found": "Method does not exist standard",
     "provider-invalid-params": "Invalid method parameters standard",
-    "provider-internal-error": "Internal JSON-RPC error standard",
     "provider-invalid-input": "Missing or invalid parameters non-standard",
     "provider-resource-not-found": "Requested resource not found non-standard",
     "provider-resource-unavailable": "Requested resource not available non-standard",
@@ -24,6 +23,10 @@
     "provider-json-rpc-version-not-supported": "Version of JSON-RPC protocol is not supported non-standard",
     "provider-wrapper-method-not-found": "provider not exist or hasn't this method",
     "metamask-provider-not-found": "Metamask provider not found"
+  },
+  "provider-internal-errors": {
+    "default": "Internal JSON-RPC error standard",
+    "not-enough-balance": "Transfer amount exceeds balance"
   },
   "notification": {
     "default-title-success": "Action Completed",
@@ -57,7 +60,7 @@
     "metamask": "MetaMask"
   },
   "app": {
-    "error-msg": "Ooops, something went wrong, please reload page or try again later."
+    "error-msg": "Ooops, something went wrong, please reload the page or try again later."
   },
   "chain-selector": {
     "unsupported-chain": "Unsupported"
@@ -69,7 +72,7 @@
     "no-data-msg": "There is nothing here. <br> Let's create your first order."
   },
   "order-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-error-msg": "Ooops, something went wrong, please reload the page or try again later.",
     "loading-msg": "Hang in there, <br>we're feeding a hamster...",
     "canceled-msg": "Order successfuly canceled."
   },
@@ -122,7 +125,7 @@
   },
   "dashboard-page": {
     "network-title-number-lbl": "1",
-    "network-title-lbl": "Select networks to start swaping your tokens",
+    "network-title-lbl": "Select networks to start swapping your tokens",
     "tokens-title-number-lbl": "2",
     "tokens-title-lbl": "Select tokens to filter the orders",
     "network-from-lbl": "Original chain",
@@ -132,15 +135,15 @@
     "title": "Available Orders"
   },
   "dashboard-order-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-error-msg": "Ooops, something went wrong, please reload the page or try again later.",
     "loading-msg": "Hang in there, <br>we're feeding a hamster...",
     "no-data-connected-msg": "Here are no orders to match yet.<br>Go to My Orders and be the first to create one.",
     "no-data-msg": "No orders to match found.<br>Connect wallet and be the first to create one.",
     "my-orders-link": "My Orders"
   },
   "dashboard-order-list-table": {
-    "buy-lbl": "To Buy",
-    "sell-lbl": "To Sell",
+    "buy-lbl": "Order Buys",
+    "sell-lbl": "Order Sells",
     "match-btn": "Match",
     "address": "({address})",
     "tooltip-title": "Connect wallet",
@@ -185,7 +188,7 @@
     "no-data-msg": "You have no orders to claim, <br>do you want to match one?"
   },
   "claim-order-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-error-msg": "Ooops, something went wrong, please reload the page or try again later.",
     "loading-msg": "Hang in there, <br>we're feeding a hamster...",
     "claimed-msg": "Order successfuly claimed."
   },
@@ -207,7 +210,7 @@
     "dashboard-link": "Go to Dashboard"
   },
   "expired-orders-list": {
-    "loading-error-msg": "Ooops, something went wrong, please reload page or try again later.",
+    "loading-error-msg": "Ooops, something went wrong, please reload the page or try again later.",
     "loading-msg": "Hang in there, <br>we're feeding a hamster...",
     "canceled-msg": "Order successfuly canceled."
   },

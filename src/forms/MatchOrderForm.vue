@@ -112,6 +112,7 @@ import { useI18n } from 'vue-i18n'
 import MatchOrderFormMatchStep from '@/forms/match-order-form/MatchOrderFormMatchStep.vue'
 import MatchOrderFormClaimStep from '@/forms/match-order-form/MatchOrderFormClaimStep.vue'
 import { ethers } from 'ethers'
+import { config } from '@/config'
 
 enum STEPS {
   matchChangeNetwork = 'match-change-network',
@@ -198,6 +199,8 @@ const match = async () => {
 }
 
 const checkApprove = async (networkId: string, tokenAddrs: string) => {
+  if (tokenAddrs === config.NATIVE_TOKEN) return
+
   const { data } = await callers.approve(
     provider.value.selectedAddress!,
     networkId,

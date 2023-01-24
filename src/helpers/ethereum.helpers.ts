@@ -10,9 +10,10 @@ import { EIP1193, EIP1193String, EIP1474 } from '@/enums'
 import { mapKeys, get } from 'lodash-es'
 import { sleep, toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
-import { useWeb3ProvidersStore } from '@/store'
+import { useTokensStore, useWeb3ProvidersStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { useSwapica } from '@/composables'
+import { config } from '@/config'
 
 export const connectEthAccounts = async (
   provider: ethers.providers.Web3Provider,
@@ -77,7 +78,9 @@ export function handleEthError(error: EthProviderRpcError) {
     case EIP1474.invalidParams:
       throw new errors.ProviderInvalidParams(error.message)
     case EIP1474.internalError:
-      throw new errors.ProviderInternalError(error.message)
+      throw new errors.ProviderInternalError(error.message, {
+        cause: error.error,
+      })
     case EIP1474.invalidInput:
       throw new errors.ProviderInvalidInput(error.message)
     case EIP1474.resourceNotFound:
@@ -134,6 +137,22 @@ export async function loadTokenInfo(rpcUrl: string, address: string) {
     decimals: erc20.decimals.value,
     symbol: erc20.symbol.value,
   } as TokenInfo
+}
+
+export async function getTokenInfo(chain: ChainResposne, address: string) {
+  if (address === config.NATIVE_TOKEN) {
+    const { tokensByChainId } = useTokensStore()
+    const token = tokensByChainId(chain.id).find(
+      i => i.chain.contract_address === address,
+    )
+    return {
+      decimals: chain?.chain_params.native_decimals,
+      symbol: token?.symbol,
+    } as TokenInfo
+  } else {
+    const data = await loadTokenInfo(chain.chain_params.rpc, address)
+    return data
+  }
 }
 
 export async function loadMatchStatus(

@@ -1,7 +1,8 @@
 import log from 'loglevel'
-import { Bus } from '@/helpers'
+import { Bus, handleProviderInternalError } from '@/helpers'
 import { i18n } from '@/localization'
 import { errors } from '@/errors'
+import { EthError } from '@/types'
 
 export class ErrorHandler {
   static process(error: Error | unknown, errorMessage = ''): void {
@@ -55,7 +56,9 @@ export class ErrorHandler {
           errorMessage = t('errors.provider-invalid-params')
           break
         case errors.ProviderInternalError:
-          errorMessage = t('errors.provider-internal-error')
+          errorMessage = handleProviderInternalError(
+            (error.cause as EthError)?.message || '',
+          )
           break
         case errors.ProviderInvalidInput:
           errorMessage = t('errors.provider-invalid-input')

@@ -462,6 +462,8 @@ $z-local-index: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: toRem(14);
+  position: relative;
+  top: toRem(1);
 
   .token-select--big & {
     font-size: toRem(16);
@@ -493,6 +495,7 @@ $z-local-index: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: toRem(18);
+  line-height: toRem(17.5);
 
   .token-select--big & {
     font-size: toRem(16);
@@ -505,6 +508,8 @@ $z-local-index: 2;
   display: flex;
   align-items: center;
   gap: toRem(4);
+  position: relative;
+  top: toRem(1);
 
   .token-select--big & {
     gap: toRem(8);

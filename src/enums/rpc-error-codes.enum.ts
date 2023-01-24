@@ -24,3 +24,7 @@ export enum EIP1474 {
   limitExceeded = -32005,
   jsonRpcVersionNotSupported = -32006,
 }
+
+export enum ProviderInternalErrors {
+  notEnoughBalance = 'transfer amount exceeds balance',
+}

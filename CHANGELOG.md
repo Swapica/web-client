@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.6] - 2023-01-19
+#### Fixed
+- A bug with showing error
+
+## [1.0.0-rc.5] - 2023-01-19
+#### Changed
+- Load decimals from contract
+
+## [1.0.0-rc.4] - 2023-01-19
+#### Added
+- Handling errors
+
+#### Changed
+- Text updates
+- Get token info from whitelist
+
 ## [1.0.0-rc.3] - 2023-01-17
 #### Changed
 - Text updates
@@ -29,7 +45,10 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.3...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.6...main
+[1.0.0-rc.6]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.5...v1.0.0-rc.6
+[1.0.0-rc.5]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.4...v1.0.0-rc.5
+[1.0.0-rc.4]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.3...v1.0.0-rc.4
 [1.0.0-rc.3]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.2...v1.0.0-rc.3
 [1.0.0-rc.2]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.1...v1.0.0-rc.2
 [1.0.0-rc.1]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.0...v1.0.0-rc.1
