@@ -9,7 +9,7 @@ for further information about branching and tagging conventions.
 
 ## [1.0.0-rc.7] - 2023-01-24
 #### Added
-- Hiding supported chains
+- Hiding unsupported chains
 
 ## [1.0.0-rc.6] - 2023-01-19
 #### Fixed
