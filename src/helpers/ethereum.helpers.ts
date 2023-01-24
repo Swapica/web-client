@@ -79,7 +79,7 @@ export function handleEthError(error: EthProviderRpcError) {
       throw new errors.ProviderInvalidParams(error.message)
     case EIP1474.internalError:
       throw new errors.ProviderInternalError(error.message, {
-        cause: error.error,
+        cause: error,
       })
     case EIP1474.invalidInput:
       throw new errors.ProviderInvalidInput(error.message)

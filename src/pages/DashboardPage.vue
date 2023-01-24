@@ -74,6 +74,7 @@
           v-if="isMounted"
           v-model:is-submitting="isSubmitting"
           :network="networkFrom!"
+          :match-network="networkTo!"
           :token-buy="filters.tokenBuy"
           :token-sell="filters.tokenSell"
         />

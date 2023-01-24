@@ -12,7 +12,7 @@ import {
   OrderStatusInfo,
 } from '@/types'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { loadMatchStatus, loadOrder, getTokenInfo } from '@/helpers'
+import { loadMatchStatus, loadOrder, getTokenInfo, isDefined } from '@/helpers'
 import { useChainsStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { MatchStatus, OrderStatus } from '@/enums'
@@ -75,9 +75,10 @@ export const useSwapica = (
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
         const destChain = chainByChainId.value(i.destChain.toNumber())
+        if (!destChain) return
         const [tokenToSell, tokenToBuy, statuses] = await Promise.all([
           getTokenInfo(network, i.tokenToSell),
-          getTokenInfo(destChain!, i.tokenToBuy),
+          getTokenInfo(destChain, i.tokenToBuy),
           ...(status === OrderStatus.executed
             ? [_getStatusInfo(destChain!, i.id.toNumber())]
             : []),
@@ -90,7 +91,7 @@ export const useSwapica = (
         } as UserOrder
       }),
     )
-    return data
+    return data.filter(isDefined)
   }
 
   const _getStatusInfo = async (network: ChainResposne, orderId: number) => {
@@ -158,12 +159,11 @@ export const useSwapica = (
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
+        const destChain = chainByChainId.value(i.destChain.toNumber())
+        if (!destChain) return
         const [tokenToSell, tokenToBuy] = await Promise.all([
           getTokenInfo(network, i.tokenToSell),
-          getTokenInfo(
-            chainByChainId.value(i.destChain.toNumber())!,
-            i.tokenToBuy,
-          ),
+          getTokenInfo(destChain, i.tokenToBuy),
         ])
         return {
           info: i,
@@ -172,7 +172,7 @@ export const useSwapica = (
         } as UserOrder
       }),
     )
-    return data
+    return data.filter(isDefined)
   }
 
   const getUserMatchesWithOrder = async (
@@ -192,11 +192,12 @@ export const useSwapica = (
     const data = await Promise.all(
       (response as unknown as Match[])?.map(async i => {
         const originChain = chainByChainId.value(i.originChain.toNumber())
+        if (!originChain) return
         const order = await loadOrder(
-          originChain?.chain_params.rpc!,
-          originChain?.swap_contract!,
+          originChain.chain_params.rpc!,
+          originChain.swap_contract!,
           i.originOrderId.toNumber(),
-          originChain!,
+          originChain,
         )
         return {
           info: i,
@@ -204,7 +205,7 @@ export const useSwapica = (
         } as UserMatch
       }),
     )
-    return data
+    return data.filter(isDefined)
   }
 
   const getUserMatches = async (
