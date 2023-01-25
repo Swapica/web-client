@@ -110,8 +110,6 @@ const isCreateOrderModalShown = ref(false)
 </script>
 
 <style lang="scss" scoped>
-$local-z-index: 1;
-
 .created-orders {
   display: grid;
   grid-template-columns: 1fr toRem(181);
@@ -151,7 +149,7 @@ $local-z-index: 1;
 
   &--fixed {
     @include respond-to(tablet) {
-      z-index: $local-z-index;
+      z-index: var(--z-index-default);
       border: toRem(1) solid var(--border-primary-main);
       border-radius: toRem(24) toRem(24) 0 0;
       box-shadow: 0 toRem(-2) toRem(8) rgba(var(--black-rgb), 0.15);

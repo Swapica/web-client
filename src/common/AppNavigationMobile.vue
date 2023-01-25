@@ -78,16 +78,13 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-$z-local-index: 10;
-$z-index-negative: -1;
-
 .app-navigation-mobile {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: vh(100);
-  z-index: $z-local-index;
+  z-index: var(--z-index-navigation-mobile);
 }
 
 .app-navigation-mobile__backdrop {
@@ -97,7 +94,7 @@ $z-index-negative: -1;
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: $z-index-negative;
+  z-index: var(--z-index-negative);
 }
 
 .app-navigation-mobile__header {
