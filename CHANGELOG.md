@@ -11,7 +11,6 @@ for further information about branching and tagging conventions.
 #### Changed
 - Mobile design
 
-
 ## [1.0.0-rc.7] - 2023-01-24
 #### Added
 - Hiding unsupported chains
