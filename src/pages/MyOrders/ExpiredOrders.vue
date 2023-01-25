@@ -25,6 +25,7 @@
       :scheme="isTablet ? 'primary-mobile' : 'primary'"
       :text="$t('expired-orders.dashboard-link')"
       :disabled="isLoadFailed"
+      :route="{ name: $routes.dashboard }"
     />
     <div class="expired-orders__content">
       <template v-if="provider.isConnected">
