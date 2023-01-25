@@ -49,12 +49,11 @@
 <script lang="ts" setup>
 import { AppButton, ConnectWalletBtn, NoDataMessage } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { SelectField } from '@/fields'
 import ClaimOrderList from '@/pages/Claim/ClaimOrderList.vue'
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { provider } = useWeb3ProvidersStore()
 const chainStore = useChainsStore()
 const networkId = ref(
   chainStore.selectedChain?.chain_params.chain_id ??

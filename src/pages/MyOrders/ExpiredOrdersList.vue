@@ -45,7 +45,6 @@ import { useSwapica } from '@/composables'
 import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
-import { storeToRefs } from 'pinia'
 import ExpiredOrdersListTable from '@/pages/MyOrders/ExpiredOrdersListTable.vue'
 import { ethers } from 'ethers'
 import { TxResposne, UserMatch } from '@/types'
@@ -59,27 +58,26 @@ const props = defineProps<{
   chainId: number
 }>()
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
-const { chainByChainId } = storeToRefs(useChainsStore())
-const network = computed(() => chainByChainId.value(props.chainId))
-const orderList = computed(() => {
-  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
-  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
-})
-const { t } = useI18n({ useScope: 'global' })
-
-const currentPage = ref(1)
-const totalItems = ref(0)
-
-const isSubmitting = ref(false)
-
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void
   (e: 'load-failed', value: boolean): void
   (e: 'is-loading', value: boolean): void
 }>()
 
-const swapicaContract = useSwapica(provider.value)
+const { provider } = useWeb3ProvidersStore()
+const { chainByChainId } = useChainsStore()
+const { t } = useI18n({ useScope: 'global' })
+const swapicaContract = useSwapica(provider)
+
+const network = computed(() => chainByChainId(props.chainId))
+const orderList = computed(() => {
+  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
+  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
+})
+
+const currentPage = ref(1)
+const totalItems = ref(0)
+const isSubmitting = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserMatch[]>([])
@@ -123,7 +121,7 @@ const loadingMatchsLoop = async () => {
   for (let i = 0; i < totalItems.value; i += 100) {
     promises.push(
       swapicaContract.getUserMatchesWithOrder(
-        provider.value.selectedAddress!,
+        provider.selectedAddress!,
         i,
         i + 100,
       ),
@@ -134,7 +132,7 @@ const loadingMatchsLoop = async () => {
 
 const getTotalItems = async () => {
   const data = await swapicaContract.getUserMatchesLength(
-    provider.value.selectedAddress!,
+    provider.selectedAddress!,
   )
   totalItems.value = data?.toNumber() || 0
 }
@@ -142,7 +140,7 @@ const getTotalItems = async () => {
 const cancelMatch = async (item: UserMatch) => {
   isSubmitting.value = true
   try {
-    const originChain = chainByChainId.value(item.info.originChain.toNumber())
+    const originChain = chainByChainId(item.info.originChain.toNumber())
 
     await switchNetwork(network.value!)
     const { data } = await callers.post<TxResposne>('/v1/cancel/match', {
@@ -150,10 +148,10 @@ const cancelMatch = async (item: UserMatch) => {
         dest_chain: network.value?.id,
         src_chain: originChain?.id,
         match_id: item.info.id.toNumber(),
-        sender: provider.value.selectedAddress,
+        sender: provider.selectedAddress,
       },
     })
-    await provider.value.signAndSendTx(data.tx_body)
+    await provider.signAndSendTx(data.tx_body)
     Bus.success(t('expired-orders-list.canceled-msg'))
     loadList()
   } catch (e) {
@@ -163,7 +161,7 @@ const cancelMatch = async (item: UserMatch) => {
 }
 
 watch(
-  () => [provider.value.selectedAddress, props.chainId],
+  () => [provider.selectedAddress, props.chainId],
   () => {
     currentPage.value = 1
     loadList()

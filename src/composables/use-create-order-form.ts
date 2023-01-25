@@ -1,20 +1,19 @@
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { reactive, computed } from 'vue'
-import { storeToRefs } from 'pinia'
 import { callers } from '@/api'
 import { TxResposne } from '@/types'
 import { BN } from '@/utils'
 import { getTokenInfo } from '@/helpers'
 
 export const useCreateOrderForm = () => {
-  const { selectedChain, chainById } = storeToRefs(useChainsStore())
-  const { provider } = storeToRefs(useWeb3ProvidersStore())
+  const { selectedChain, chainById } = useChainsStore()
+  const { provider } = useWeb3ProvidersStore()
 
-  const networkSell = computed(() => chainById.value(form.networkSell))
-  const networkBuy = computed(() => chainById.value(form.networkBuy))
+  const networkSell = computed(() => chainById(form.networkSell))
+  const networkBuy = computed(() => chainById(form.networkBuy))
 
   const form = reactive({
-    networkSell: selectedChain.value?.id || '',
+    networkSell: selectedChain?.id || '',
     networkBuy: '',
     amountSell: '',
     amountBuy: '',
@@ -39,7 +38,7 @@ export const useCreateOrderForm = () => {
           .toFraction(tokenToBuy?.decimals)
           .toString(),
         dest_chain: form.networkBuy,
-        sender: provider.value.selectedAddress,
+        sender: provider.selectedAddress,
       },
     })
   }

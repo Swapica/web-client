@@ -56,7 +56,6 @@ import { useCreateOrderForm, useForm, useStepper } from '@/composables'
 import { StepperIndicator, ConfirmationStep, ApproveStep } from '@/common'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import { useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { callers } from '@/api'
 import { TxResposne } from '@/types'
 import { ref } from 'vue'
@@ -74,9 +73,8 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { provider } = useWeb3ProvidersStore()
 const { t } = useI18n({ useScope: 'global' })
-
 const former = useCreateOrderForm()
 const { isFormDisabled, disableForm, enableForm } = useForm()
 const { currentStep, steps, currentIdx, forward, back, toStep } = useStepper([
@@ -129,7 +127,7 @@ const checkApprove = async () => {
   if (former.form.tokenSell === config.NATIVE_TOKEN) return
 
   const { data } = await callers.approve(
-    provider.value.selectedAddress!,
+    provider.selectedAddress!,
     former.networkSell.value?.id!,
     former.form.tokenSell,
   )
@@ -148,7 +146,7 @@ const handleApprove = async () => {
 const approveToken = async () => {
   isApproving.value = true
   try {
-    await provider.value.signAndSendTx(approveTx.value?.tx_body)
+    await provider.signAndSendTx(approveTx.value?.tx_body)
   } catch (e) {
     toStep(STEPS.approve)
     throw e
@@ -159,7 +157,7 @@ const approveToken = async () => {
 const createOrder = async () => {
   try {
     const { data } = await former.createOrder()
-    await provider.value.signAndSendTx(data.tx_body)
+    await provider.signAndSendTx(data.tx_body)
     Bus.emit(Bus.eventList.offerCreated)
     Bus.success(t('create-order-form.created-msg'))
     emit('close')

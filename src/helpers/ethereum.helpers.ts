@@ -11,7 +11,6 @@ import { mapKeys, get } from 'lodash-es'
 import { sleep, toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { useSwapica } from '@/composables'
 import { config } from '@/config'
 
@@ -181,17 +180,17 @@ export async function loadOrder(
 }
 
 export async function switchNetwork(chain: ChainResposne) {
-  const { provider } = storeToRefs(useWeb3ProvidersStore())
+  const { provider } = useWeb3ProvidersStore()
 
   try {
-    if (provider.value.isConnected) {
-      await provider.value.switchChain(chain.chain_params.chain_id)
+    if (provider.isConnected) {
+      await provider.switchChain(chain.chain_params.chain_id)
     }
   } catch (error) {
     const e = error as EthProviderRpcError
     if (e?.code === 4902 || e?.code === EIP1474.internalError) {
       try {
-        await provider.value.addChain(
+        await provider.addChain(
           chain.chain_params.chain_id,
           chain.name,
           chain.chain_params.rpc,
@@ -201,7 +200,7 @@ export async function switchNetwork(chain: ChainResposne) {
           chain.chain_params.explorer_url,
         )
         await sleep(1500)
-        if (provider.value.chainId !== chain.chain_params.chain_id) {
+        if (provider.chainId !== chain.chain_params.chain_id) {
           throw new errors.ProviderUserRejectedRequest()
         }
       } catch (e) {

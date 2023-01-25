@@ -79,16 +79,11 @@ import { useSwapica } from '@/composables'
 import { computed, ref, watch } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler } from '@/helpers'
-import { storeToRefs } from 'pinia'
 import DashboardOrderListTable from '@/pages/Dashboard/DashboardOrderListTable.vue'
 import { ethers } from 'ethers'
 import { ChainResposne, UserOrder } from '@/types'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { useWindowSize } from '@vueuse/core'
-
-const { width: windowWidth } = useWindowSize()
-const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
-const PAGE_LIMIT = isTablet.value ? 5 : 10
 
 const props = defineProps<{
   network: ChainResposne
@@ -98,21 +93,24 @@ const props = defineProps<{
   isSubmitting?: boolean
 }>()
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
-
-const currentPage = ref(1)
-const totalItems = ref(0)
-const isMatchOrderModalShown = ref(false)
-
 const emit = defineEmits<{
   (e: 'update:is-submitting', value: boolean): void
 }>()
 
-const swapicaContract = useSwapica(provider.value)
+const { provider } = useWeb3ProvidersStore()
+const { width: windowWidth } = useWindowSize()
+const swapicaContract = useSwapica(provider)
+
+const currentPage = ref(1)
+const totalItems = ref(0)
+const isMatchOrderModalShown = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
 const selectedOrder = ref<UserOrder>()
+
+const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
+const PAGE_LIMIT = isTablet.value ? 5 : 10
 
 const orderList = computed(() => {
   const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)

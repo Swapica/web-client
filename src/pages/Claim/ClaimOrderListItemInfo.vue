@@ -135,7 +135,6 @@ import { WINDOW_BREAKPOINTS } from '@/enums'
 import { ChainResposne, UserOrder } from '@/types'
 import { cropAddress, formatWeiAmount } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 
 defineProps<{
   order: UserOrder
@@ -144,10 +143,10 @@ defineProps<{
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = storeToRefs(useChainsStore())
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { chainByChainId } = useChainsStore()
+const { provider } = useWeb3ProvidersStore()
 
-const networkBuy = (chainId: number) => chainByChainId.value(chainId)
+const networkBuy = (chainId: number) => chainByChainId(chainId)
 
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 </script>

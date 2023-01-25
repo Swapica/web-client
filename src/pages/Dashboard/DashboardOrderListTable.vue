@@ -150,7 +150,6 @@ import {
   getEthExplorerAddressUrl,
 } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 
 withDefaults(
   defineProps<{
@@ -168,10 +167,10 @@ const emit = defineEmits<{
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = storeToRefs(useChainsStore())
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { chainByChainId } = useChainsStore()
+const { provider } = useWeb3ProvidersStore()
 
-const networkBuy = (chainId: number) => chainByChainId.value(chainId)
+const networkBuy = (chainId: number) => chainByChainId(chainId)
 
 const isMediumWidth = computed(
   () => windowWidth.value < WINDOW_BREAKPOINTS.medium,

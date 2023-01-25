@@ -57,7 +57,6 @@ import { WINDOW_BREAKPOINTS } from '@/enums'
 import { ChainResposne, UserMatch, UserOrder } from '@/types'
 import ClaimOrderListItemInfo from '@/pages/Claim/ClaimOrderListItemInfo.vue'
 import { useChainsStore } from '@/store'
-import { storeToRefs } from 'pinia'
 
 const props = withDefaults(
   defineProps<{
@@ -75,13 +74,13 @@ const emit = defineEmits<{
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = storeToRefs(useChainsStore())
+const { chainByChainId } = useChainsStore()
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 
 const getSellNetwork = (i: UserOrder | UserMatch) => {
   return 'order' in i
-    ? chainByChainId.value(i.info.originChain.toNumber())!
+    ? chainByChainId(i.info.originChain.toNumber())!
     : props.networkSell
 }
 </script>

@@ -80,21 +80,16 @@ import {
   CreateOrderModal,
 } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { SelectField } from '@/fields'
 
 const { width: windowWidth } = useWindowSize()
+const { provider } = useWeb3ProvidersStore()
+const chainStore = useChainsStore()
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
-const { provider } = storeToRefs(useWeb3ProvidersStore())
-const chainStore = useChainsStore()
-const networkId = ref(
-  chainStore.selectedChain?.chain_params.chain_id ??
-    chainStore.chains[0].chain_params.chain_id,
-)
 
 const chains = computed(() =>
   chainStore.chains.map(i => ({
@@ -107,6 +102,10 @@ const isListEmpty = ref(true)
 const isLoadFailed = ref(false)
 const isLoading = ref(false)
 const isCreateOrderModalShown = ref(false)
+const networkId = ref(
+  chainStore.selectedChain?.chain_params.chain_id ??
+    chainStore.chains[0].chain_params.chain_id,
+)
 </script>
 
 <style lang="scss" scoped>

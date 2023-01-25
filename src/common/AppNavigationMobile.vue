@@ -52,12 +52,12 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { nextTick, watch, ref } from 'vue'
 import { AppButton, AppLogo, ConnectWalletBtn } from '@/common'
 
-const emit = defineEmits<{
-  (e: 'close-nav'): void
-}>()
-
 const props = defineProps<{
   isShown: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'close-nav'): void
 }>()
 
 const navRef = ref<HTMLElement>()

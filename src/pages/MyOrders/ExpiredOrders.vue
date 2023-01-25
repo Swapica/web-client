@@ -64,24 +64,17 @@
 <script lang="ts" setup>
 import { AppButton, ConnectWalletBtn, NoDataMessage } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { SelectField } from '@/fields'
 import ExpiredOrdersList from '@/pages/MyOrders/ExpiredOrdersList.vue'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { useWindowSize } from '@vueuse/core'
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { provider } = useWeb3ProvidersStore()
 const chainStore = useChainsStore()
 const { width: windowWidth } = useWindowSize()
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
-
-const networkId = ref(
-  chainStore.selectedChain?.chain_params.chain_id ??
-    chainStore.chains[0].chain_params.chain_id,
-)
-
 const chains = computed(() =>
   chainStore.chains.map(i => ({
     label: i.name,
@@ -92,6 +85,10 @@ const chains = computed(() =>
 const isLoading = ref(false)
 const isLoadFailed = ref(false)
 const isListEmpty = ref(false)
+const networkId = ref(
+  chainStore.selectedChain?.chain_params.chain_id ??
+    chainStore.chains[0].chain_params.chain_id,
+)
 </script>
 
 <style lang="scss" scoped>
