@@ -269,8 +269,6 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-$z-local-index: 2;
-
 .select-field {
   display: flex;
   flex-direction: column;
@@ -379,7 +377,7 @@ $z-local-index: 2;
   top: 105%;
   right: 0;
   width: 100%;
-  z-index: $z-local-index;
+  z-index: var(--z-index-select);
   background: url('/backgrounds/select-field-dropdown-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(6);

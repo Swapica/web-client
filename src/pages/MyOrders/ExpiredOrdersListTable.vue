@@ -166,7 +166,6 @@ import { WINDOW_BREAKPOINTS } from '@/enums'
 import { UserMatch } from '@/types'
 import { cropAddress, formatWeiAmount } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 
 withDefaults(
   defineProps<{
@@ -183,10 +182,10 @@ const emit = defineEmits<{
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = storeToRefs(useChainsStore())
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { chainByChainId } = useChainsStore()
+const { provider } = useWeb3ProvidersStore()
 
-const getNetwork = (chainId: number) => chainByChainId.value(chainId)
+const getNetwork = (chainId: number) => chainByChainId(chainId)
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)

@@ -150,8 +150,6 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
-$z-index-side-nodes: 1;
-
 .input-field {
   display: flex;
   flex-direction: column;
@@ -265,7 +263,7 @@ $z-index-side-nodes: 1;
   transform: translateY(-50%);
   color: inherit;
   max-height: 100%;
-  z-index: $z-index-side-nodes;
+  z-index: var(--z-index-default);
 }
 
 .input-field__node-right-wrp {
@@ -274,7 +272,7 @@ $z-index-side-nodes: 1;
   right: toRem(8);
   transform: translateY(-50%);
   color: inherit;
-  z-index: $z-index-side-nodes;
+  z-index: var(--z-index-default);
 }
 
 .input-field__icon {

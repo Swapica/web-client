@@ -77,11 +77,10 @@ import { WINDOW_BREAKPOINTS } from '@/enums'
 import { Dropdown, Icon } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { ChainResposne } from '@/types'
-import { storeToRefs } from 'pinia'
 import { ErrorHandler, switchNetwork } from '@/helpers'
 
 const chainStore = useChainsStore()
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { provider } = useWeb3ProvidersStore()
 
 const { width: windowWidth } = useWindowSize()
 const isMediumWidth = computed(
@@ -101,7 +100,7 @@ const switchChain = async (
   dropdown.close()
 }
 
-if (!provider.value.currentProvider) {
+if (!provider.currentProvider) {
   chainStore.selectChain(chainStore.chains[0].chain_params.chain_id)
 }
 </script>

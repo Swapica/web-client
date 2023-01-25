@@ -46,7 +46,6 @@ import { useSwapica } from '@/composables'
 import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
-import { storeToRefs } from 'pinia'
 import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { ethers } from 'ethers'
 import { TxResposne, UserOrder } from '@/types'
@@ -59,27 +58,26 @@ const props = defineProps<{
   chainId: number
 }>()
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
-const { chainByChainId } = storeToRefs(useChainsStore())
-const network = computed(() => chainByChainId.value(props.chainId))
-const orderList = computed(() => {
-  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
-  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
-})
-const { t } = useI18n({ useScope: 'global' })
-
-const currentPage = ref(1)
-const totalItems = ref(0)
-
-const isSubmitting = ref(false)
-
 const emit = defineEmits<{
   (e: 'list-empty', value: boolean): void
   (e: 'load-failed', value: boolean): void
   (e: 'is-loading', value: boolean): void
 }>()
 
-const swapicaContract = useSwapica(provider.value)
+const { provider } = useWeb3ProvidersStore()
+const { chainByChainId } = useChainsStore()
+const swapicaContract = useSwapica(provider)
+const { t } = useI18n({ useScope: 'global' })
+
+const network = computed(() => chainByChainId(props.chainId))
+const orderList = computed(() => {
+  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
+  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
+})
+
+const currentPage = ref(1)
+const totalItems = ref(0)
+const isSubmitting = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<UserOrder[]>([])
@@ -116,7 +114,7 @@ const loadingOrdersLoop = async () => {
   for (let i = 0; i < totalItems.value; i += 100) {
     promises.push(
       swapicaContract.getUserOrders(
-        provider.value.selectedAddress!,
+        provider.selectedAddress!,
         i,
         i + 100,
         network.value!,
@@ -128,7 +126,7 @@ const loadingOrdersLoop = async () => {
 
 const getTotalItems = async () => {
   const data = await swapicaContract.getUserOrdersLength(
-    provider.value.selectedAddress!,
+    provider.selectedAddress!,
   )
   totalItems.value = data?.toNumber() || 0
 }
@@ -141,10 +139,10 @@ const cancelOrder = async (item: UserOrder) => {
       data: {
         src_chain: network.value?.id,
         order_id: item.info.id.toNumber(),
-        sender: provider.value.selectedAddress,
+        sender: provider.selectedAddress,
       },
     })
-    await provider.value.signAndSendTx(data.tx_body)
+    await provider.signAndSendTx(data.tx_body)
     Bus.success(t('order-list.canceled-msg'))
     loadList()
   } catch (e) {
@@ -158,7 +156,7 @@ Bus.on(Bus.eventList.offerCreated, () => {
 })
 
 watch(
-  () => [provider.value.selectedAddress, props.chainId],
+  () => [provider.selectedAddress, props.chainId],
   () => {
     currentPage.value = 1
     loadList()

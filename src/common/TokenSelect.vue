@@ -280,8 +280,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-$z-local-index: 2;
-
 .token-select {
   display: flex;
   flex-direction: column;
@@ -395,7 +393,7 @@ $z-local-index: 2;
   top: 110%;
   right: 0;
   width: 100%;
-  z-index: $z-local-index;
+  z-index: var(--z-index-select);
   background: url('/backgrounds/select-field-dropdown-bg.svg') no-repeat;
   background-size: 100% 100%;
   padding: toRem(5) toRem(6);

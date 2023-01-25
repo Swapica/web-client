@@ -32,8 +32,6 @@ const isShown = ref(false)
 </script>
 
 <style lang="scss" scoped>
-$z-local-index: 1;
-
 .tooltip {
   position: relative;
 }
@@ -46,7 +44,7 @@ $z-local-index: 1;
   min-width: toRem(221);
   bottom: 50%;
   left: 65%;
-  z-index: $z-local-index;
+  z-index: var(--z-index-default);
   display: flex;
   flex-direction: column;
   align-items: center;

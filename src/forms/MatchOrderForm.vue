@@ -104,7 +104,6 @@ import {
 } from '@/common'
 import { Bus, ErrorHandler } from '@/helpers'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { callers } from '@/api'
 import { ChainResposne, TxResposne, UserOrder } from '@/types'
 import { computed, ref } from 'vue'
@@ -132,18 +131,19 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
-const { chainByChainId } = storeToRefs(useChainsStore())
-const networkBuy = computed(() =>
-  chainByChainId.value(props.order.info.destChain.toNumber()),
-)
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
-const swapicaContract = useSwapica(provider.value)
+const { chainByChainId } = useChainsStore()
+const { provider } = useWeb3ProvidersStore()
+const swapicaContract = useSwapica(provider)
 
 const { t } = useI18n({ useScope: 'global' })
 
+const networkBuy = computed(() =>
+  chainByChainId(props.order.info.destChain.toNumber()),
+)
+
 const isValidChangeMatchNetwork = computed(
-  () => provider.value.chainId === networkBuy.value?.chain_params.chain_id,
+  () => provider.chainId === networkBuy.value?.chain_params.chain_id,
 )
 
 const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
@@ -202,7 +202,7 @@ const checkApprove = async (networkId: string, tokenAddrs: string) => {
   if (tokenAddrs === config.NATIVE_TOKEN) return
 
   const { data } = await callers.approve(
-    provider.value.selectedAddress!,
+    provider.selectedAddress!,
     networkId,
     tokenAddrs,
   )
@@ -222,7 +222,7 @@ const approveToken = async () => {
   isApproving.value = true
 
   try {
-    await provider.value.signAndSendTx(approveTx.value?.tx_body)
+    await provider.signAndSendTx(approveTx.value?.tx_body)
   } catch (e) {
     toStep(STEPS.approveBuyToken)
     throw e
@@ -237,10 +237,10 @@ const matchOrder = async () => {
         dest_chain: networkBuy.value?.id,
         order_id: props.order.info.id.toNumber(),
         src_chain: props.networkSell.id,
-        sender: provider.value.selectedAddress,
+        sender: provider.selectedAddress,
       },
     })
-    await provider.value.signAndSendTx(data.tx_body)
+    await provider.signAndSendTx(data.tx_body)
     onNext()
   } catch (e) {
     toStep(STEPS.match)
@@ -257,12 +257,12 @@ const claim = async () => {
         dest_chain: networkBuy.value?.id,
         order_id: props.order.info.id.toNumber(),
         src_chain: props.networkSell.id,
-        receiver: provider.value.selectedAddress,
-        sender: provider.value.selectedAddress,
+        receiver: provider.selectedAddress,
+        sender: provider.selectedAddress,
         match_id: matchId,
       },
     })
-    await provider.value.signAndSendTx(test.tx_body)
+    await provider.signAndSendTx(test.tx_body)
     Bus.emit(Bus.eventList.orderMatched)
     Bus.success(t('match-order-form.matched-msg'))
     emit('close')
@@ -278,10 +278,10 @@ const getMatchId = async () => {
   )
   swapicaContract.init(networkBuy.value?.swap_contract!, rpcProvider)
   const matchLength = await swapicaContract.getUserMatchesLength(
-    provider.value.selectedAddress!,
+    provider.selectedAddress!,
   )
   const data = await swapicaContract.getUserMatches(
-    provider.value.selectedAddress!,
+    provider.selectedAddress!,
     matchLength!.toNumber() - 1,
     matchLength!.toNumber(),
   )

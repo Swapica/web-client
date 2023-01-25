@@ -14,7 +14,6 @@ import {
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { loadMatchStatus, loadOrder, getTokenInfo, isDefined } from '@/helpers'
 import { useChainsStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { MatchStatus, OrderStatus } from '@/enums'
 
 export const useSwapica = (
@@ -63,7 +62,7 @@ export const useSwapica = (
     network: ChainResposne,
     status = OrderStatus.awaitingMatch,
   ) => {
-    const { chainByChainId } = storeToRefs(useChainsStore())
+    const { chainByChainId } = useChainsStore()
 
     const response = await _instance.value?.getUserOrders(
       address,
@@ -74,7 +73,7 @@ export const useSwapica = (
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
-        const destChain = chainByChainId.value(i.destChain.toNumber())
+        const destChain = chainByChainId(i.destChain.toNumber())
         if (!destChain) return
         const [tokenToSell, tokenToBuy, statuses] = await Promise.all([
           getTokenInfo(network, i.tokenToSell),
@@ -126,8 +125,8 @@ export const useSwapica = (
 
   const getOrder = async (id: number, network: ChainResposne) => {
     const order = (await _instance.value?.orders(id)) as unknown as Order
-    const { chainByChainId } = storeToRefs(useChainsStore())
-    const destChain = chainByChainId.value(order.destChain.toNumber())
+    const { chainByChainId } = useChainsStore()
+    const destChain = chainByChainId(order.destChain.toNumber())
     const [tokenToSell, tokenToBuy, orderStatus] = await Promise.all([
       getTokenInfo(network, order.tokenToSell),
       getTokenInfo(destChain!, order.tokenToBuy),
@@ -148,7 +147,7 @@ export const useSwapica = (
     to: number,
     network: ChainResposne,
   ) => {
-    const { chainByChainId } = storeToRefs(useChainsStore())
+    const { chainByChainId } = useChainsStore()
 
     const response = await _instance.value?.getActiveOrders(
       tokenSell,
@@ -159,7 +158,7 @@ export const useSwapica = (
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
-        const destChain = chainByChainId.value(i.destChain.toNumber())
+        const destChain = chainByChainId(i.destChain.toNumber())
         if (!destChain) return
         const [tokenToSell, tokenToBuy] = await Promise.all([
           getTokenInfo(network, i.tokenToSell),
@@ -187,11 +186,11 @@ export const useSwapica = (
       from,
       to,
     )
-    const { chainByChainId } = storeToRefs(useChainsStore())
+    const { chainByChainId } = useChainsStore()
 
     const data = await Promise.all(
       (response as unknown as Match[])?.map(async i => {
-        const originChain = chainByChainId.value(i.originChain.toNumber())
+        const originChain = chainByChainId(i.originChain.toNumber())
         if (!originChain) return
         const order = await loadOrder(
           originChain.chain_params.rpc!,

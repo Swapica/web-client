@@ -10,19 +10,18 @@
 <script lang="ts" setup>
 import { AppButton } from '@/common'
 import { useWeb3ProvidersStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { cropAddress, ErrorHandler } from '@/helpers'
 import { useI18n } from 'vue-i18n'
 import { errors } from '@/errors'
 
-const { provider } = storeToRefs(useWeb3ProvidersStore())
+const { provider } = useWeb3ProvidersStore()
 const { t } = useI18n({ useScope: 'global' })
 
 const connect = async () => {
   try {
-    if (provider.value.currentProvider) {
-      await provider.value.connect()
+    if (provider.currentProvider) {
+      await provider.connect()
     } else {
       throw new errors.MetamaskProviderNotFound()
     }
@@ -32,8 +31,8 @@ const connect = async () => {
 }
 
 const connectProviderButtonText = computed(() => {
-  return provider.value.isConnected
-    ? cropAddress(provider.value.selectedAddress!, 8, 6)
+  return provider.isConnected
+    ? cropAddress(provider.selectedAddress!, 8, 6)
     : t('connect-wallet-btn.connect-provider-button')
 })
 </script>

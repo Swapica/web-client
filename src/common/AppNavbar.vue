@@ -51,8 +51,6 @@ const isMobile = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 </script>
 
 <style lang="scss" scoped>
-$z-local-index: 9;
-
 .app-navbar {
   display: flex;
   align-items: center;
@@ -63,7 +61,7 @@ $z-local-index: 9;
   background-color: var(--background-primary-main);
   box-shadow: 0 toRem(2) toRem(12) var(--shadow-primary-dark);
   height: toRem(96);
-  z-index: $z-local-index;
+  z-index: var(--z-index-navigation);
   width: 100vw;
 
   @include respond-to(tablet) {
