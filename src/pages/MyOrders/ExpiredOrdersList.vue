@@ -74,6 +74,8 @@ const totalItems = ref(0)
 const isSubmitting = ref(false)
 
 const emit = defineEmits<{
+  (e: 'list-empty', value: boolean): void
+  (e: 'load-failed', value: boolean): void
   (e: 'is-loading', value: boolean): void
 }>()
 
@@ -83,6 +85,8 @@ const isLoaded = ref(false)
 const list = ref<UserMatch[]>([])
 
 const loadList = async () => {
+  emit('load-failed', false)
+  emit('list-empty', false)
   emit('is-loading', true)
   isLoaded.value = false
   isLoadFailed.value = false
@@ -103,8 +107,10 @@ const loadList = async () => {
           i.order.orderStatus?.executedBy.toNumber() !== i.info.id.toNumber(),
       )
       .reverse()
+    if (!list.value.length) emit('list-empty', true)
   } catch (e) {
     isLoadFailed.value = true
+    emit('load-failed', true)
     ErrorHandler.processWithoutFeedback(e)
   }
   emit('is-loading', false)

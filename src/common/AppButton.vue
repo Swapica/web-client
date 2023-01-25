@@ -131,6 +131,7 @@ const buttonClasses = computed(() =>
   transition-property: padding;
   text-decoration: none;
   color: var(--text-primary-dark);
+  font-size: toRem(18);
 
   &:disabled,
   &--disabled {

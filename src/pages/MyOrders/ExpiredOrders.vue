@@ -1,5 +1,10 @@
 <template>
-  <div class="expired-orders">
+  <div
+    class="expired-orders"
+    :class="{
+      'expired-orders--without-btn': isListEmpty,
+    }"
+  >
     <div class="expired-orders__title-wrp">
       <h5 class="expired-orders__title">
         {{ $t('expired-orders.title') }}
@@ -13,10 +18,20 @@
         :value-options="chains"
       />
     </div>
+    <app-button
+      v-if="!isListEmpty"
+      class="expired-orders__go-to-dashboard-btn"
+      size="small"
+      :scheme="isTablet ? 'primary-mobile' : 'primary'"
+      :text="$t('expired-orders.dashboard-link')"
+      :disabled="isLoadFailed"
+    />
     <div class="expired-orders__content">
       <template v-if="provider.isConnected">
         <expired-orders-list
           :chain-id="networkId"
+          @list-empty="isListEmpty = $event"
+          @load-failed="isLoadFailed = $event"
           @is-loading="isLoading = $event"
         >
           <template #noDataMsg>
@@ -53,9 +68,15 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { SelectField } from '@/fields'
 import ExpiredOrdersList from '@/pages/MyOrders/ExpiredOrdersList.vue'
+import { WINDOW_BREAKPOINTS } from '@/enums'
+import { useWindowSize } from '@vueuse/core'
 
 const { provider } = storeToRefs(useWeb3ProvidersStore())
 const chainStore = useChainsStore()
+const { width: windowWidth } = useWindowSize()
+
+const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
+
 const networkId = ref(
   chainStore.selectedChain?.chain_params.chain_id ??
     chainStore.chains[0].chain_params.chain_id,
@@ -69,24 +90,43 @@ const chains = computed(() =>
 )
 
 const isLoading = ref(false)
+const isLoadFailed = ref(false)
+const isListEmpty = ref(false)
 </script>
 
 <style lang="scss" scoped>
 .expired-orders {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr toRem(181);
   gap: toRem(12);
   align-items: center;
   grid-template-areas:
-    'title'
-    'content';
+    'title button'
+    'content content';
+
+  &--without-btn {
+    grid-template-areas:
+      'title title'
+      'content content';
+  }
 
   @include respond-to(tablet) {
     gap: toRem(8);
     grid-template-columns: 1fr;
     grid-template-areas:
       'title'
-      'content';
+      'content'
+      'button';
+  }
+}
+
+.expired-orders__go-to-dashboard-btn {
+  width: 100%;
+  grid-area: button;
+
+  @include respond-to(tablet) {
+    width: toRem(288);
+    margin: 0 auto;
   }
 }
 

@@ -124,8 +124,8 @@ const isCreateOrderModalShown = ref(false)
     grid-template-columns: 1fr;
     grid-template-areas:
       'title'
-      'button'
-      'content';
+      'content'
+      'button';
   }
 }
 
