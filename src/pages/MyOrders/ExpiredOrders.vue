@@ -2,7 +2,7 @@
   <div
     class="expired-orders"
     :class="{
-      'expired-orders--without-btn': isListEmpty,
+      'expired-orders--without-btn': isListEmpty || !provider.selectedAddress,
     }"
   >
     <div class="expired-orders__title-wrp">
@@ -19,7 +19,7 @@
       />
     </div>
     <app-button
-      v-if="!isListEmpty"
+      v-if="provider.isConnected && !isListEmpty"
       class="expired-orders__go-to-dashboard-btn"
       size="small"
       :scheme="isTablet ? 'primary-mobile' : 'primary'"

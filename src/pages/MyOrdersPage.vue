@@ -14,4 +14,10 @@ import ExpiredOrders from '@/pages/MyOrders/ExpiredOrders.vue'
 .my-orders-page__expired-orders {
   margin-top: toRem(32.5);
 }
+
+.my-orders-page {
+  @include respond-to(tablet) {
+    padding-bottom: toRem(104);
+  }
+}
 </style>

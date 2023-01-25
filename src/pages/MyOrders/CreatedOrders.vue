@@ -2,8 +2,7 @@
   <div
     class="created-orders"
     :class="{
-      'created-orders--without-btn':
-        !isCreateOrderBtnShown || !provider.selectedAddress,
+      'created-orders--without-btn': isListEmpty || !provider.selectedAddress,
     }"
   >
     <div class="created-orders__title-wrp">
@@ -19,21 +18,28 @@
         :value-options="chains"
       />
     </div>
-    <app-button
-      v-if="provider.isConnected && isCreateOrderBtnShown"
-      class="created-orders__create-btn"
-      size="small"
-      :scheme="isTablet ? 'primary-mobile' : 'primary'"
-      :text="$t('created-orders.create-btn')"
-      :disabled="isCreateOrderBtnDisabled || isLoading"
-      @click="isCreateOrderModalShown = true"
-    />
+    <div
+      v-if="provider.isConnected && !isListEmpty"
+      class="created-orders__create-btn-wrp"
+      :class="{
+        'created-orders__create-btn-wrp--fixed': !isLoading && !isLoadFailed,
+      }"
+    >
+      <app-button
+        class="created-orders__create-btn"
+        size="small"
+        :scheme="isTablet ? 'primary-mobile' : 'primary'"
+        :text="$t('created-orders.create-btn')"
+        :disabled="isLoadFailed || isLoading"
+        @click="isCreateOrderModalShown = true"
+      />
+    </div>
     <div class="created-orders__content">
       <template v-if="provider.isConnected">
         <order-list
           :chain-id="networkId"
-          @list-empty="isCreateOrderBtnShown = !$event"
-          @load-failed="isCreateOrderBtnDisabled = $event"
+          @list-empty="isListEmpty = $event"
+          @load-failed="isLoadFailed = $event"
           @is-loading="isLoading = $event"
         >
           <template #noDataMsg>
@@ -97,13 +103,15 @@ const chains = computed(() =>
   })),
 )
 
-const isCreateOrderBtnShown = ref(true)
-const isCreateOrderBtnDisabled = ref(false)
+const isListEmpty = ref(true)
+const isLoadFailed = ref(false)
 const isLoading = ref(false)
 const isCreateOrderModalShown = ref(false)
 </script>
 
 <style lang="scss" scoped>
+$local-z-index: 1;
+
 .created-orders {
   display: grid;
   grid-template-columns: 1fr toRem(181);
@@ -131,11 +139,29 @@ const isCreateOrderModalShown = ref(false)
 
 .created-orders__create-btn {
   width: 100%;
-  grid-area: button;
 
   @include respond-to(tablet) {
     width: toRem(288);
     margin: 0 auto;
+  }
+}
+
+.created-orders__create-btn-wrp {
+  grid-area: button;
+
+  &--fixed {
+    @include respond-to(tablet) {
+      z-index: $local-z-index;
+      border: toRem(1) solid var(--border-primary-main);
+      border-radius: toRem(24) toRem(24) 0 0;
+      box-shadow: 0 toRem(-2) toRem(8) rgba(var(--black-rgb), 0.15);
+      padding: toRem(15);
+      background: var(--background-primary-main);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
   }
 }
 
