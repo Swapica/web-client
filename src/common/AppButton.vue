@@ -318,7 +318,5 @@ const buttonClasses = computed(() =>
   word-break: break-all;
   min-width: 0;
   line-height: toRem(17);
-
-  @include text-ellipsis;
 }
 </style>
