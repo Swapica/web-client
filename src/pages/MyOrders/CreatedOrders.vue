@@ -22,7 +22,7 @@
       v-if="provider.isConnected && !isListEmpty"
       class="created-orders__create-btn-wrp"
       :class="{
-        'created-orders__create-btn-wrp--fixed': !isLoading && !isLoadFailed,
+        'created-orders__create-btn-wrp--fixed': isButtonFixed,
       }"
     >
       <app-button
@@ -80,16 +80,23 @@ import {
   CreateOrderModal,
 } from '@/common'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { SelectField } from '@/fields'
+
+const emit = defineEmits<{
+  (e: 'is-button-fixed', value: boolean): void
+}>()
 
 const { width: windowWidth } = useWindowSize()
 const { provider } = useWeb3ProvidersStore()
 const chainStore = useChainsStore()
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
+const isButtonFixed = computed(
+  () => !isListEmpty.value && !isLoading.value && !isLoadFailed.value,
+)
 
 const chains = computed(() =>
   chainStore.chains.map(i => ({
@@ -106,6 +113,10 @@ const networkId = ref(
   chainStore.selectedChain?.chain_params.chain_id ??
     chainStore.chains[0].chain_params.chain_id,
 )
+
+watch(isButtonFixed, val => {
+  emit('is-button-fixed', val)
+})
 </script>
 
 <style lang="scss" scoped>
