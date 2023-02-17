@@ -4,7 +4,6 @@
       class="match-order-modal__form"
       :key="`${isShown}`"
       :order="order"
-      :network-sell="networkSell"
       @close="close"
     />
   </modal>
@@ -13,12 +12,11 @@
 <script lang="ts" setup>
 import MatchOrderForm from '@/forms/MatchOrderForm.vue'
 import { Modal } from '@/common'
-import { ChainResposne, UserOrder } from '@/types'
+import { Order } from '@/types'
 
 defineProps<{
   isShown: boolean
-  order: UserOrder
-  networkSell: ChainResposne
+  order: Order
 }>()
 
 const emit = defineEmits<{

@@ -1,3 +1,5 @@
+import { OrderStatus } from '@/enums'
+
 export type JsonApiRelationship = Record<string, unknown>
 export type Uuid = string
 export type JsonApiRelationships = Record<
@@ -64,4 +66,27 @@ export type Token = JsonApiRecordBase<'token'> & {
   decimals: number
   token_type: string
   chain: TokenChain
+}
+
+export type Order = JsonApiRecordBase<'order'> & {
+  creator: string
+  token_to_buy: string
+  token_to_sell: string
+  amount_to_buy: string
+  amount_to_sell: string
+  order_id: number
+  src_chain?: ChainResposne
+  destination_chain?: ChainResposne
+  state: OrderStatus
+}
+
+export type MatchOrder = JsonApiRecordBase<'match_order'> & {
+  creator: string
+  token_to_sell: string
+  amount_to_sell: string
+  match_id: number
+  src_chain?: ChainResposne
+  origin_chain?: ChainResposne
+  state: OrderStatus
+  origin_order?: Order
 }

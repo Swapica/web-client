@@ -110,7 +110,7 @@ export const useSwapica = (
     return _instance.value?.getUserOrdersLength(user)
   }
   const getOrdersLength = async () => {
-    return _instance.value?.getOrdersLength()
+    return _instance.value?.getAllOrdersLength()
   }
   const getUserMatchesLength = async (user: string) => {
     return _instance.value?.getUserMatchesLength(user)
@@ -143,18 +143,13 @@ export const useSwapica = (
   const getActiveOrders = async (
     tokenSell: string,
     tokenBuy: string,
-    from: number,
-    to: number,
+    offset: number,
+    limit: number,
     network: ChainResposne,
   ) => {
     const { chainByChainId } = useChainsStore()
 
-    const response = await _instance.value?.getActiveOrders(
-      tokenSell,
-      tokenBuy,
-      from,
-      to,
-    )
+    const response = await _instance.value?.getAllOrders(offset, limit)
 
     const data = await Promise.all(
       (response as unknown as Order[])?.map(async i => {
@@ -209,15 +204,13 @@ export const useSwapica = (
 
   const getUserMatches = async (
     address: string,
-    from: number,
-    to: number,
-    status = OrderStatus.awaitingFinalization,
+    offset: number,
+    limit: number,
   ) => {
     const response = await _instance.value?.getUserMatches(
       address,
-      status,
-      from,
-      to,
+      offset,
+      limit,
     )
     return response as unknown as Match[]
   }

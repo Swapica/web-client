@@ -10,8 +10,7 @@
       <template v-else>
         <template v-if="list.length">
           <dashboard-order-list-table
-            :network-sell="network!"
-            :list="orderList"
+            :list="list"
             @match-btn-click="
               ;(selectedOrder = $event), (isMatchOrderModalShown = true)
             "
@@ -60,7 +59,6 @@
       v-if="selectedOrder"
       v-model:is-shown="isMatchOrderModalShown"
       :order="selectedOrder"
-      :network-sell="network"
     />
   </div>
 </template>
@@ -75,18 +73,17 @@ import {
   ConnectWalletBtn,
   AppButton,
 } from '@/common'
-import { useSwapica } from '@/composables'
 import { computed, ref, watch } from 'vue'
 import { useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler } from '@/helpers'
 import DashboardOrderListTable from '@/pages/Dashboard/DashboardOrderListTable.vue'
-import { ethers } from 'ethers'
-import { ChainResposne, UserOrder } from '@/types'
+import { ChainResposne, Order } from '@/types'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { useWindowSize } from '@vueuse/core'
+import { callers } from '@/api'
 
 const props = defineProps<{
-  network: ChainResposne
+  networkSell: ChainResposne
   matchNetwork: ChainResposne
   tokenBuy: string
   tokenSell: string
@@ -99,72 +96,42 @@ const emit = defineEmits<{
 
 const { provider } = useWeb3ProvidersStore()
 const { width: windowWidth } = useWindowSize()
-const swapicaContract = useSwapica(provider)
 
 const currentPage = ref(1)
-const totalItems = ref(0)
 const isMatchOrderModalShown = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref<UserOrder[]>([])
-const selectedOrder = ref<UserOrder>()
+const list = ref<Order[]>([])
+const selectedOrder = ref<Order>()
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const PAGE_LIMIT = isTablet.value ? 5 : 10
-
-const orderList = computed(() => {
-  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
-  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
-})
 
 const loadList = async () => {
   emit('update:is-submitting', true)
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    const rpcProvider = new ethers.providers.JsonRpcProvider(
-      props.network.chain_params.rpc,
+    const { data } = await callers.get<Order[]>(
+      '/integrations/order-aggregator/orders',
+      {
+        params: {
+          'filter[src_chain]': props.networkSell.chain_params.chain_id,
+          'filter[destination_chain]': props.matchNetwork.chain_params.chain_id,
+          'filter[token_to_buy]': props.tokenBuy,
+          'filter[token_to_sell]': props.tokenSell,
+          'page[limit]': PAGE_LIMIT,
+          include: 'src_chain,destination_chain',
+        },
+      },
     )
-    swapicaContract.init(props.network.swap_contract!, rpcProvider)
-    await getTotalItems()
-
-    const data = await loadingOrdersLoop()
-    const filteredList = data
-      .flat()
-      .filter(
-        i =>
-          i.info.destChain.toNumber() ===
-          props.matchNetwork.chain_params.chain_id,
-      )
-    list.value = filteredList.reverse()
+    list.value = data
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
   }
   emit('update:is-submitting', false)
   isLoaded.value = true
-}
-
-const loadingOrdersLoop = async () => {
-  const promises = []
-
-  for (let i = 0; i < totalItems.value; i += 100) {
-    promises.push(
-      swapicaContract.getActiveOrders(
-        props.tokenSell,
-        props.tokenBuy,
-        i,
-        i + 100,
-        props.network,
-      ),
-    )
-  }
-  return Promise.all(promises)
-}
-
-const getTotalItems = async () => {
-  const data = await swapicaContract.getOrdersLength()
-  totalItems.value = data?.toNumber() || 0
 }
 
 Bus.on(Bus.eventList.orderMatched, () => {

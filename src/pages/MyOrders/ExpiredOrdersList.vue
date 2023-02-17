@@ -11,7 +11,7 @@
         <template v-if="list.length">
           <expired-orders-list-table
             :is-btn-disabled="isSubmitting"
-            :list="orderList"
+            :list="list"
             @cancel-btn-click="cancelMatch"
           >
             <template #pagination>
@@ -41,16 +41,13 @@
 
 <script lang="ts" setup>
 import { ErrorMessage, Loader, Pagination } from '@/common'
-import { useSwapica } from '@/composables'
-import { ref, watch, computed } from 'vue'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { ref, watch } from 'vue'
+import { useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import ExpiredOrdersListTable from '@/pages/MyOrders/ExpiredOrdersListTable.vue'
-import { ethers } from 'ethers'
-import { TxResposne, UserMatch } from '@/types'
+import { TxResposne, MatchOrder } from '@/types'
 import { callers } from '@/api'
 import { useI18n } from 'vue-i18n'
-import { OrderStatus } from '@/enums'
 
 const PAGE_LIMIT = 5
 
@@ -65,22 +62,13 @@ const emit = defineEmits<{
 }>()
 
 const { provider } = useWeb3ProvidersStore()
-const { chainByChainId } = useChainsStore()
 const { t } = useI18n({ useScope: 'global' })
-const swapicaContract = useSwapica(provider)
-
-const network = computed(() => chainByChainId(props.chainId))
-const orderList = computed(() => {
-  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
-  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
-})
 
 const currentPage = ref(1)
-const totalItems = ref(0)
 const isSubmitting = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref<UserMatch[]>([])
+const list = ref<MatchOrder[]>([])
 
 const loadList = async () => {
   emit('load-failed', false)
@@ -89,22 +77,19 @@ const loadList = async () => {
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    const rpcProvider = new ethers.providers.JsonRpcProvider(
-      network.value?.chain_params.rpc,
+    const { data } = await callers.get<MatchOrder[]>(
+      '/integrations/order-aggregator/match_orders',
+      {
+        params: {
+          'filter[creator]': provider.selectedAddress,
+          'filter[src_chain]': props.chainId,
+          'filter[expired]': false,
+          'page[limit]': PAGE_LIMIT,
+          include: 'src_chain,origin_chain,origin_order',
+        },
+      },
     )
-    swapicaContract.init(network.value?.swap_contract!, rpcProvider)
-
-    await getTotalItems()
-
-    const data = await loadingMatchsLoop()
     list.value = data
-      .flat()
-      .filter(
-        i =>
-          i.order.orderStatus?.state !== OrderStatus.awaitingMatch &&
-          i.order.orderStatus?.executedBy.toNumber() !== i.info.id.toNumber(),
-      )
-      .reverse()
     if (!list.value.length) emit('list-empty', true)
   } catch (e) {
     isLoadFailed.value = true
@@ -115,39 +100,15 @@ const loadList = async () => {
   isLoaded.value = true
 }
 
-const loadingMatchsLoop = async () => {
-  const promises = []
-
-  for (let i = 0; i < totalItems.value; i += 100) {
-    promises.push(
-      swapicaContract.getUserMatchesWithOrder(
-        provider.selectedAddress!,
-        i,
-        i + 100,
-      ),
-    )
-  }
-  return Promise.all(promises)
-}
-
-const getTotalItems = async () => {
-  const data = await swapicaContract.getUserMatchesLength(
-    provider.selectedAddress!,
-  )
-  totalItems.value = data?.toNumber() || 0
-}
-
-const cancelMatch = async (item: UserMatch) => {
+const cancelMatch = async (item: MatchOrder) => {
   isSubmitting.value = true
   try {
-    const originChain = chainByChainId(item.info.originChain.toNumber())
-
-    await switchNetwork(network.value!)
+    await switchNetwork(item.src_chain!)
     const { data } = await callers.post<TxResposne>('/v1/cancel/match', {
       data: {
-        dest_chain: network.value?.id,
-        src_chain: originChain?.id,
-        match_id: item.info.id.toNumber(),
+        dest_chain: item.src_chain?.id,
+        src_chain: item.origin_chain?.id,
+        match_id: item.match_id,
         sender: provider.selectedAddress,
       },
     })

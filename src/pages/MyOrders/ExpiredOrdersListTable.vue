@@ -24,7 +24,7 @@
       <div
         class="expired-orders-list-table__body"
         v-for="i in list"
-        :key="i.info.id.toString()"
+        :key="i.id"
       >
         <div class="expired-orders-list-table__body-item-info-wrp">
           <!-- eslint-disable-next-line max-len -->
@@ -33,30 +33,30 @@
               class="expired-orders-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
-                  i.order.info.amountToBuy.toString(),
-                  i.order.tokenToBuy.decimals,
+                  i.origin_order?.amount_to_buy!,
+                  i.origin_order?.token_to_buy.decimals,
                 )
               "
             >
               {{
                 formatWeiAmount(
-                  i.order.info.amountToBuy.toString(),
-                  i.order.tokenToBuy.decimals,
+                  i.origin_order?.amount_to_buy!,
+                  i.origin_order?.token_to_buy.decimals,
                 )
               }}
             </span>
             <span class="expired-orders-list-table__body-item-code">
-              {{ i.order.tokenToBuy.symbol }}
+              {{ i.origin_order?.token_to_buy.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
               class="expired-orders-list-table__body-item-address"
-              :text="i.order.info.tokenToBuy"
-              :title="i.order.info.tokenToBuy"
+              :text="i.origin_order?.token_to_buy!"
+              :title="i.origin_order?.token_to_buy"
             >
               {{
                 $t('expired-orders-list-table.address', {
-                  address: cropAddress(i.order.info.tokenToBuy, 4, 3),
+                  address: cropAddress(i.origin_order?.token_to_buy!, 4, 3),
                 })
               }}
             </copy-button>
@@ -65,9 +65,8 @@
               scheme="icon"
               target="_blank"
               :href="provider.getAddressUrl(
-                getNetwork(i.order.info.destChain.toNumber())
-                  ?.chain_params.explorer_url!,
-                i.order.info.tokenToBuy
+                i.src_chain?.chain_params.explorer_url!,
+                i.origin_order?.token_to_buy!
               )"
               :icon-left="$icons.link"
             />
@@ -78,30 +77,30 @@
               class="expired-orders-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
-                  i.order.info.amountToSell.toString(),
-                  i.order.tokenToSell.decimals,
+                  i.origin_order?.amount_to_sell!,
+                  i.origin_order?.token_to_sell.decimals,
                 )
               "
             >
               {{
                 formatWeiAmount(
-                  i.order.info.amountToSell.toString(),
-                  i.order.tokenToSell.decimals,
+                  i.origin_order?.amount_to_sell!,
+                  i.origin_order?.token_to_sell.decimals,
                 )
               }}
             </span>
             <span class="expired-orders-list-table__body-item-code">
-              {{ i.order.tokenToSell.symbol }}
+              {{ i.origin_order?.token_to_sell.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
               class="expired-orders-list-table__body-item-address"
-              :text="i.order.info.tokenToSell"
-              :title="i.order.info.tokenToSell"
+              :text="i.origin_order?.token_to_sell!"
+              :title="i.origin_order?.token_to_sell"
             >
               {{
                 $t('expired-orders-list-table.address', {
-                  address: cropAddress(i.order.info.tokenToSell, 4, 3),
+                  address: cropAddress(i.origin_order?.token_to_sell!, 4, 3),
                 })
               }}
             </copy-button>
@@ -112,10 +111,9 @@
               :icon-left="$icons.link"
               :href="
                 provider.getAddressUrl(
-                  getNetwork(i.info.originChain.toNumber())
-                    ?.chain_params
+                  i.origin_chain?.chain_params
                     .explorer_url!,
-                  i.order.info.tokenToSell,
+                  i.origin_order?.token_to_sell!,
                 )
               "
             />
@@ -126,15 +124,15 @@
             class="expired-orders-list-table__body-item-network-text"
             :title="
               $t('expired-orders-list-table.network', {
-                from: getNetwork(i.info.originChain.toNumber())?.name,
-                to: getNetwork(i.order.info.destChain.toNumber())?.name,
+                from: i.origin_chain?.name,
+                to: i.src_chain?.name,
               })
             "
           >
             {{
               $t('expired-orders-list-table.network', {
-                from: getNetwork(i.info.originChain.toNumber())?.name,
-                to: getNetwork(i.order.info.destChain.toNumber())?.name,
+                from: i.origin_chain?.name,
+                to: i.src_chain?.name,
               })
             }}
           </span>
@@ -163,13 +161,13 @@ import { AppButton, CopyButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { UserMatch } from '@/types'
+import { MatchOrder } from '@/types'
 import { cropAddress, formatWeiAmount } from '@/helpers'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { useWeb3ProvidersStore } from '@/store'
 
 withDefaults(
   defineProps<{
-    list: UserMatch[]
+    list: MatchOrder[]
     isBtnDisabled?: boolean
   }>(),
   {
@@ -178,14 +176,11 @@ withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'cancel-btn-click', value: UserMatch): void
+  (e: 'cancel-btn-click', value: MatchOrder): void
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = useChainsStore()
 const { provider } = useWeb3ProvidersStore()
-
-const getNetwork = (chainId: number) => chainByChainId(chainId)
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)

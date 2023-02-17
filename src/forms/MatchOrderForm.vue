@@ -3,7 +3,7 @@
     <stepper-indicator :steps="steps" :current-step-idx="currentIdx" />
     <change-network-step
       v-if="currentStep.name === STEPS.matchChangeNetwork"
-      :network="networkBuy!"
+      :network="order.destination_chain!"
       @cancel="close"
       @changed="onNext"
     >
@@ -13,11 +13,11 @@
         class="match-order-form__change-network-msg"
       >
         <template #network>
-          {{ networkSell?.name }}
+          {{ order.src_chain?.name }}
         </template>
         <template #networkBold>
           <span class="match-order-form__network-lbl">
-            {{ networkBuy?.name }}
+            {{ order.destination_chain?.name }}
           </span>
         </template>
       </i18n-t>
@@ -61,7 +61,7 @@
     />
     <change-network-step
       v-if="currentStep.name === STEPS.claimChangeNetwork"
-      :network="networkSell!"
+      :network="order.src_chain!"
       @cancel="close"
       @changed="onNext"
     >
@@ -71,11 +71,11 @@
         class="match-order-form__change-network-msg"
       >
         <template #network>
-          {{ networkSell?.name }}
+          {{ order.src_chain?.name }}
         </template>
         <template #networkBold>
           <span class="match-order-form__network-lbl">
-            {{ networkSell?.name }}
+            {{ order.src_chain?.name }}
           </span>
         </template>
       </i18n-t>
@@ -103,9 +103,9 @@ import {
   ChangeNetworkStep,
 } from '@/common'
 import { Bus, ErrorHandler } from '@/helpers'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { useWeb3ProvidersStore } from '@/store'
 import { callers } from '@/api'
-import { ChainResposne, TxResposne, UserOrder } from '@/types'
+import { TxResposne, Order } from '@/types'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MatchOrderFormMatchStep from '@/forms/match-order-form/MatchOrderFormMatchStep.vue'
@@ -124,26 +124,21 @@ enum STEPS {
 }
 
 const props = defineProps<{
-  order: UserOrder
-  networkSell: ChainResposne
+  order: Order
 }>()
 
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const { chainByChainId } = useChainsStore()
 const { provider } = useWeb3ProvidersStore()
 const swapicaContract = useSwapica(provider)
 
 const { t } = useI18n({ useScope: 'global' })
 
-const networkBuy = computed(() =>
-  chainByChainId(props.order.info.destChain.toNumber()),
-)
-
 const isValidChangeMatchNetwork = computed(
-  () => provider.chainId === networkBuy.value?.chain_params.chain_id,
+  () =>
+    provider.chainId === props.order.destination_chain?.chain_params.chain_id,
 )
 
 const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
@@ -185,7 +180,10 @@ const close = () => {
 const match = async () => {
   toStep(STEPS.confirmationMatch)
   try {
-    await checkApprove(networkBuy.value?.id!, props.order.info.tokenToBuy)
+    await checkApprove(
+      props.order.destination_chain?.id!,
+      props.order.token_to_buy,
+    )
     if (approveTx.value) {
       toStep(STEPS.approveBuyToken)
       return
@@ -234,9 +232,9 @@ const matchOrder = async () => {
   try {
     const { data } = await callers.post<TxResposne>('/v1/create/match', {
       data: {
-        dest_chain: networkBuy.value?.id,
-        order_id: props.order.info.id.toNumber(),
-        src_chain: props.networkSell.id,
+        dest_chain: props.order.destination_chain?.id,
+        order_id: props.order.order_id,
+        src_chain: props.order.src_chain?.id,
         sender: provider.selectedAddress,
       },
     })
@@ -254,9 +252,9 @@ const claim = async () => {
     const matchId = await getMatchId()
     const { data: test } = await callers.post<TxResposne>('/v1/execute/order', {
       data: {
-        dest_chain: networkBuy.value?.id,
-        order_id: props.order.info.id.toNumber(),
-        src_chain: props.networkSell.id,
+        dest_chain: props.order.destination_chain?.id,
+        order_id: props.order.order_id,
+        src_chain: props.order.src_chain?.id,
         receiver: provider.selectedAddress,
         sender: provider.selectedAddress,
         match_id: matchId,
@@ -274,18 +272,21 @@ const claim = async () => {
 
 const getMatchId = async () => {
   const rpcProvider = new ethers.providers.JsonRpcProvider(
-    networkBuy.value?.chain_params.rpc,
+    props.order.destination_chain?.chain_params.rpc,
   )
-  swapicaContract.init(networkBuy.value?.swap_contract!, rpcProvider)
+  swapicaContract.init(
+    props.order.destination_chain?.swap_contract!,
+    rpcProvider,
+  )
   const matchLength = await swapicaContract.getUserMatchesLength(
     provider.selectedAddress!,
   )
   const data = await swapicaContract.getUserMatches(
     provider.selectedAddress!,
     matchLength!.toNumber() - 1,
-    matchLength!.toNumber(),
+    1,
   )
-  return data[0].id.toNumber()
+  return data[0].matchId.toNumber()
 }
 </script>
 <style lang="scss" scoped>

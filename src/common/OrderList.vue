@@ -11,8 +11,7 @@
         <template v-if="list.length">
           <order-list-table
             :is-btn-disabled="isSubmitting"
-            :network-sell="network!"
-            :list="orderList"
+            :list="list"
             @cancel-btn-click="cancelOrder"
           >
             <template #pagination>
@@ -42,13 +41,11 @@
 
 <script lang="ts" setup>
 import { ErrorMessage, Loader, Pagination } from '@/common'
-import { useSwapica } from '@/composables'
 import { ref, watch, computed } from 'vue'
 import { useChainsStore, useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import OrderListTable from '@/common/order-list/OrderListTable.vue'
-import { ethers } from 'ethers'
-import { TxResposne, UserOrder } from '@/types'
+import { Order, TxResposne } from '@/types'
 import { callers } from '@/api'
 import { useI18n } from 'vue-i18n'
 
@@ -66,21 +63,15 @@ const emit = defineEmits<{
 
 const { provider } = useWeb3ProvidersStore()
 const { chainByChainId } = useChainsStore()
-const swapicaContract = useSwapica(provider)
 const { t } = useI18n({ useScope: 'global' })
 
-const network = computed(() => chainByChainId(props.chainId))
-const orderList = computed(() => {
-  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
-  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
-})
+const srcChain = computed(() => chainByChainId(props.chainId))
 
 const currentPage = ref(1)
-const totalItems = ref(0)
 const isSubmitting = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref<UserOrder[]>([])
+const list = ref<Order[]>([])
 
 const loadList = async () => {
   emit('load-failed', false)
@@ -89,15 +80,18 @@ const loadList = async () => {
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    const rpcProvider = new ethers.providers.JsonRpcProvider(
-      network.value?.chain_params.rpc,
+    const { data } = await callers.get<Order[]>(
+      '/integrations/order-aggregator/orders',
+      {
+        params: {
+          'filter[creator]': provider.selectedAddress,
+          'filter[src_chain]': props.chainId,
+          'page[limit]': PAGE_LIMIT,
+          include: 'src_chain,destination_chain',
+        },
+      },
     )
-    swapicaContract.init(network.value?.swap_contract!, rpcProvider)
-
-    await getTotalItems()
-
-    const data = await loadingOrdersLoop()
-    list.value = data.flat().reverse()
+    list.value = data
     if (!list.value.length) emit('list-empty', true)
   } catch (e) {
     isLoadFailed.value = true
@@ -108,37 +102,14 @@ const loadList = async () => {
   isLoaded.value = true
 }
 
-const loadingOrdersLoop = async () => {
-  const promises = []
-
-  for (let i = 0; i < totalItems.value; i += 100) {
-    promises.push(
-      swapicaContract.getUserOrders(
-        provider.selectedAddress!,
-        i,
-        i + 100,
-        network.value!,
-      ),
-    )
-  }
-  return Promise.all(promises)
-}
-
-const getTotalItems = async () => {
-  const data = await swapicaContract.getUserOrdersLength(
-    provider.selectedAddress!,
-  )
-  totalItems.value = data?.toNumber() || 0
-}
-
-const cancelOrder = async (item: UserOrder) => {
+const cancelOrder = async (item: Order) => {
   isSubmitting.value = true
   try {
-    await switchNetwork(network.value!)
+    await switchNetwork(srcChain.value!)
     const { data } = await callers.post<TxResposne>('/v1/cancel/order', {
       data: {
-        src_chain: network.value?.id,
-        order_id: item.info.id.toNumber(),
+        src_chain: srcChain.value?.id,
+        order_id: item.order_id,
         sender: provider.selectedAddress,
       },
     })

@@ -15,14 +15,14 @@
             v-model="filters.networkFrom"
             scheme="primary"
             :label="$t('dashboard-page.network-from-lbl')"
-            :value-options="chains"
+            :value-options="chainsOptions"
             :disabled="isSubmitting"
           />
           <select-field
             v-model="filters.networkTo"
             scheme="primary"
             :label="$t('dashboard-page.network-to-lbl')"
-            :value-options="chains"
+            :value-options="chainsOptions"
             :disabled="isSubmitting"
           />
         </div>
@@ -73,7 +73,7 @@
         <dashboard-order-list
           v-if="isMounted"
           v-model:is-submitting="isSubmitting"
-          :network="networkFrom!"
+          :network-sell="networkFrom!"
           :match-network="networkTo!"
           :token-buy="filters.tokenBuy"
           :token-sell="filters.tokenSell"
@@ -90,22 +90,22 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { TokenSelect } from '@/common'
 import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
 
-const chainStore = useChainsStore()
+const { selectedChain, chainById, chains } = useChainsStore()
 const { tokensByChainId } = useTokensStore()
+const isMounted = ref(false)
+const isSubmitting = ref(false)
 
-const chains = computed(() =>
-  chainStore.chains.map(i => ({
+const chainsOptions = computed(() =>
+  chains.map(i => ({
     label: i.name,
     value: i.id,
     imageUrl: i.icon,
   })),
 )
 
-const isMounted = ref(false)
-
 const filters = reactive({
-  networkFrom: chainStore.selectedChain?.id ?? chains.value[0].value,
-  networkTo: chains.value[0].value,
+  networkFrom: selectedChain?.id ?? chainsOptions.value[0].value,
+  networkTo: chainsOptions.value[0].value,
   tokenSell: '',
   tokenBuy: '',
 })
@@ -125,11 +125,8 @@ const tokensBuy = computed(() =>
     imageUrl: i.icon,
   })),
 )
-
-const isSubmitting = ref(false)
-
-const networkFrom = computed(() => chainStore.chainById(filters.networkFrom))
-const networkTo = computed(() => chainStore.chainById(filters.networkTo))
+const networkFrom = computed(() => chainById(filters.networkFrom))
+const networkTo = computed(() => chainById(filters.networkTo))
 
 watch(
   () => filters.networkFrom,

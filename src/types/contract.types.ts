@@ -24,12 +24,13 @@ export type UserOrder = {
 }
 
 export type Match = {
-  account: string
+  creator: string
   tokenToSell: string
   amountToSell: BigNumber
-  originChain: BigNumber
-  id: BigNumber
+  originChainId: BigNumber
+  matchId: BigNumber
   originOrderId: BigNumber
+  state: number
 }
 
 export type UserMatch = {
