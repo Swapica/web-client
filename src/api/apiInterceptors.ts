@@ -7,6 +7,7 @@ export function attachJsonApiUnpacker(axios: AxiosInstance): void {
   axios.interceptors.response.use((success): AxiosResponse => {
     if (success.status === StatusCodes.noContent) return success
     success.links = success?.data?.links
+    success.meta = success?.data?.meta
     success.data = jsona.deserialize(success.data)
     return success
   })

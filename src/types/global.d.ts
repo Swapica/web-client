@@ -9,5 +9,6 @@ declare module 'axios' {
     config: AxiosRequestConfig<D>
     request?: unknown
     links: Record<string, string>
+    meta: Record<string, unknown>
   }
 }

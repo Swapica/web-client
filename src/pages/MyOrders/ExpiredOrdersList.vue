@@ -16,8 +16,9 @@
           >
             <template #pagination>
               <pagination
-                v-model:current-page="currentPage"
-                :total-items="list.length"
+                :current-page="currentPage"
+                @update:current-page=";(currentPage = $event), loadList()"
+                :total-items="totalItems"
                 :page-limit="PAGE_LIMIT"
               />
             </template>
@@ -65,6 +66,7 @@ const { provider } = useWeb3ProvidersStore()
 const { t } = useI18n({ useScope: 'global' })
 
 const currentPage = ref(1)
+const totalItems = ref(0)
 const isSubmitting = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
@@ -77,7 +79,7 @@ const loadList = async () => {
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    const { data } = await callers.get<MatchOrder[]>(
+    const { data, meta } = await callers.get<MatchOrder[]>(
       '/integrations/order-aggregator/match_orders',
       {
         params: {
@@ -89,6 +91,7 @@ const loadList = async () => {
         },
       },
     )
+    totalItems.value = meta.count as number
     list.value = data
     if (!list.value.length) emit('list-empty', true)
   } catch (e) {

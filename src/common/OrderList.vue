@@ -17,7 +17,7 @@
             <template #pagination>
               <pagination
                 v-model:current-page="currentPage"
-                :total-items="list.length"
+                :total-items="totalItems"
                 :page-limit="PAGE_LIMIT"
               />
             </template>
@@ -71,6 +71,7 @@ const currentPage = ref(1)
 const isSubmitting = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
+const totalItems = ref(0)
 const list = ref<Order[]>([])
 
 const loadList = async () => {
@@ -80,7 +81,7 @@ const loadList = async () => {
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    const { data } = await callers.get<Order[]>(
+    const { data, meta } = await callers.get<Order[]>(
       '/integrations/order-aggregator/orders',
       {
         params: {
@@ -91,6 +92,7 @@ const loadList = async () => {
         },
       },
     )
+    totalItems.value = meta.count as number
     list.value = data
     if (!list.value.length) emit('list-empty', true)
   } catch (e) {
