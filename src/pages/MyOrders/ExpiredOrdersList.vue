@@ -83,7 +83,7 @@ const loadList = async () => {
         params: {
           'filter[creator]': provider.selectedAddress,
           'filter[src_chain]': props.chainId,
-          'filter[expired]': false,
+          'filter[expired]': true,
           'page[limit]': PAGE_LIMIT,
           include: 'src_chain,origin_chain,origin_order',
         },
