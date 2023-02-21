@@ -79,7 +79,7 @@ import { useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler } from '@/helpers'
 import DashboardOrderListTable from '@/pages/Dashboard/DashboardOrderListTable.vue'
 import { ChainResposne, Order } from '@/types'
-import { WINDOW_BREAKPOINTS } from '@/enums'
+import { OrderStatus, WINDOW_BREAKPOINTS } from '@/enums'
 import { useWindowSize } from '@vueuse/core'
 import { callers } from '@/api'
 
@@ -122,6 +122,7 @@ const loadList = async () => {
           'filter[destination_chain]': props.matchNetwork.chain_params.chain_id,
           'filter[token_to_buy]': props.tokenBuy,
           'filter[token_to_sell]': props.tokenSell,
+          'filter[state]': OrderStatus.awaitingMatch,
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,
           include: 'src_chain,destination_chain',

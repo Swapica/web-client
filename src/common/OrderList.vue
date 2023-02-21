@@ -49,6 +49,7 @@ import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { Order, TxResposne } from '@/types'
 import { callers } from '@/api'
 import { useI18n } from 'vue-i18n'
+import { OrderStatus } from '@/enums'
 
 const PAGE_LIMIT = 5
 
@@ -88,6 +89,7 @@ const loadList = async () => {
         params: {
           'filter[creator]': provider.selectedAddress,
           'filter[src_chain]': props.chainId,
+          'filter[state]': OrderStatus.awaitingMatch,
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,
           include: 'src_chain,destination_chain',
