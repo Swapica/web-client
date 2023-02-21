@@ -17,8 +17,9 @@
           >
             <template #pagination>
               <pagination
-                v-model:current-page="currentPage"
-                :total-items="list.length"
+                :current-page="currentPage"
+                @update:current-page=";(currentPage = $event), loadList()"
+                :total-items="totalItems"
                 :page-limit="PAGE_LIMIT"
               />
             </template>
@@ -103,6 +104,7 @@ const isLoadFailed = ref(false)
 const isLoaded = ref(false)
 const list = ref<Order[]>([])
 const selectedOrder = ref<Order>()
+const totalItems = ref(0)
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const PAGE_LIMIT = isTablet.value ? 5 : 10
@@ -112,7 +114,7 @@ const loadList = async () => {
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    const { data } = await callers.get<Order[]>(
+    const { data, meta } = await callers.get<Order[]>(
       '/integrations/order-aggregator/orders',
       {
         params: {
@@ -121,10 +123,17 @@ const loadList = async () => {
           'filter[token_to_buy]': props.tokenBuy,
           'filter[token_to_sell]': props.tokenSell,
           'page[limit]': PAGE_LIMIT,
+          'page[number]': currentPage.value - 1,
           include: 'src_chain,destination_chain',
         },
       },
     )
+    if (!data.length && currentPage.value > 1) {
+      currentPage.value -= 1
+      loadList()
+      return
+    }
+    totalItems.value = meta.count as number
     list.value = data
   } catch (e) {
     isLoadFailed.value = true

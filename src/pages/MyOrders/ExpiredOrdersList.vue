@@ -87,10 +87,16 @@ const loadList = async () => {
           'filter[src_chain]': props.chainId,
           'filter[expired]': true,
           'page[limit]': PAGE_LIMIT,
+          'page[number]': currentPage.value - 1,
           include: 'src_chain,origin_chain,origin_order',
         },
       },
     )
+    if (!data.length && currentPage.value > 1) {
+      currentPage.value -= 1
+      loadList()
+      return
+    }
     totalItems.value = meta.count as number
     list.value = data
     if (!list.value.length) emit('list-empty', true)
