@@ -11,14 +11,14 @@
         <template v-if="list.length">
           <claim-order-list-table
             :is-btn-disabled="isSubmitting"
-            :network-sell="network!"
-            :list="orderList"
+            :list="list"
             @claim-btn-click="claimOrderOrMatch"
           >
             <template #pagination>
               <pagination
-                v-model:current-page="currentPage"
-                :total-items="list.length"
+                :current-page="currentPage"
+                @update:current-page=";(currentPage = $event), loadList()"
+                :total-items="totalItems"
                 :page-limit="PAGE_LIMIT"
               />
             </template>
@@ -42,15 +42,12 @@
 
 <script lang="ts" setup>
 import { ErrorMessage, Loader, Pagination } from '@/common'
-import { useSwapica } from '@/composables'
-import { ref, watch, computed } from 'vue'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { ref, watch } from 'vue'
+import { useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import ClaimOrderListTable from '@/pages/Claim/ClaimOrderListTable.vue'
-import { ethers } from 'ethers'
-import { TxResposne, UserMatch, UserOrder } from '@/types'
+import { TxResposne, MatchOrder } from '@/types'
 import { callers } from '@/api'
-import { OrderStatus, MatchStatus } from '@/enums'
 import { useI18n } from 'vue-i18n'
 
 const PAGE_LIMIT = 5
@@ -65,48 +62,38 @@ const emit = defineEmits<{
 
 const { t } = useI18n({ useScope: 'global' })
 const { provider } = useWeb3ProvidersStore()
-const { chainByChainId } = useChainsStore()
-const swapicaContract = useSwapica(provider)
-
-const network = computed(() => chainByChainId(props.chainId))
-const orderList = computed(() => {
-  const firstItemIndex = PAGE_LIMIT * (currentPage.value - 1)
-  return list.value.slice(firstItemIndex, firstItemIndex + PAGE_LIMIT)
-})
 
 const currentPage = ref(1)
 const totalItems = ref(0)
 const isSubmitting = ref(false)
 const isLoadFailed = ref(false)
 const isLoaded = ref(false)
-const list = ref<(UserOrder | UserMatch)[]>([])
+const list = ref<MatchOrder[]>([])
 
 const loadList = async () => {
   emit('is-loading', true)
   isLoaded.value = false
   isLoadFailed.value = false
   try {
-    const rpcProvider = new ethers.providers.JsonRpcProvider(
-      network.value?.chain_params.rpc,
+    const { data, meta } = await callers.get<MatchOrder[]>(
+      '/integrations/order-aggregator/claimable',
+      {
+        params: {
+          'filter[creator]': provider.selectedAddress,
+          'filter[src_chain]': props.chainId,
+          'page[limit]': PAGE_LIMIT,
+          'page[number]': currentPage.value - 1,
+          include: 'src_chain,origin_chain',
+        },
+      },
     )
-    swapicaContract.init(network.value?.swap_contract!, rpcProvider)
-
-    await getTotalItems()
-
-    const orders = await loadingOrdersLoop()
-    const matches = await loadingMatchesLoop()
-    const orderList = orders
-      .flat()
-      .filter(i => i.matchStatus?.state !== MatchStatus.executed)
-
-    const matchesList = matches
-      .flat()
-      .filter(i => i.order.orderStatus?.state === OrderStatus.awaitingMatch)
-
-    const filteredList = [...orderList, ...matchesList].sort(
-      (a, b) => b.info.id.toNumber() - a.info.id.toNumber(),
-    )
-    list.value = filteredList
+    if (!data.length && currentPage.value > 1) {
+      currentPage.value -= 1
+      loadList()
+      return
+    }
+    totalItems.value = meta.count as number
+    list.value = data
   } catch (e) {
     isLoadFailed.value = true
     ErrorHandler.processWithoutFeedback(e)
@@ -115,50 +102,13 @@ const loadList = async () => {
   isLoaded.value = true
 }
 
-const loadingOrdersLoop = async () => {
-  const promises = []
-
-  for (let i = 0; i < totalItems.value; i += 100) {
-    promises.push(
-      swapicaContract.getUserOrders(
-        provider.selectedAddress!,
-        i,
-        i + 100,
-        network.value!,
-        OrderStatus.executed,
-      ),
-    )
-  }
-  return Promise.all(promises)
-}
-
-const loadingMatchesLoop = async () => {
-  const promises = []
-
-  for (let i = 0; i < totalItems.value; i += 100) {
-    promises.push(
-      swapicaContract.getUserMatchesWithOrder(
-        provider.selectedAddress!,
-        i,
-        i + 100,
-      ),
-    )
-  }
-  return Promise.all(promises)
-}
-
-const getTotalItems = async () => {
-  const data = await swapicaContract.getUserOrdersLength(
-    provider.selectedAddress!,
-  )
-  totalItems.value = data?.toNumber() || 0
-}
-
-const claimOrderOrMatch = async (item: UserOrder | UserMatch) => {
+const claimOrderOrMatch = async (item: MatchOrder) => {
   isSubmitting.value = true
   try {
     const response =
-      'order' in item ? await getClaimOrder(item) : await getClaimMatch(item)
+      item.origin_order?.creator === provider.selectedAddress
+        ? await getClaimMatch(item)
+        : await getClaimOrder(item)
     await provider.signAndSendTx(response.tx_body)
     Bus.success(t('claim-order-list.claimed-msg'))
     loadList()
@@ -168,15 +118,14 @@ const claimOrderOrMatch = async (item: UserOrder | UserMatch) => {
   isSubmitting.value = false
 }
 
-const getClaimMatch = async (item: UserOrder) => {
-  const destChain = chainByChainId(item.info.destChain.toNumber())
-  await switchNetwork(destChain!)
+const getClaimMatch = async (item: MatchOrder) => {
+  await switchNetwork(item.origin_order?.destination_chain!)
   const { data } = await callers.post<TxResposne>('/v1/execute/match', {
     data: {
-      src_chain: network.value?.id,
-      dest_chain: destChain?.id,
-      match_id: item.orderStatus?.executedBy.toNumber(),
-      order_id: item.info.id.toNumber(),
+      src_chain: item.origin_order?.src_chain?.id,
+      dest_chain: item.origin_order?.destination_chain?.id,
+      match_id: item.match_id,
+      order_id: item.origin_order?.order_id,
       sender: provider.selectedAddress,
       receiver: provider.selectedAddress,
     },
@@ -184,15 +133,14 @@ const getClaimMatch = async (item: UserOrder) => {
   return data
 }
 
-const getClaimOrder = async (item: UserMatch) => {
-  const srcChain = chainByChainId(item.info.originChain.toNumber())
-  await switchNetwork(srcChain!)
+const getClaimOrder = async (item: MatchOrder) => {
+  await switchNetwork(item.origin_order?.src_chain!)
   const { data } = await callers.post<TxResposne>('/v1/execute/order', {
     data: {
-      src_chain: srcChain?.id,
-      dest_chain: network.value?.id,
-      match_id: item.info.id.toNumber(),
-      order_id: item.info.originOrderId.toNumber(),
+      src_chain: item.origin_order?.src_chain?.id,
+      dest_chain: item.origin_order?.destination_chain?.id,
+      match_id: item.match_id,
+      order_id: item.origin_order?.order_id,
       sender: provider.selectedAddress,
       receiver: provider.selectedAddress,
     },

@@ -20,16 +20,8 @@
       </div>
     </div>
     <div class="claim-order-list-table__body-wrp">
-      <div
-        class="claim-order-list-table__body"
-        v-for="i in list"
-        :key="'order' in i ? 'match' : 'order' + i.info.id.toNumber()"
-      >
-        <claim-order-list-item-info
-          :order="'order' in i ? i.order : i"
-          :network-sell="getSellNetwork(i)"
-          :is-match="Boolean('order' in i)"
-        />
+      <div class="claim-order-list-table__body" v-for="i in list" :key="i.id">
+        <claim-order-list-item-info :item="i" />
         <app-button
           class="claim-order-list-table__body-item-claim-btn"
           :scheme="isTablet ? 'secondary-mobile' : 'secondary'"
@@ -54,14 +46,12 @@ import { AppButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { ChainResposne, UserMatch, UserOrder } from '@/types'
+import { MatchOrder } from '@/types'
 import ClaimOrderListItemInfo from '@/pages/Claim/ClaimOrderListItemInfo.vue'
-import { useChainsStore } from '@/store'
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
-    list: (UserOrder | UserMatch)[]
-    networkSell: ChainResposne
+    list: MatchOrder[]
     isBtnDisabled?: boolean
   }>(),
   {
@@ -70,19 +60,12 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'claim-btn-click', value: UserOrder | UserMatch): void
+  (e: 'claim-btn-click', value: MatchOrder): void
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = useChainsStore()
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
-
-const getSellNetwork = (i: UserOrder | UserMatch) => {
-  return 'order' in i
-    ? chainByChainId(i.info.originChain.toNumber())!
-    : props.networkSell
-}
 </script>
 <style lang="scss" scoped>
 .claim-order-list-table {
