@@ -144,7 +144,7 @@ const { provider } = useWeb3ProvidersStore()
 
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 const isMatch = computed(
-  () => props.item.origin_order?.creator === provider.selectedAddress,
+  () => props.item.origin_order?.creator !== provider.selectedAddress,
 )
 </script>
 <style lang="scss" scoped>
