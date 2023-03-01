@@ -24,7 +24,7 @@
       <div
         class="order-list-table__body"
         v-for="i in list"
-        :key="i.info.id.toString()"
+        :key="i.id"
       >
         <div class="order-list-table__body-item-info-wrp">
           <!-- eslint-disable-next-line max-len -->
@@ -33,30 +33,30 @@
               class="order-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
+                  i.amount_to_buy,
+                  i.token_to_buy.decimals,
                 )
               "
             >
               {{
                 formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
+                  i.amount_to_buy,
+                  i.token_to_buy.decimals,
                 )
               }}
             </span>
             <span class="order-list-table__body-item-code">
-              {{ i.tokenToBuy.symbol }}
+              {{ i.token_to_buy.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
               class="order-list-table__body-item-address"
-              :text="i.info.tokenToBuy"
-              :title="i.info.tokenToBuy"
+              :text="i.token_to_buy.address"
+              :title="i.token_to_buy.address"
             >
               {{
                 $t('order-list-table.address', {
-                  address: cropAddress(i.info.tokenToBuy, 4, 3),
+                  address: cropAddress(i.token_to_buy.address, 4, 3),
                 })
               }}
             </copy-button>
@@ -65,9 +65,8 @@
               scheme="icon"
               target="_blank"
               :href="provider.getAddressUrl(
-                networkBuy(i.info.destChain.toNumber())
-                  ?.chain_params.explorer_url!,
-                i.info.tokenToBuy
+                i.destination_chain?.chain_params.explorer_url!,
+                i.token_to_buy.address
               )"
               :icon-left="$icons.link"
             />
@@ -78,30 +77,30 @@
               class="order-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
-                  i.info.amountToSell.toString(),
-                  i.tokenToSell.decimals,
+                  i.amount_to_sell,
+                  i.token_to_sell.decimals,
                 )
               "
             >
               {{
                 formatWeiAmount(
-                  i.info.amountToSell.toString(),
-                  i.tokenToSell.decimals,
+                  i.amount_to_sell,
+                  i.token_to_sell.decimals,
                 )
               }}
             </span>
             <span class="order-list-table__body-item-code">
-              {{ i.tokenToSell.symbol }}
+              {{ i.token_to_sell.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
               class="order-list-table__body-item-address"
-              :text="i.info.tokenToSell"
-              :title="i.info.tokenToSell"
+              :text="i.token_to_sell.address"
+              :title="i.token_to_sell.address"
             >
               {{
                 $t('order-list-table.address', {
-                  address: cropAddress(i.info.tokenToSell, 4, 3),
+                  address: cropAddress(i.token_to_sell.address, 4, 3),
                 })
               }}
             </copy-button>
@@ -112,8 +111,8 @@
               :icon-left="$icons.link"
               :href="
                 provider.getAddressUrl(
-                  networkSell.chain_params.explorer_url,
-                  i.info.tokenToSell,
+                  i.src_chain?.chain_params.explorer_url!,
+                  i.token_to_sell.address,
                 )
               "
             />
@@ -124,15 +123,15 @@
             class="order-list-table__body-item-network-text"
             :title="
               $t('order-list-table.network', {
-                from: networkSell.name,
-                to: networkBuy(i.info.destChain.toNumber())?.name,
+                from: i.src_chain?.name,
+                to: i.destination_chain?.name,
               })
             "
           >
             {{
               $t('order-list-table.network', {
-                from: networkSell.name,
-                to: networkBuy(i.info.destChain.toNumber())?.name,
+                from: i.src_chain?.name,
+                to: i.destination_chain?.name,
               })
             }}
           </span>
@@ -161,14 +160,13 @@ import { AppButton, CopyButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { ChainResposne, UserOrder } from '@/types'
+import { Order } from '@/types'
 import { cropAddress, formatWeiAmount } from '@/helpers'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { useWeb3ProvidersStore } from '@/store'
 
 withDefaults(
   defineProps<{
-    list: UserOrder[]
-    networkSell: ChainResposne
+    list: Order[]
     isBtnDisabled?: boolean
   }>(),
   {
@@ -177,14 +175,11 @@ withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'cancel-btn-click', value: UserOrder): void
+  (e: 'cancel-btn-click', value: Order): void
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = useChainsStore()
 const { provider } = useWeb3ProvidersStore()
-
-const networkBuy = (chainId: number) => chainByChainId(chainId)
 
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)

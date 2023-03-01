@@ -56,33 +56,66 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
         components: [
           {
-            internalType: "enum Swapica.State",
+            internalType: "enum ISwapica.State",
             name: "state",
             type: "uint8",
           },
           {
             internalType: "uint256",
-            name: "executedBy",
+            name: "matchId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "originOrderId",
             type: "uint256",
           },
           {
             internalType: "address",
-            name: "matchSwapica",
+            name: "creator",
             type: "address",
           },
+          {
+            internalType: "address",
+            name: "tokenToSell",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToSell",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "originChainId",
+            type: "uint256",
+          },
         ],
-        indexed: true,
-        internalType: "struct Swapica.Status",
-        name: "status",
+        indexed: false,
+        internalType: "struct ISwapica.Match",
+        name: "match_",
         type: "tuple",
+      },
+    ],
+    name: "MatchCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "matchId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "enum ISwapica.State",
+        name: "status",
+        type: "uint8",
       },
     ],
     name: "MatchUpdated",
@@ -92,21 +125,93 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        components: [
+          {
+            components: [
+              {
+                internalType: "enum ISwapica.State",
+                name: "state",
+                type: "uint8",
+              },
+              {
+                internalType: "uint256",
+                name: "matchId",
+                type: "uint256",
+              },
+              {
+                internalType: "address",
+                name: "matchSwapica",
+                type: "address",
+              },
+            ],
+            internalType: "struct ISwapica.OrderStatus",
+            name: "status",
+            type: "tuple",
+          },
+          {
+            internalType: "uint256",
+            name: "orderId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "creator",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "tokenToSell",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToSell",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "tokenToBuy",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToBuy",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "destinationChain",
+            type: "uint256",
+          },
+        ],
+        indexed: false,
+        internalType: "struct ISwapica.Order",
+        name: "order",
+        type: "tuple",
+      },
+    ],
+    name: "OrderCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "uint256",
-        name: "id",
+        name: "orderId",
         type: "uint256",
       },
       {
         components: [
           {
-            internalType: "enum Swapica.State",
+            internalType: "enum ISwapica.State",
             name: "state",
             type: "uint8",
           },
           {
             internalType: "uint256",
-            name: "executedBy",
+            name: "matchId",
             type: "uint256",
           },
           {
@@ -115,8 +220,8 @@ const _abi = [
             type: "address",
           },
         ],
-        indexed: true,
-        internalType: "struct Swapica.Status",
+        indexed: false,
+        internalType: "struct ISwapica.OrderStatus",
         name: "status",
         type: "tuple",
       },
@@ -157,19 +262,6 @@ const _abi = [
     type: "event",
   },
   {
-    inputs: [],
-    name: "NATIVE",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "address[]",
@@ -204,7 +296,7 @@ const _abi = [
     inputs: [
       {
         internalType: "address[]",
-        name: "signers_",
+        name: "signers",
         type: "address[]",
       },
     ],
@@ -217,7 +309,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "orderData",
+        name: "data",
         type: "bytes",
       },
       {
@@ -235,7 +327,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "id",
+        name: "orderId",
         type: "uint256",
       },
     ],
@@ -248,7 +340,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "orderData",
+        name: "data",
         type: "bytes",
       },
       {
@@ -265,29 +357,36 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "tokenToSell",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amountToSell",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "tokenToBuy",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amountToBuy",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "destChain",
-        type: "uint256",
+        components: [
+          {
+            internalType: "address",
+            name: "tokenToSell",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToSell",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "tokenToBuy",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountToBuy",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "destinationChain",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct ISwapica.CreateOrderRequest",
+        name: "request",
+        type: "tuple",
       },
     ],
     name: "createOrder",
@@ -299,7 +398,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "orderData",
+        name: "data",
         type: "bytes",
       },
       {
@@ -317,7 +416,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "orderData",
+        name: "data",
         type: "bytes",
       },
       {
@@ -334,38 +433,50 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "tokenToSell",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "tokenToBuy",
-        type: "address",
-      },
-      {
         internalType: "uint256",
-        name: "begin",
+        name: "offset",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "end",
+        name: "limit",
         type: "uint256",
       },
     ],
-    name: "getActiveOrders",
+    name: "getAllOrders",
     outputs: [
       {
         components: [
           {
+            components: [
+              {
+                internalType: "enum ISwapica.State",
+                name: "state",
+                type: "uint8",
+              },
+              {
+                internalType: "uint256",
+                name: "matchId",
+                type: "uint256",
+              },
+              {
+                internalType: "address",
+                name: "matchSwapica",
+                type: "address",
+              },
+            ],
+            internalType: "struct ISwapica.OrderStatus",
+            name: "status",
+            type: "tuple",
+          },
+          {
             internalType: "uint256",
-            name: "id",
+            name: "orderId",
             type: "uint256",
           },
           {
             internalType: "address",
-            name: "account",
+            name: "creator",
             type: "address",
           },
           {
@@ -374,14 +485,14 @@ const _abi = [
             type: "address",
           },
           {
-            internalType: "address",
-            name: "tokenToBuy",
-            type: "address",
-          },
-          {
             internalType: "uint256",
             name: "amountToSell",
             type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "tokenToBuy",
+            type: "address",
           },
           {
             internalType: "uint256",
@@ -390,12 +501,12 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "destChain",
+            name: "destinationChain",
             type: "uint256",
           },
         ],
-        internalType: "struct Swapica.Order[]",
-        name: "result",
+        internalType: "struct ISwapica.Order[]",
+        name: "allOrders",
         type: "tuple[]",
       },
     ],
@@ -404,7 +515,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "getOrdersLength",
+    name: "getAllOrdersLength",
     outputs: [
       {
         internalType: "uint256",
@@ -436,18 +547,13 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "enum Swapica.State",
-        name: "state",
-        type: "uint8",
-      },
-      {
         internalType: "uint256",
-        name: "begin",
+        name: "offset",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "end",
+        name: "limit",
         type: "uint256",
       },
     ],
@@ -456,8 +562,13 @@ const _abi = [
       {
         components: [
           {
+            internalType: "enum ISwapica.State",
+            name: "state",
+            type: "uint8",
+          },
+          {
             internalType: "uint256",
-            name: "id",
+            name: "matchId",
             type: "uint256",
           },
           {
@@ -467,7 +578,7 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "account",
+            name: "creator",
             type: "address",
           },
           {
@@ -482,12 +593,12 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "originChain",
+            name: "originChainId",
             type: "uint256",
           },
         ],
-        internalType: "struct Swapica.Match[]",
-        name: "result",
+        internalType: "struct ISwapica.Match[]",
+        name: "userMatches",
         type: "tuple[]",
       },
     ],
@@ -521,18 +632,13 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "enum Swapica.State",
-        name: "state",
-        type: "uint8",
-      },
-      {
         internalType: "uint256",
-        name: "begin",
+        name: "offset",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "end",
+        name: "limit",
         type: "uint256",
       },
     ],
@@ -541,13 +647,35 @@ const _abi = [
       {
         components: [
           {
+            components: [
+              {
+                internalType: "enum ISwapica.State",
+                name: "state",
+                type: "uint8",
+              },
+              {
+                internalType: "uint256",
+                name: "matchId",
+                type: "uint256",
+              },
+              {
+                internalType: "address",
+                name: "matchSwapica",
+                type: "address",
+              },
+            ],
+            internalType: "struct ISwapica.OrderStatus",
+            name: "status",
+            type: "tuple",
+          },
+          {
             internalType: "uint256",
-            name: "id",
+            name: "orderId",
             type: "uint256",
           },
           {
             internalType: "address",
-            name: "account",
+            name: "creator",
             type: "address",
           },
           {
@@ -556,14 +684,14 @@ const _abi = [
             type: "address",
           },
           {
-            internalType: "address",
-            name: "tokenToBuy",
-            type: "address",
-          },
-          {
             internalType: "uint256",
             name: "amountToSell",
             type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "tokenToBuy",
+            type: "address",
           },
           {
             internalType: "uint256",
@@ -572,12 +700,12 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "destChain",
+            name: "destinationChain",
             type: "uint256",
           },
         ],
-        internalType: "struct Swapica.Order[]",
-        name: "result",
+        internalType: "struct ISwapica.Order[]",
+        name: "userOrders",
         type: "tuple[]",
       },
     ],
@@ -597,181 +725,6 @@ const _abi = [
       {
         internalType: "uint256",
         name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "locked",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "matchStatus",
-    outputs: [
-      {
-        internalType: "enum Swapica.State",
-        name: "state",
-        type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "executedBy",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "matchSwapica",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "matches",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "originOrderId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "tokenToSell",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amountToSell",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "originChain",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "orderStatus",
-    outputs: [
-      {
-        internalType: "enum Swapica.State",
-        name: "state",
-        type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "executedBy",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "matchSwapica",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "orders",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "tokenToSell",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "tokenToBuy",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amountToSell",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "amountToBuy",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "destChain",
         type: "uint256",
       },
     ],
@@ -808,7 +761,7 @@ const _abi = [
     inputs: [
       {
         internalType: "address[]",
-        name: "signers_",
+        name: "signers",
         type: "address[]",
       },
     ],
@@ -828,7 +781,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "signaturesThreshold_",
+        name: "_signaturesThreshold",
         type: "uint256",
       },
     ],

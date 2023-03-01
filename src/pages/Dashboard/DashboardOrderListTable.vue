@@ -17,7 +17,7 @@
       <div
         class="dashboard-order-list-table__body"
         v-for="i in list"
-        :key="i.info.id.toString()"
+        :key="i.id"
       >
         <div class="dashboard-order-list-table__body-item-info-wrp">
           <!-- eslint-disable-next-line max-len -->
@@ -26,32 +26,32 @@
               class="dashboard-order-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
-                  i.info.amountToSell.toString(),
-                  i.tokenToSell.decimals,
+                  i.amount_to_sell,
+                  i.token_to_sell.decimals,
                 )
               "
             >
               {{
                 formatWeiAmount(
-                  i.info.amountToSell.toString(),
-                  i.tokenToSell.decimals,
+                  i.amount_to_sell,
+                  i.token_to_sell.decimals,
                 )
               }}
             </span>
             <span class="dashboard-order-list-table__body-item-code">
-              {{ i.tokenToSell.symbol }}
+              {{ i.token_to_sell.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
               class="dashboard-order-list-table__body-item-address"
-              :text="i.info.tokenToSell"
-              :title="i.info.tokenToSell"
+              :text="i.token_to_sell.address"
+              :title="i.token_to_sell.address"
             >
               {{
                 $t('dashboard-order-list-table.address', {
                   address: isMediumWidth
-                    ? cropAddress(i.info.tokenToSell)
-                    : cropAddress(i.info.tokenToSell, 7, 12),
+                    ? cropAddress(i.token_to_sell.address)
+                    : cropAddress(i.token_to_sell.address, 7, 12),
                 })
               }}
             </copy-button>
@@ -62,8 +62,8 @@
               :icon-left="$icons.link"
               :href="
                 getEthExplorerAddressUrl(
-                  networkSell.chain_params.explorer_url,
-                  i.info.tokenToSell,
+                  i.src_chain?.chain_params.explorer_url!,
+                  i.token_to_sell.address,
                 )
               "
             />
@@ -74,32 +74,32 @@
               class="dashboard-order-list-table__body-item-amount"
               :title="
                 formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
+                  i.amount_to_buy,
+                  i.token_to_buy.decimals,
                 )
               "
             >
               {{
                 formatWeiAmount(
-                  i.info.amountToBuy.toString(),
-                  i.tokenToBuy.decimals,
+                  i.amount_to_buy,
+                  i.token_to_buy.decimals,
                 )
               }}
             </span>
             <span class="dashboard-order-list-table__body-item-code">
-              {{ i.tokenToBuy.symbol }}
+              {{ i.token_to_buy.symbol }}
             </span>
             <copy-button
               v-if="!isSmall"
               class="dashboard-order-list-table__body-item-address"
-              :text="i.info.tokenToBuy"
-              :title="i.info.tokenToBuy"
+              :text="i.token_to_buy.address"
+              :title="i.token_to_buy.address"
             >
               {{
                 $t('dashboard-order-list-table.address', {
                   address: isMediumWidth
-                    ? cropAddress(i.info.tokenToBuy)
-                    : cropAddress(i.info.tokenToBuy, 7, 12),
+                    ? cropAddress(i.token_to_buy.address)
+                    : cropAddress(i.token_to_buy.address, 7, 12),
                 })
               }}
             </copy-button>
@@ -108,9 +108,8 @@
               scheme="icon"
               target="_blank"
               :href="getEthExplorerAddressUrl(
-                networkBuy(i.info.destChain.toNumber())
-                  ?.chain_params.explorer_url!,
-                i.info.tokenToBuy
+                i.destination_chain?.chain_params.explorer_url!,
+                i.token_to_buy.address
               )"
               :icon-left="$icons.link"
             />
@@ -143,18 +142,17 @@ import { AppButton, CopyButton, Tooltip } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { ChainResposne, UserOrder } from '@/types'
+import { Order } from '@/types'
 import {
   cropAddress,
   formatWeiAmount,
   getEthExplorerAddressUrl,
 } from '@/helpers'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { useWeb3ProvidersStore } from '@/store'
 
 withDefaults(
   defineProps<{
-    list: UserOrder[]
-    networkSell: ChainResposne
+    list: Order[]
     isBtnDisabled?: boolean
   }>(),
   {
@@ -163,14 +161,11 @@ withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'match-btn-click', value: UserOrder): void
+  (e: 'match-btn-click', value: Order): void
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = useChainsStore()
 const { provider } = useWeb3ProvidersStore()
-
-const networkBuy = (chainId: number) => chainByChainId(chainId)
 
 const isMediumWidth = computed(
   () => windowWidth.value < WINDOW_BREAKPOINTS.medium,

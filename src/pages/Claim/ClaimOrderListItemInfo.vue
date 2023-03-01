@@ -10,30 +10,30 @@
         class="claim-order-list-item-info__body-item-amount"
         :title="
           formatWeiAmount(
-            order.info.amountToSell.toString(),
-            order.tokenToSell.decimals,
+            item.origin_order?.amount_to_sell!,
+            item.origin_order?.token_to_sell.decimals!,
           )
         "
       >
         {{
           formatWeiAmount(
-            order.info.amountToSell.toString(),
-            order.tokenToSell.decimals,
+            item.origin_order?.amount_to_sell!,
+            item.origin_order?.token_to_sell.decimals!,
           )
         }}
       </span>
       <span class="claim-order-list-item-info__body-item-code">
-        {{ order.tokenToSell.symbol }}
+        {{ item.origin_order?.token_to_sell.symbol }}
       </span>
       <copy-button
         v-if="!isSmall"
         class="claim-order-list-item-info__body-item-address"
-        :text="order.info.tokenToSell"
-        :title="order.info.tokenToSell"
+        :text="item.origin_order?.token_to_sell.address!"
+        :title="item.origin_order?.token_to_sell.address"
       >
         {{
           $t('claim-order-list-item-info.address', {
-            address: cropAddress(order.info.tokenToSell, 4, 3),
+            address: cropAddress(item.origin_order?.token_to_sell.address!, 4, 3),
           })
         }}
       </copy-button>
@@ -44,8 +44,8 @@
         :icon-left="$icons.link"
         :href="
           provider.getAddressUrl(
-            networkSell.chain_params.explorer_url,
-            order.info.tokenToSell,
+            item.origin_order?.src_chain?.chain_params.explorer_url!,
+            item.origin_order?.token_to_sell.address!,
           )
         "
       />
@@ -58,30 +58,30 @@
         class="claim-order-list-item-info__body-item-amount"
         :title="
           formatWeiAmount(
-            order.info.amountToBuy.toString(),
-            order.tokenToBuy.decimals,
+            item.origin_order?.amount_to_buy!,
+            item.origin_order?.token_to_buy.decimals!,
           )
         "
       >
         {{
           formatWeiAmount(
-            order.info.amountToBuy.toString(),
-            order.tokenToBuy.decimals,
+            item.origin_order?.amount_to_buy!,
+            item.origin_order?.token_to_buy.decimals!,
           )
         }}
       </span>
       <span class="claim-order-list-item-info__body-item-code">
-        {{ order.tokenToBuy.symbol }}
+        {{ item.origin_order?.token_to_buy.symbol }}
       </span>
       <copy-button
         v-if="!isSmall"
         class="claim-order-list-item-info__body-item-address"
-        :text="order.info.tokenToBuy"
-        :title="order.info.tokenToBuy"
+        :text="item.origin_order?.token_to_buy.address!"
+        :title="item.origin_order?.token_to_buy.address"
       >
         {{
           $t('claim-order-list-item-info.address', {
-            address: cropAddress(order.info.tokenToBuy, 4, 3),
+            address: cropAddress(item.origin_order?.token_to_buy.address!, 4, 3),
           })
         }}
       </copy-button>
@@ -90,9 +90,8 @@
         scheme="icon"
         target="_blank"
         :href="provider.getAddressUrl(
-          networkBuy(order.info.destChain.toNumber())
-            ?.chain_params.explorer_url!,
-          order.info.tokenToBuy
+          item.origin_order?.destination_chain?.chain_params.explorer_url!,
+          item.origin_order?.token_to_buy.address!
         )"
         :icon-left="$icons.link"
       />
@@ -104,8 +103,8 @@
       tag="p"
       class="claim-order-list-item-info__body-item-network-text"
       :title="$t('claim-order-list-item-info.network', {
-        to: networkSell.name,
-        from: networkBuy(order.info.destChain.toNumber())?.name,
+        to: item.origin_order?.src_chain?.name,
+        from: item.origin_order?.destination_chain?.name,
       })"
     >
       <template #from>
@@ -113,7 +112,7 @@
           class="claim-order-list-item-info__network-lbl"
           :class="{'claim-order-list-item-info__network-lbl--bold': !isMatch }"
         >
-          {{ networkBuy(order.info.destChain.toNumber())?.name }}
+          {{ item.origin_order?.destination_chain?.name }}
         </span>
       </template>
       <template #to>
@@ -121,7 +120,7 @@
           class="claim-order-list-item-info__network-lbl"
           :class="{'claim-order-list-item-info__network-lbl--bold': isMatch }"
         >
-          {{ networkSell.name }}
+          {{ item.origin_order?.src_chain?.name }}
         </span>
       </template>
     </i18n-t>
@@ -132,23 +131,21 @@ import { AppButton, CopyButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { ChainResposne, UserOrder } from '@/types'
+import { MatchOrder } from '@/types'
 import { cropAddress, formatWeiAmount } from '@/helpers'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { useWeb3ProvidersStore } from '@/store'
 
-defineProps<{
-  order: UserOrder
-  networkSell: ChainResposne
-  isMatch: boolean
+const props = defineProps<{
+  item: MatchOrder
 }>()
 
 const { width: windowWidth } = useWindowSize()
-const { chainByChainId } = useChainsStore()
 const { provider } = useWeb3ProvidersStore()
 
-const networkBuy = (chainId: number) => chainByChainId(chainId)
-
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
+const isMatch = computed(
+  () => props.item.origin_order?.creator !== provider.selectedAddress,
+)
 </script>
 <style lang="scss" scoped>
 .claim-order-list-item-info__body-item-info-wrp {

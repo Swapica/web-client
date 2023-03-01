@@ -13,23 +13,18 @@
         <span class="match-order-form-match-step__desc-token-bold">
           {{
             $t('match-order-form-match-step.recieve-token-msg', {
-              token: order.tokenToSell.symbol,
+              token: order.token_to_sell.symbol,
               amount: formatWeiAmount(
-                order.info.amountToSell.toString(),
-                order.tokenToSell.decimals,
+                order.amount_to_sell,
+                order.token_to_sell.decimals,
               ),
             })
           }}
         </span>
       </template>
       <template #tokenBuy>
-        {{
-          formatWeiAmount(
-            order.info.amountToBuy.toString(),
-            order.tokenToBuy.decimals,
-          )
-        }}
-        {{ order.tokenToBuy.symbol }}
+        {{ formatWeiAmount(order.amount_to_buy, order.token_to_buy.decimals) }}
+        {{ order.token_to_buy.symbol }}
       </template>
     </i18n-t>
 
@@ -51,11 +46,11 @@
 </template>
 <script lang="ts" setup>
 import { AppButton } from '@/common'
-import { UserOrder } from '@/types'
+import { Order } from '@/types'
 import { formatWeiAmount } from '@/helpers'
 
 defineProps<{
-  order: UserOrder
+  order: Order
 }>()
 
 const emit = defineEmits<{

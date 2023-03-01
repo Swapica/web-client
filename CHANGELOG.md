@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.9] - 2023-03-01
+#### Changed
+- Getting lists from the backend instead of contracts
+
 ## [1.0.0-rc.8] - 2023-01-25
 #### Changed
 - Mobile design
@@ -53,7 +57,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.8...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.9...main
+[1.0.0-rc.9]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.8...v1.0.0-rc.9
 [1.0.0-rc.8]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.7...v1.0.0-rc.8
 [1.0.0-rc.7]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.6...v1.0.0-rc.7
 [1.0.0-rc.6]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.5...v1.0.0-rc.6

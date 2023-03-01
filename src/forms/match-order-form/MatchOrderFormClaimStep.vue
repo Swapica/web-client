@@ -12,12 +12,9 @@
       <template #tokenSell>
         <span class="match-order-form-claim-step__desc-token-bold">
           {{
-            formatWeiAmount(
-              order.info.amountToSell.toString(),
-              order.tokenToSell.decimals,
-            )
+            formatWeiAmount(order.amount_to_sell, order.token_to_sell.decimals)
           }}
-          {{ order.tokenToSell.symbol }}
+          {{ order.token_to_sell.symbol }}
         </span>
       </template>
     </i18n-t>
@@ -40,11 +37,11 @@
 </template>
 <script lang="ts" setup>
 import { AppButton } from '@/common'
-import { UserOrder } from '@/types'
+import { Order } from '@/types'
 import { formatWeiAmount } from '@/helpers'
 
 defineProps<{
-  order: UserOrder
+  order: Order
 }>()
 
 const emit = defineEmits<{
