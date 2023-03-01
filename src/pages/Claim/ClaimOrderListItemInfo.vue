@@ -11,14 +11,14 @@
         :title="
           formatWeiAmount(
             item.origin_order?.amount_to_sell!,
-            item.origin_order?.token_to_sell.decimals,
+            item.origin_order?.token_to_sell.decimals!,
           )
         "
       >
         {{
           formatWeiAmount(
             item.origin_order?.amount_to_sell!,
-            item.origin_order?.token_to_sell.decimals,
+            item.origin_order?.token_to_sell.decimals!,
           )
         }}
       </span>
@@ -28,12 +28,12 @@
       <copy-button
         v-if="!isSmall"
         class="claim-order-list-item-info__body-item-address"
-        :text="item.origin_order?.token_to_sell!"
-        :title="item.origin_order?.token_to_sell"
+        :text="item.origin_order?.token_to_sell.address!"
+        :title="item.origin_order?.token_to_sell.address"
       >
         {{
           $t('claim-order-list-item-info.address', {
-            address: cropAddress(item.origin_order?.token_to_sell!, 4, 3),
+            address: cropAddress(item.origin_order?.token_to_sell.address!, 4, 3),
           })
         }}
       </copy-button>
@@ -45,7 +45,7 @@
         :href="
           provider.getAddressUrl(
             item.origin_order?.src_chain?.chain_params.explorer_url!,
-            item.origin_order?.token_to_sell!,
+            item.origin_order?.token_to_sell.address!,
           )
         "
       />
@@ -59,14 +59,14 @@
         :title="
           formatWeiAmount(
             item.origin_order?.amount_to_buy!,
-            item.origin_order?.token_to_buy.decimals,
+            item.origin_order?.token_to_buy.decimals!,
           )
         "
       >
         {{
           formatWeiAmount(
             item.origin_order?.amount_to_buy!,
-            item.origin_order?.token_to_buy.decimals,
+            item.origin_order?.token_to_buy.decimals!,
           )
         }}
       </span>
@@ -76,12 +76,12 @@
       <copy-button
         v-if="!isSmall"
         class="claim-order-list-item-info__body-item-address"
-        :text="item.origin_order?.token_to_buy!"
-        :title="item.origin_order?.token_to_buy"
+        :text="item.origin_order?.token_to_buy.address!"
+        :title="item.origin_order?.token_to_buy.address"
       >
         {{
           $t('claim-order-list-item-info.address', {
-            address: cropAddress(item.origin_order?.token_to_buy!, 4, 3),
+            address: cropAddress(item.origin_order?.token_to_buy.address!, 4, 3),
           })
         }}
       </copy-button>
@@ -91,7 +91,7 @@
         target="_blank"
         :href="provider.getAddressUrl(
           item.origin_order?.destination_chain?.chain_params.explorer_url!,
-          item.origin_order?.token_to_buy!
+          item.origin_order?.token_to_buy.address!
         )"
         :icon-left="$icons.link"
       />

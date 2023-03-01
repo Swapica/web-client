@@ -34,14 +34,14 @@
               :title="
                 formatWeiAmount(
                   i.origin_order?.amount_to_buy!,
-                  i.origin_order?.token_to_buy.decimals,
+                  i.origin_order?.token_to_buy.decimals!,
                 )
               "
             >
               {{
                 formatWeiAmount(
                   i.origin_order?.amount_to_buy!,
-                  i.origin_order?.token_to_buy.decimals,
+                  i.origin_order?.token_to_buy.decimals!,
                 )
               }}
             </span>
@@ -51,12 +51,13 @@
             <copy-button
               v-if="!isSmall"
               class="expired-orders-list-table__body-item-address"
-              :text="i.origin_order?.token_to_buy!"
-              :title="i.origin_order?.token_to_buy"
+              :text="i.origin_order?.token_to_buy.address!"
+              :title="i.origin_order?.token_to_buy.address"
             >
               {{
                 $t('expired-orders-list-table.address', {
-                  address: cropAddress(i.origin_order?.token_to_buy!, 4, 3),
+                  address:
+                    cropAddress(i.origin_order?.token_to_buy.address!, 4, 3),
                 })
               }}
             </copy-button>
@@ -66,7 +67,7 @@
               target="_blank"
               :href="provider.getAddressUrl(
                 i.src_chain?.chain_params.explorer_url!,
-                i.origin_order?.token_to_buy!
+                i.origin_order?.token_to_buy.address!
               )"
               :icon-left="$icons.link"
             />
@@ -78,14 +79,14 @@
               :title="
                 formatWeiAmount(
                   i.origin_order?.amount_to_sell!,
-                  i.origin_order?.token_to_sell.decimals,
+                  i.origin_order?.token_to_sell.decimals!,
                 )
               "
             >
               {{
                 formatWeiAmount(
                   i.origin_order?.amount_to_sell!,
-                  i.origin_order?.token_to_sell.decimals,
+                  i.origin_order?.token_to_sell.decimals!,
                 )
               }}
             </span>
@@ -95,12 +96,13 @@
             <copy-button
               v-if="!isSmall"
               class="expired-orders-list-table__body-item-address"
-              :text="i.origin_order?.token_to_sell!"
-              :title="i.origin_order?.token_to_sell"
+              :text="i.origin_order?.token_to_sell.address!"
+              :title="i.origin_order?.token_to_sell.address"
             >
               {{
                 $t('expired-orders-list-table.address', {
-                  address: cropAddress(i.origin_order?.token_to_sell!, 4, 3),
+                  address:
+                    cropAddress(i.origin_order?.token_to_sell.address!, 4, 3),
                 })
               }}
             </copy-button>
@@ -113,7 +115,7 @@
                 provider.getAddressUrl(
                   i.origin_chain?.chain_params
                     .explorer_url!,
-                  i.origin_order?.token_to_sell!,
+                  i.origin_order?.token_to_sell.address!,
                 )
               "
             />

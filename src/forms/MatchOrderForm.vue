@@ -182,7 +182,7 @@ const match = async () => {
   try {
     await checkApprove(
       props.order.destination_chain?.id!,
-      props.order.token_to_buy,
+      props.order.token_to_buy.address,
     )
     if (approveTx.value) {
       toStep(STEPS.approveBuyToken)

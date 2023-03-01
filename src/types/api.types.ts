@@ -68,10 +68,18 @@ export type Token = JsonApiRecordBase<'token'> & {
   chain: TokenChain
 }
 
+export type OrderToken = JsonApiRecordBase<'token'> & {
+  address: string
+  name: string
+  symbol: string
+  decimals: number
+  src_chain: number
+}
+
 export type Order = JsonApiRecordBase<'order'> & {
   creator: string
-  token_to_buy: string
-  token_to_sell: string
+  token_to_buy: OrderToken
+  token_to_sell: OrderToken
   amount_to_buy: string
   amount_to_sell: string
   order_id: number
@@ -82,7 +90,7 @@ export type Order = JsonApiRecordBase<'order'> & {
 
 export type MatchOrder = JsonApiRecordBase<'match_order'> & {
   creator: string
-  token_to_sell: string
+  token_to_sell: OrderToken
   amount_to_sell: string
   match_id: number
   src_chain?: ChainResposne

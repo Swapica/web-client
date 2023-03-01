@@ -44,14 +44,14 @@
             <copy-button
               v-if="!isSmall"
               class="dashboard-order-list-table__body-item-address"
-              :text="i.token_to_sell"
-              :title="i.token_to_sell"
+              :text="i.token_to_sell.address"
+              :title="i.token_to_sell.address"
             >
               {{
                 $t('dashboard-order-list-table.address', {
                   address: isMediumWidth
-                    ? cropAddress(i.token_to_sell)
-                    : cropAddress(i.token_to_sell, 7, 12),
+                    ? cropAddress(i.token_to_sell.address)
+                    : cropAddress(i.token_to_sell.address, 7, 12),
                 })
               }}
             </copy-button>
@@ -63,7 +63,7 @@
               :href="
                 getEthExplorerAddressUrl(
                   i.src_chain?.chain_params.explorer_url!,
-                  i.token_to_sell,
+                  i.token_to_sell.address,
                 )
               "
             />
@@ -92,14 +92,14 @@
             <copy-button
               v-if="!isSmall"
               class="dashboard-order-list-table__body-item-address"
-              :text="i.token_to_buy"
-              :title="i.token_to_buy"
+              :text="i.token_to_buy.address"
+              :title="i.token_to_buy.address"
             >
               {{
                 $t('dashboard-order-list-table.address', {
                   address: isMediumWidth
-                    ? cropAddress(i.token_to_buy)
-                    : cropAddress(i.token_to_buy, 7, 12),
+                    ? cropAddress(i.token_to_buy.address)
+                    : cropAddress(i.token_to_buy.address, 7, 12),
                 })
               }}
             </copy-button>
@@ -109,7 +109,7 @@
               target="_blank"
               :href="getEthExplorerAddressUrl(
                 i.destination_chain?.chain_params.explorer_url!,
-                i.token_to_buy
+                i.token_to_buy.address
               )"
               :icon-left="$icons.link"
             />

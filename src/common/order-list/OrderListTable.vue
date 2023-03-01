@@ -51,12 +51,12 @@
             <copy-button
               v-if="!isSmall"
               class="order-list-table__body-item-address"
-              :text="i.token_to_buy"
-              :title="i.token_to_buy"
+              :text="i.token_to_buy.address"
+              :title="i.token_to_buy.address"
             >
               {{
                 $t('order-list-table.address', {
-                  address: cropAddress(i.token_to_buy, 4, 3),
+                  address: cropAddress(i.token_to_buy.address, 4, 3),
                 })
               }}
             </copy-button>
@@ -66,7 +66,7 @@
               target="_blank"
               :href="provider.getAddressUrl(
                 i.destination_chain?.chain_params.explorer_url!,
-                i.token_to_buy
+                i.token_to_buy.address
               )"
               :icon-left="$icons.link"
             />
@@ -95,12 +95,12 @@
             <copy-button
               v-if="!isSmall"
               class="order-list-table__body-item-address"
-              :text="i.token_to_sell"
-              :title="i.token_to_sell"
+              :text="i.token_to_sell.address"
+              :title="i.token_to_sell.address"
             >
               {{
                 $t('order-list-table.address', {
-                  address: cropAddress(i.token_to_sell, 4, 3),
+                  address: cropAddress(i.token_to_sell.address, 4, 3),
                 })
               }}
             </copy-button>
@@ -112,7 +112,7 @@
               :href="
                 provider.getAddressUrl(
                   i.src_chain?.chain_params.explorer_url!,
-                  i.token_to_sell,
+                  i.token_to_sell.address,
                 )
               "
             />

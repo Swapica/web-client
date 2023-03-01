@@ -125,7 +125,7 @@ const loadList = async () => {
           'filter[state]': OrderStatus.awaitingMatch,
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,
-          include: 'src_chain,destination_chain',
+          include: 'src_chain,destination_chain,token_to_buy,token_to_sell',
         },
       },
     )

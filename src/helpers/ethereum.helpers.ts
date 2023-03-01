@@ -11,7 +11,6 @@ import { mapKeys, get } from 'lodash-es'
 import { sleep, toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
-import { useSwapica } from '@/composables'
 import { config } from '@/config'
 
 export const connectEthAccounts = async (
@@ -152,31 +151,6 @@ export async function getTokenInfo(chain: ChainResposne, address: string) {
     const data = await loadTokenInfo(chain.chain_params.rpc, address)
     return data
   }
-}
-
-export async function loadMatchStatus(
-  rpcUrl: string,
-  address: string,
-  id: number,
-) {
-  const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
-  const swapica = useSwapica(rpcProvider, address)
-  const data = await swapica.getMatchStatus(id)
-
-  return data
-}
-
-export async function loadOrder(
-  rpcUrl: string,
-  address: string,
-  id: number,
-  network: ChainResposne,
-) {
-  const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
-  const swapica = useSwapica(rpcProvider, address)
-  const data = await swapica.getOrder(id, network)
-
-  return data
 }
 
 export async function switchNetwork(chain: ChainResposne) {

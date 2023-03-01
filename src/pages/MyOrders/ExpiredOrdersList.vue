@@ -88,7 +88,8 @@ const loadList = async () => {
           'filter[expired]': true,
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,
-          include: 'src_chain,origin_chain,origin_order',
+          include:
+            'src_chain,origin_chain,origin_order,origin_order.token_to_buy,origin_order.token_to_sell',
         },
       },
     )
