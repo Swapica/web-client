@@ -1,8 +1,12 @@
 import log from 'loglevel'
-import { Bus, handleProviderInternalError } from '@/helpers'
+import {
+  Bus,
+  handleProviderInternalError,
+  handleProviderInvalidInputError,
+} from '@/helpers'
 import { i18n } from '@/localization'
 import { errors } from '@/errors'
-import { EthProviderRpcError } from '@/types'
+import { get } from 'lodash-es'
 
 export class ErrorHandler {
   static process(error: Error | unknown, errorMessage = ''): void {
@@ -57,11 +61,14 @@ export class ErrorHandler {
           break
         case errors.ProviderInternalError:
           errorMessage = handleProviderInternalError(
-            (error.cause as EthProviderRpcError)?.reason || '',
+            get(error, 'cause.reason', '') ||
+              get(error, 'cause.data.message', ''),
           )
           break
         case errors.ProviderInvalidInput:
-          errorMessage = t('errors.provider-invalid-input')
+          errorMessage = handleProviderInvalidInputError(
+            get(error, 'cause.reason', ''),
+          )
           break
         case errors.ProviderResourceNotFound:
           errorMessage = t('errors.provider-resource-not-found')
