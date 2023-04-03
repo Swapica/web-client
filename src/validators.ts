@@ -31,3 +31,9 @@ export const maxLength = (length: number): ValidationRule =>
 export const sameAs = (field: Ref): ValidationRule => {
   return <ValidationRule>withI18nMessage(_sameAs(field, get(field, '_key')))
 }
+
+export const amount = <ValidationRule>(
+  withI18nMessage(
+    (value: number | string) => Boolean(+value) && Number(value) > 0,
+  )
+)

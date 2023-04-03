@@ -1,5 +1,5 @@
 <template>
-  <div :class="selectFieldClasses">
+  <div :class="selectFieldClasses" :title="errorMessage ? errorMessage : ''">
     <label v-if="label" class="token-select__label">
       {{ label }}
     </label>

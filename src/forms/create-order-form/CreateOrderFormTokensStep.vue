@@ -135,7 +135,7 @@ import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { UseCreateOrderForm } from '@/types'
 import { computed, toRefs } from 'vue'
-import { required } from '@/validators'
+import { required, amount } from '@/validators'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { useTokensStore } from '@/store'
@@ -177,8 +177,8 @@ const tokensBuy = computed(() =>
 const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   form,
   {
-    amountSell: { required },
-    amountBuy: { required },
+    amountSell: { required, amount },
+    amountBuy: { required, amount },
     tokenSell: { required },
     tokenBuy: { required },
   },

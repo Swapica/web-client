@@ -138,7 +138,10 @@ watch(
 </script>
 
 <template>
-  <div :class="selectFieldClasses">
+  <div
+    :class="selectFieldClasses"
+    :title="errorMessage && !isErrorMessageShown ? errorMessage : ''"
+  >
     <label
       v-if="label"
       class="select-field__label"
