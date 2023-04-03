@@ -9,19 +9,23 @@
 </template>
 <script lang="ts" setup>
 import { AppButton } from '@/common'
-import { useWeb3ProvidersStore } from '@/store'
+import { useWeb3ProvidersStore, useChainsStore } from '@/store'
 import { computed } from 'vue'
-import { cropAddress, ErrorHandler } from '@/helpers'
+import { cropAddress, ErrorHandler, sleep, switchNetwork } from '@/helpers'
 import { useI18n } from 'vue-i18n'
 import { errors } from '@/errors'
 
 const { provider } = useWeb3ProvidersStore()
+const chainStore = useChainsStore()
+
 const { t } = useI18n({ useScope: 'global' })
 
 const connect = async () => {
   try {
     if (provider.currentProvider) {
       await provider.connect()
+      await sleep(1000)
+      await switchNetwork(chainStore.selectedChain!)
     } else {
       throw new errors.MetamaskProviderNotFound()
     }
