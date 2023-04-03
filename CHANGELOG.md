@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.10] - 2023-04-03
+
+#### Fixed
+- Unuserfriendly error when user with empty balance tries to create an order
+- A bug with opportunity to create an order with 0 amount
+
+#### Removed
+- Default tokens from dashboard
+
 ## [1.0.0-rc.9] - 2023-03-01
 #### Changed
 - Getting lists from the backend instead of contracts
@@ -57,7 +66,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.9...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.10...main
+[1.0.0-rc.10]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.9...v1.0.0-rc.10
 [1.0.0-rc.9]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.8...v1.0.0-rc.9
 [1.0.0-rc.8]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.7...v1.0.0-rc.8
 [1.0.0-rc.7]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.6...v1.0.0-rc.7
