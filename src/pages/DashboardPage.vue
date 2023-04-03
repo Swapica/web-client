@@ -43,6 +43,7 @@
             v-model="filters.tokenSell"
             is-head-icon-shown
             size="big"
+            is-emit-search-value-on-input
             :key="filters.networkFrom"
             :value-options="tokensSell"
             :disabled="isSubmitting"
@@ -53,6 +54,7 @@
             v-model="filters.tokenBuy"
             is-head-icon-shown
             size="big"
+            is-emit-search-value-on-input
             :key="filters.networkTo"
             :value-options="tokensBuy"
             :disabled="isSubmitting"
@@ -130,14 +132,12 @@ const networkTo = computed(() => chainById(filters.networkTo))
 
 watch(
   () => filters.networkFrom,
-  () => (filters.tokenSell = tokensSell.value[0]?.value ?? ''),
-  { immediate: true },
+  () => (filters.tokenSell = ''),
 )
 
 watch(
   () => filters.networkTo,
-  () => (filters.tokenBuy = tokensBuy.value[0]?.value ?? ''),
-  { immediate: true },
+  () => (filters.tokenBuy = ''),
 )
 
 onMounted(() => {

@@ -1,7 +1,8 @@
 {
   "validations": {
     "field-error_required": "Please fill out this field",
-    "field-error_email": "Field must be a valid email"
+    "field-error_email": "Field must be a valid email",
+    "field-error_amount": "Amount must be a number, greater than 0"
   },
   "errors": {
     "default": "Oops... Something went wrong",
@@ -14,7 +15,6 @@
     "provider-invalid-request": "JSON is not a valid request object standard",
     "provider-method-not-found": "Method does not exist standard",
     "provider-invalid-params": "Invalid method parameters standard",
-    "provider-invalid-input": "Missing or invalid parameters non-standard",
     "provider-resource-not-found": "Requested resource not found non-standard",
     "provider-resource-unavailable": "Requested resource not available non-standard",
     "provider-transaction-rejected": "Transaction creation failed non-standard",
@@ -24,9 +24,14 @@
     "provider-wrapper-method-not-found": "provider not exist or hasn't this method",
     "metamask-provider-not-found": "Metamask provider not found"
   },
+  "provider-invalid-input-errors": {
+    "not-enough-balance": "Transfer amount exceeds balance",
+    "default": "Missing or invalid parameters non-standard"
+  },
   "provider-internal-errors": {
     "default": "Internal JSON-RPC error standard",
-    "not-enough-balance": "Transfer amount exceeds balance"
+    "not-enough-balance": "Transfer amount exceeds balance",
+    "insufficient-funds": "Transfer amount exceeds balance"
   },
   "notification": {
     "default-title-success": "Action Completed",

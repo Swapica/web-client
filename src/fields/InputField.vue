@@ -106,7 +106,11 @@ defineExpose({
 </script>
 
 <template>
-  <div class="input-field" :class="inputClasses">
+  <div
+    class="input-field"
+    :class="inputClasses"
+    :title="errorMessage && !isErrorMessageShown ? errorMessage : ''"
+  >
     <label v-if="label" :for="`input-field--${uid}`" class="input-field__label">
       {{ label }}
     </label>

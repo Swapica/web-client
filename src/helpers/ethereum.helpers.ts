@@ -80,7 +80,9 @@ export function handleEthError(error: EthProviderRpcError) {
         cause: error,
       })
     case EIP1474.invalidInput:
-      throw new errors.ProviderInvalidInput(error.message)
+      throw new errors.ProviderInvalidInput(error.message, {
+        cause: error,
+      })
     case EIP1474.resourceNotFound:
       throw new errors.ProviderResourceNotFound(error.message)
     case EIP1474.resourceUnavailable:

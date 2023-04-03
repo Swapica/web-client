@@ -120,8 +120,8 @@ const loadList = async () => {
         params: {
           'filter[src_chain]': props.networkSell.chain_params.chain_id,
           'filter[destination_chain]': props.matchNetwork.chain_params.chain_id,
-          'filter[token_to_buy]': props.tokenBuy,
-          'filter[token_to_sell]': props.tokenSell,
+          ...(props.tokenBuy && { 'filter[token_to_buy]': props.tokenBuy }),
+          ...(props.tokenSell && { 'filter[token_to_sell]': props.tokenSell }),
           'filter[state]': OrderStatus.awaitingMatch,
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,
@@ -149,15 +149,15 @@ Bus.on(Bus.eventList.orderMatched, () => {
 })
 
 watch(
-  () => [props.tokenSell, props.tokenBuy],
-  val => {
-    if (val[0] && val[1]) {
-      currentPage.value = 1
-      loadList()
-    } else {
-      list.value = []
-      isLoaded.value = true
-    }
+  () => [
+    props.tokenSell,
+    props.tokenBuy,
+    props.networkSell,
+    props.matchNetwork,
+  ],
+  () => {
+    currentPage.value = 1
+    loadList()
   },
   {
     immediate: true,

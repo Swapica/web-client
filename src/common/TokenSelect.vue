@@ -1,5 +1,5 @@
 <template>
-  <div :class="selectFieldClasses">
+  <div :class="selectFieldClasses" :title="errorMessage ? errorMessage : ''">
     <label v-if="label" class="token-select__label">
       {{ label }}
     </label>
@@ -127,6 +127,7 @@ const props = withDefaults(
     isHeadIconShown?: boolean
     size?: SIZES
     emitEmptyValueOnStartSearch?: boolean
+    isEmitSearchValueOnInput?: boolean
   }>(),
   {
     valueOptions: () => [],
@@ -137,6 +138,7 @@ const props = withDefaults(
     rpcUrl: '',
     isHeadIconShown: false,
     emitEmptyValueOnStartSearch: false,
+    isEmitSearchValueOnInput: false,
     size: 'default',
   },
 )
@@ -235,6 +237,8 @@ const handleSearch = async () => {
     let address = ''
     if (selectedOption.value) {
       address = selectedOption?.value?.value
+    } else if (props.isEmitSearchValueOnInput) {
+      address = searchValue.value
     } else if (isEthAddress(searchValue.value)) {
       if (!props.rpcUrl) return
       const data = await loadTokenInfo(props.rpcUrl, searchValue.value)

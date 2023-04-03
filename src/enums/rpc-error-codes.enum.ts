@@ -28,3 +28,7 @@ export enum EIP1474 {
 export enum ProviderInternalErrors {
   notEnoughBalance = 'transfer amount exceeds balance',
 }
+
+export enum ProviderInvalidInputErrors {
+  notEnoughBalance = 'insufficient funds for intrinsic transaction cost',
+}
