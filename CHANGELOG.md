@@ -8,7 +8,6 @@ Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
 ## [1.0.0-rc.10] - 2023-04-03
-
 #### Fixed
 - Unuserfriendly error when user with empty balance tries to create an order
 - A bug with opportunity to create an order with 0 amount
