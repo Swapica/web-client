@@ -2,7 +2,8 @@
   "validations": {
     "field-error_required": "Please fill out this field",
     "field-error_email": "Field must be a valid email",
-    "field-error_amount": "Amount must be a number, greater than 0"
+    "field-error_amount": "Amount must be a number, greater than 0",
+    "field-error_sameTokenInSameNetwork": "Tokens must be different in the same network"
   },
   "errors": {
     "default": "Oops... Something went wrong",
@@ -105,7 +106,9 @@
     "next-btn": "Confirm",
     "token-to-sell-lbl": "Token to sell",
     "token-to-buy-lbl": "Token to buy",
-    "token-network": "Network: {network}"
+    "token-network": "Network: {network}",
+    "token-balance": "Balance: {balance}",
+    "token-balance-loading-lbl": "loading"
   },
   "confirmation-step": {
     "title": "Confirmation",

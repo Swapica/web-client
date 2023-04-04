@@ -68,6 +68,22 @@
             })
           }}
         </p>
+
+        <p
+          class="create-order-form-tokens-step__token-balance"
+          :class="{
+            'create-order-form-tokens-step__token-balance--loading':
+              isBalanceLoading,
+          }"
+        >
+          {{
+            $t('create-order-form-tokens-step.token-balance', {
+              balance: isBalanceLoading
+                ? $t('create-order-form-tokens-step.token-balance-loading-lbl')
+                : formatWeiAmount(tokenSellBalance, tokenSellInfo.decimals),
+            })
+          }}
+        </p>
       </div>
       <div class="create-order-form-tokens-step__token-wrp">
         <span
@@ -133,15 +149,22 @@
 import { AppButton, TokenSelect } from '@/common'
 import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
-import { UseCreateOrderForm } from '@/types'
-import { computed, toRefs } from 'vue'
-import { required, amount } from '@/validators'
+import { TokenInfo, UseCreateOrderForm } from '@/types'
+import { computed, reactive, ref, toRef, toRefs, watch } from 'vue'
+import { required, amount, sameTokenInSameNetwork } from '@/validators'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
-import { useTokensStore } from '@/store'
+import { useTokensStore, useWeb3ProvidersStore } from '@/store'
+import {
+  loadTokenBalance,
+  getTokenInfo,
+  formatWeiAmount,
+  ErrorHandler,
+} from '@/helpers'
 
 const { width: windowWidth } = useWindowSize()
 const { tokensByChainId } = useTokensStore()
+const { provider } = useWeb3ProvidersStore()
 
 const props = defineProps<{
   former: UseCreateOrderForm
@@ -152,6 +175,10 @@ const emit = defineEmits<{
   (e: 'back'): void
   (e: 'next'): void
 }>()
+
+const tokenSellBalance = ref('0')
+const isBalanceLoading = ref(false)
+let tokenSellInfo = reactive<TokenInfo>({} as TokenInfo)
 
 const isSmallWidth = computed(
   () => windowWidth.value < WINDOW_BREAKPOINTS.small,
@@ -179,8 +206,22 @@ const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   {
     amountSell: { required, amount },
     amountBuy: { required, amount },
-    tokenSell: { required },
-    tokenBuy: { required },
+    tokenSell: {
+      required,
+      sameTokenInSameNetwork: sameTokenInSameNetwork(
+        networkBuy.value!,
+        networkSell.value!,
+        toRef(form.value, 'tokenBuy'),
+      ),
+    },
+    tokenBuy: {
+      required,
+      sameTokenInSameNetwork: sameTokenInSameNetwork(
+        networkBuy.value!,
+        networkSell.value!,
+        toRef(form.value, 'tokenSell'),
+      ),
+    },
   },
 )
 
@@ -188,6 +229,37 @@ const handleNext = () => {
   if (!isFormValid()) return
   emit('next')
 }
+
+const loadTokenInfo = async () => {
+  if (!form.value.tokenSell) {
+    tokenSellBalance.value = '0'
+    return
+  }
+  isBalanceLoading.value = true
+  try {
+    const [balance, tokenInfo] = await Promise.all([
+      loadTokenBalance(
+        networkSell.value?.chain_params.rpc!,
+        form.value.tokenSell,
+      ),
+      getTokenInfo(networkSell.value!, form.value.tokenSell),
+    ])
+    tokenSellBalance.value = balance
+    tokenSellInfo = tokenInfo
+  } catch (e) {
+    tokenSellBalance.value = '0'
+    ErrorHandler.processWithoutFeedback(e)
+  }
+  isBalanceLoading.value = false
+}
+
+watch(
+  () => [form.value.tokenSell, provider.selectedAddress],
+  () => {
+    loadTokenInfo()
+  },
+  { immediate: true },
+)
 </script>
 
 <style lang="scss" scoped>
@@ -245,6 +317,20 @@ const handleNext = () => {
   font-size: toRem(14);
   line-height: 1.2;
   color: var(--text-primary-main);
+}
+
+.create-order-form-tokens-step__token-balance {
+  font-size: toRem(12);
+  line-height: 1.2;
+  color: var(--text-primary-main);
+  margin-top: toRem(4);
+
+  &--loading {
+    &:after {
+      content: ' .';
+      animation: dots 1.2s steps(5, end) infinite;
+    }
+  }
 }
 
 .create-order-form-tokens-step__token-network {
@@ -311,5 +397,28 @@ const handleNext = () => {
   width: 100%;
   gap: toRem(4.5);
   margin-bottom: toRem(8);
+}
+
+@keyframes dots {
+  0%,
+  20% {
+    color: transparent;
+    text-shadow: 0.25em 0 0 transparent, 0.5em 0 0 transparent;
+  }
+
+  40% {
+    color: var(--text-primary-dark);
+    text-shadow: 0.25em 0 0 transparent, 0.5em 0 0 transparent;
+  }
+
+  60% {
+    text-shadow: 0.25em 0 0 var(--text-primary-dark), 0.5em 0 0 transparent;
+  }
+
+  80%,
+  100% {
+    text-shadow: 0.25em 0 0 var(--text-primary-dark),
+      0.5em 0 0 var(--text-primary-dark);
+  }
 }
 </style>
