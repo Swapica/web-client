@@ -306,14 +306,10 @@ watch(
 }
 
 .create-order-form-tokens-step__token-balance {
-  font-size: toRem(14);
+  font-size: toRem(12);
   line-height: 1.2;
-  color: var(--text-primary-dark);
-
-  @include respond-to(tablet) {
-    font-size: toRem(12);
-    line-height: 1;
-  }
+  color: var(--text-primary-main);
+  margin-top: toRem(4);
 
   &--loading {
     &:after {
