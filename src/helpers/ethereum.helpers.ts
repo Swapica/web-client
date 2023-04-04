@@ -155,6 +155,19 @@ export async function getTokenInfo(chain: ChainResposne, address: string) {
   }
 }
 
+export async function loadTokenBalance(rpcUrl: string, address: string) {
+  const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
+  const { provider } = useWeb3ProvidersStore()
+
+  if (address === config.NATIVE_TOKEN) {
+    const balance = await rpcProvider?.getBalance(provider.selectedAddress!)
+    return balance?.toString()
+  } else {
+    const erc20 = useErc20(rpcProvider, address)
+    return erc20.getBalanceOf(provider.selectedAddress!)
+  }
+}
+
 export async function switchNetwork(chain: ChainResposne) {
   const { provider } = useWeb3ProvidersStore()
 

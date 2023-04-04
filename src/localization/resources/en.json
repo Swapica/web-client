@@ -105,7 +105,9 @@
     "next-btn": "Confirm",
     "token-to-sell-lbl": "Token to sell",
     "token-to-buy-lbl": "Token to buy",
-    "token-network": "Network: {network}"
+    "token-network": "Network: {network}",
+    "token-balance": "Balance: {balance}",
+    "token-balance-loading-lbl": "loading"
   },
   "confirmation-step": {
     "title": "Confirmation",
