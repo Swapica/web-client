@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.11] - 2023-04-04
+#### Added
+- Display the balance of owned token on create an order form
+#### Fixed
+- A bug with create order in the same networks with the same token
+
 ## [1.0.0-rc.10] - 2023-04-03
 #### Fixed
 - Unuserfriendly error when user with empty balance tries to create an order
@@ -65,7 +71,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.10...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.11...main
+[1.0.0-rc.11]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.10...v1.0.0-rc.11
 [1.0.0-rc.10]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.9...v1.0.0-rc.10
 [1.0.0-rc.9]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.8...v1.0.0-rc.9
 [1.0.0-rc.8]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.7...v1.0.0-rc.8

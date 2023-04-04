@@ -10,6 +10,7 @@ import { Ref } from 'vue'
 import { createI18nMessage, MessageProps } from '@vuelidate/validators'
 import { get } from 'lodash-es'
 import { i18n } from '@/localization'
+import { ChainResposne } from '@/types'
 
 const { t } = i18n.global || i18n
 
@@ -37,3 +38,14 @@ export const amount = <ValidationRule>(
     (value: number | string) => Boolean(+value) && Number(value) > 0,
   )
 )
+
+export const sameTokenInSameNetwork = (
+  networkSell: ChainResposne,
+  networkBuy: ChainResposne,
+  tokenAddr: Ref,
+): ValidationRule => {
+  return <ValidationRule>withI18nMessage(value => {
+    if (networkBuy.id !== networkSell.id) return true
+    return value !== tokenAddr.value
+  })
+}

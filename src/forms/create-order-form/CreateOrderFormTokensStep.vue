@@ -150,8 +150,8 @@ import { AppButton, TokenSelect } from '@/common'
 import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { TokenInfo, UseCreateOrderForm } from '@/types'
-import { computed, reactive, ref, toRefs, watch } from 'vue'
-import { required, amount } from '@/validators'
+import { computed, reactive, ref, toRef, toRefs, watch } from 'vue'
+import { required, amount, sameTokenInSameNetwork } from '@/validators'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
@@ -206,8 +206,22 @@ const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   {
     amountSell: { required, amount },
     amountBuy: { required, amount },
-    tokenSell: { required },
-    tokenBuy: { required },
+    tokenSell: {
+      required,
+      sameTokenInSameNetwork: sameTokenInSameNetwork(
+        networkBuy.value!,
+        networkSell.value!,
+        toRef(form.value, 'tokenBuy'),
+      ),
+    },
+    tokenBuy: {
+      required,
+      sameTokenInSameNetwork: sameTokenInSameNetwork(
+        networkBuy.value!,
+        networkSell.value!,
+        toRef(form.value, 'tokenSell'),
+      ),
+    },
   },
 )
 
