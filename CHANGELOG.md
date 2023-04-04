@@ -10,6 +10,7 @@ for further information about branching and tagging conventions.
 ## [1.0.0-rc.11] - 2023-04-04
 #### Added
 - Display the balance of owned token on create an order form
+
 #### Fixed
 - A bug with create order in the same networks with the same token
 
