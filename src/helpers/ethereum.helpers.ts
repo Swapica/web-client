@@ -176,27 +176,23 @@ export async function switchNetwork(chain: ChainResposne) {
       await provider.switchChain(chain.chain_params.chain_id)
     }
   } catch (error) {
-    const e = error as EthProviderRpcError
-    if (e?.code === 4902 || e?.code === EIP1474.internalError) {
-      try {
-        await provider.addChain(
-          chain.chain_params.chain_id,
-          chain.name,
-          chain.chain_params.rpc,
-          chain.chain_params.native_symbol,
-          chain.chain_params.native_symbol, // TODO add name
-          chain.chain_params.native_decimals,
-          chain.chain_params.explorer_url,
-        )
-        await sleep(1500)
-        if (provider.chainId !== chain.chain_params.chain_id) {
-          throw new errors.ProviderUserRejectedRequest()
-        }
-      } catch (e) {
-        handleEthError(e as EthProviderRpcError)
+    try {
+      await provider.addChain(
+        chain.chain_params.chain_id,
+        chain.name,
+        chain.chain_params.rpc,
+        chain.chain_params.native_symbol,
+        chain.chain_params.native_symbol, // TODO add name
+        chain.chain_params.native_decimals,
+        chain.chain_params.explorer_url,
+      )
+      await sleep(1500)
+      if (provider.chainId !== chain.chain_params.chain_id) {
+        throw new errors.ProviderUserRejectedRequest()
       }
-    } else {
-      handleEthError(e)
+    } catch (e) {
+      alert(e)
+      handleEthError(e as EthProviderRpcError)
     }
   }
 }
