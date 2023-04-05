@@ -100,7 +100,7 @@ const switchChain = async (
   dropdown.close()
 }
 
-if (!provider.currentProvider) {
+if (!provider.isConnected) {
   chainStore.selectChain(chainStore.chains[0].chain_params.chain_id)
 }
 </script>

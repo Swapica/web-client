@@ -25,7 +25,9 @@ const connect = async () => {
     if (provider.currentProvider) {
       await provider.connect()
       await sleep(1000)
-      await switchNetwork(chainStore.selectedChain!)
+      if (chainStore.selectedChain) {
+        await switchNetwork(chainStore.selectedChain!)
+      }
     } else {
       throw new errors.MetamaskProviderNotFound()
     }
