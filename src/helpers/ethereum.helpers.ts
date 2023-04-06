@@ -8,7 +8,7 @@ import { errors } from '@/errors'
 import { ethers } from 'ethers'
 import { EIP1193, EIP1193String, EIP1474 } from '@/enums'
 import { mapKeys, get } from 'lodash-es'
-import { sleep, toCamelCaseDeep } from '@/helpers'
+import { isMobile, sleep, toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
 import { config } from '@/config'
@@ -176,23 +176,32 @@ export async function switchNetwork(chain: ChainResposne) {
       await provider.switchChain(chain.chain_params.chain_id)
     }
   } catch (error) {
-    try {
-      await provider.addChain(
-        chain.chain_params.chain_id,
-        chain.name,
-        chain.chain_params.rpc,
-        chain.chain_params.native_symbol,
-        chain.chain_params.native_symbol, // TODO add name
-        chain.chain_params.native_decimals,
-        chain.chain_params.explorer_url,
-      )
-      await sleep(1500)
-      if (provider.chainId !== chain.chain_params.chain_id) {
-        throw new errors.ProviderUserRejectedRequest()
+    const e = error as EthProviderRpcError
+
+    if (
+      e?.code === 4902 ||
+      e?.code === EIP1474.internalError ||
+      (isMobile() && !(e instanceof errors.ProviderUserRejectedRequest))
+    ) {
+      try {
+        await provider.addChain(
+          chain.chain_params.chain_id,
+          chain.name,
+          chain.chain_params.rpc,
+          chain.chain_params.native_symbol,
+          chain.chain_params.native_symbol, // TODO add name
+          chain.chain_params.native_decimals,
+          chain.chain_params.explorer_url,
+        )
+        await sleep(1500)
+        if (provider.chainId !== chain.chain_params.chain_id) {
+          throw new errors.ProviderUserRejectedRequest()
+        }
+      } catch (e) {
+        handleEthError(e as EthProviderRpcError)
       }
-    } catch (e) {
-      alert(e)
-      handleEthError(e as EthProviderRpcError)
+    } else {
+      handleEthError(e)
     }
   }
 }
