@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.16] - 2023-04-10
+#### Added
+- All option to select field
+
+#### Fixed
+- A bug with switch chain in metamask
+
 ## [1.0.0-rc.15] - 2023-04-07
 #### Changed
 - Meta tags
@@ -88,7 +95,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.15...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.16...main
+[1.0.0-rc.16]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.15...v1.0.0-rc.16
 [1.0.0-rc.15]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.14...v1.0.0-rc.15
 [1.0.0-rc.14]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.13...v1.0.0-rc.14
 [1.0.0-rc.13]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.12...v1.0.0-rc.13

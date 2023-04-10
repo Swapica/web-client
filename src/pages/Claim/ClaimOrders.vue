@@ -9,6 +9,7 @@
         v-model="networkId"
         scheme="primary"
         size="medium"
+        is-need-all-option
         :disabled="isLoading"
         :value-options="chains"
       />
@@ -55,10 +56,7 @@ import ClaimOrderList from '@/pages/Claim/ClaimOrderList.vue'
 
 const { provider } = useWeb3ProvidersStore()
 const chainStore = useChainsStore()
-const networkId = ref(
-  chainStore.selectedChain?.chain_params.chain_id ??
-    chainStore.chains[0].chain_params.chain_id,
-)
+const networkId = ref<string | number>('')
 
 const chains = computed(() =>
   chainStore.chains.map(i => ({
