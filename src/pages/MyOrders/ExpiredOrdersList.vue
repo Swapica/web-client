@@ -53,7 +53,7 @@ import { useI18n } from 'vue-i18n'
 const PAGE_LIMIT = 5
 
 const props = defineProps<{
-  chainId: number
+  chainId: number | string
 }>()
 
 const emit = defineEmits<{
@@ -84,7 +84,7 @@ const loadList = async () => {
       {
         params: {
           'filter[creator]': provider.selectedAddress,
-          'filter[src_chain]': props.chainId,
+          ...(Boolean(props.chainId) && { 'filter[src_chain]': props.chainId }),
           'filter[expired]': true,
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,

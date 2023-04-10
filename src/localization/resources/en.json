@@ -230,5 +230,8 @@
     "cancel-btn": "Cancel",
     "address": "({address})",
     "network": "{to}/{from}"
+  },
+  "select-field": {
+    "all-lbl": "All"
   }
 }
