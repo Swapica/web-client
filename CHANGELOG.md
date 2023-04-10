@@ -11,6 +11,9 @@ for further information about branching and tagging conventions.
 #### Added
 - All option to select field
 
+#### Fixed
+- A bug with switch chain in metamask
+
 ## [1.0.0-rc.15] - 2023-04-07
 #### Changed
 - Meta tags

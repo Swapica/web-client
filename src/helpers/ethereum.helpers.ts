@@ -187,7 +187,7 @@ export async function switchNetwork(chain: ChainResposne) {
         await provider.addChain(
           chain.chain_params.chain_id,
           chain.name,
-          chain.chain_params.rpc,
+          chain.chain_params.public_rpc,
           chain.chain_params.native_symbol,
           chain.chain_params.native_symbol, // TODO add name
           chain.chain_params.native_decimals,
