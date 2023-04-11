@@ -21,6 +21,7 @@ type ChainParams = {
   native_symbol: string
   rpc: string
   public_rpc: string
+  chain_type: string
 }
 
 export type ChainResposne = JsonApiRecordBase<'chain'> & {

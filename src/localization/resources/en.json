@@ -140,7 +140,8 @@
     "network-to-lbl": "Match chain",
     "token-sell-lbl": "Order sells",
     "token-buy-lbl": "Order buys",
-    "title": "Available Orders"
+    "title": "Available Orders",
+    "token-placeholder": "All"
   },
   "dashboard-order-list": {
     "loading-error-msg": "Ooops, something went wrong, please reload the page or try again later.",
@@ -232,6 +233,9 @@
     "network": "{to}/{from}"
   },
   "select-field": {
+    "all-lbl": "All"
+  },
+  "token-select": {
     "all-lbl": "All"
   }
 }

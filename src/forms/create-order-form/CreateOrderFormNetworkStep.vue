@@ -12,7 +12,7 @@
       scheme="primary"
       :is-error-message-shown="false"
       :label="$t('create-order-form-network-step.network-to-sell-lbl')"
-      :value-options="chains"
+      :value-options="networkSellChains"
       :disabled="isDisabled"
       :error-message="getFieldErrorMessage('networkSell')"
       @blur="touchField('networkSell')"
@@ -21,7 +21,7 @@
       v-model="form.networkBuy"
       scheme="primary"
       :is-error-message-shown="false"
-      :value-options="chains"
+      :value-options="networkBuyChains"
       :disabled="isDisabled"
       :label="$t('create-order-form-network-step.network-to-buy-lbl')"
       :error-message="getFieldErrorMessage('networkBuy')"
@@ -55,6 +55,7 @@ import { useChainsStore } from '@/store'
 import { UseCreateOrderForm } from '@/types'
 import { computed, toRefs } from 'vue'
 import { required } from '@/validators'
+import { CHAIN_TYPES } from '@/enums'
 
 const props = defineProps<{
   former: UseCreateOrderForm
@@ -76,14 +77,28 @@ const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   },
 )
 
-const chainStore = useChainsStore()
-const chains = computed(() =>
-  chainStore.chains.map(i => ({
+const { chains, chainById } = useChainsStore()
+
+const networkSellChains = computed(() => getNetworkList(form.value.networkBuy))
+const networkBuyChains = computed(() => getNetworkList(form.value.networkSell))
+
+const getNetworkList = (network: string) => {
+  const chainList = chains.map(i => ({
     label: i.name,
     value: i.id,
     imageUrl: i.icon,
-  })),
-)
+    type: i.chain_params.chain_type,
+  }))
+
+  return chainList.filter(i => {
+    const networkInfo = chainById(network)
+
+    return (
+      i.type === CHAIN_TYPES.testnet ||
+      i.type !== networkInfo?.chain_params.chain_type
+    )
+  })
+}
 
 const handleNext = () => {
   if (!isFormValid()) return
