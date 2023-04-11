@@ -3,7 +3,8 @@
     "field-error_required": "Please fill out this field",
     "field-error_email": "Field must be a valid email",
     "field-error_amount": "Amount must be a number, greater than 0",
-    "field-error_sameTokenInSameNetwork": "Tokens must be different in the same network"
+    "field-error_sameTokenInSameNetwork": "Tokens must be different in the same network",
+    "field-error_maxValue": "Max value: {max}"
   },
   "errors": {
     "default": "Oops... Something went wrong",

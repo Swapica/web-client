@@ -151,7 +151,12 @@ import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { TokenInfo, UseCreateOrderForm } from '@/types'
 import { computed, reactive, ref, toRef, toRefs, watch } from 'vue'
-import { required, amount, sameTokenInSameNetwork } from '@/validators'
+import {
+  required,
+  amount,
+  sameTokenInSameNetwork,
+  maxValue,
+} from '@/validators'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
@@ -204,8 +209,8 @@ const tokensBuy = computed(() =>
 const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   form,
   {
-    amountSell: { required, amount },
-    amountBuy: { required, amount },
+    amountSell: { required, amount, maxValue: maxValue(5) },
+    amountBuy: { required, amount, maxValue: maxValue(5) },
     tokenSell: {
       required,
       sameTokenInSameNetwork: sameTokenInSameNetwork(
