@@ -79,7 +79,7 @@
               />
               <icon
                 v-else-if="option.icon"
-                class="select-field__select-dropdown-item-icon"
+                class="token-select__select-dropdown-item-icon"
                 :name="option.icon"
               />
               <span class="token-select__select-dropdown-item-text">
@@ -108,6 +108,7 @@ import {
 } from '@/helpers'
 import debounce from 'lodash/debounce'
 import { ICON_NAMES } from '@/enums'
+import { useI18n } from 'vue-i18n'
 
 type SIZES = 'big' | 'default'
 
@@ -128,6 +129,8 @@ const props = withDefaults(
     size?: SIZES
     emitEmptyValueOnStartSearch?: boolean
     isEmitSearchValueOnInput?: boolean
+    isCanSearchToken?: boolean
+    isSelectAllOptionShown?: boolean
   }>(),
   {
     valueOptions: () => [],
@@ -139,6 +142,8 @@ const props = withDefaults(
     isHeadIconShown: false,
     emitEmptyValueOnStartSearch: false,
     isEmitSearchValueOnInput: false,
+    isCanSearchToken: false,
+    isSelectAllOptionShown: false,
     size: 'default',
   },
 )
@@ -149,6 +154,7 @@ const emit = defineEmits<{
 }>()
 
 const attrs = useAttrs()
+const { t } = useI18n({ useScope: 'global' })
 
 const selectElement = ref<HTMLDivElement>()
 const searchFieldRef = ref<typeof InputField>()
@@ -178,11 +184,11 @@ const isReadonly = computed(() =>
 const headLabel = computed(() => {
   return isEthAddress(searchValue.value)
     ? cropAddress(searchValue.value, 3, 4)
-    : searchValue.value
+    : searchValue.value || selectedOption.value?.label || props.placeholder
 })
 
 const selectedOption = computed(() =>
-  props.valueOptions.find(
+  optionList.value.find(
     i =>
       i.value.toLowerCase() === searchValue.value.toLowerCase() ||
       i.label.toLowerCase() === searchValue.value.toLowerCase(),
@@ -205,15 +211,19 @@ const toggleDropdown = () => {
 const openDropdown = () => {
   if (isDisabled.value || isReadonly.value) return
   isDropdownOpen.value = true
-  isInputShown.value = true
-  nextTick(() => {
-    searchFieldRef.value?.inputRef.focus()
-  })
+  if (props.isCanSearchToken) {
+    isInputShown.value = true
+    nextTick(() => {
+      searchFieldRef.value?.inputRef.focus()
+    })
+  }
 }
 
 const closeDropdown = () => {
   isDropdownOpen.value = false
-  isInputShown.value = false
+  if (props.isCanSearchToken) {
+    isInputShown.value = false
+  }
 }
 
 const select = (value: string) => {
@@ -224,9 +234,23 @@ const select = (value: string) => {
 const getOptionList = () => {
   const regex = new RegExp(searchValue.value.trim(), 'i')
 
-  optionList.value = searchValue.value
-    ? props.valueOptions.filter(i => regex.test(i.label) || regex.test(i.value))
-    : props.valueOptions
+  optionList.value =
+    searchValue.value && props.isCanSearchToken
+      ? props.valueOptions.filter(
+          i => regex.test(i.label) || regex.test(i.value),
+        )
+      : [
+          ...(props.isSelectAllOptionShown
+            ? [
+                {
+                  label: t('token-select.all-lbl'),
+                  value: '',
+                  icon: ICON_NAMES.user,
+                },
+              ]
+            : []),
+          ...props.valueOptions,
+        ]
 }
 
 const handleSearch = async () => {
@@ -334,6 +358,7 @@ watch(
   height: 100%;
   min-height: toRem(24);
   position: relative;
+  cursor: pointer;
 
   @include field-text;
 
@@ -357,13 +382,6 @@ watch(
     color: var(--field-error);
     -webkit-text-fill-color: var(--field-error);
   }
-}
-
-.token-select__placeholder {
-  font: inherit;
-  opacity: 0.25;
-
-  @include field-placeholder;
 }
 
 .token-select__select-head-indicator {

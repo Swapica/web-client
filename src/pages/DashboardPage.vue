@@ -15,14 +15,14 @@
             v-model="filters.networkFrom"
             scheme="primary"
             :label="$t('dashboard-page.network-from-lbl')"
-            :value-options="chainsOptions"
+            :value-options="networkFromChains"
             :disabled="isSubmitting"
           />
           <select-field
             v-model="filters.networkTo"
             scheme="primary"
             :label="$t('dashboard-page.network-to-lbl')"
-            :value-options="chainsOptions"
+            :value-options="networkToChains"
             :disabled="isSubmitting"
           />
         </div>
@@ -44,6 +44,8 @@
             is-head-icon-shown
             size="big"
             is-emit-search-value-on-input
+            is-select-all-option-shown
+            :placeholder="$t('dashboard-page.token-placeholder')"
             :key="filters.networkFrom"
             :value-options="tokensSell"
             :disabled="isSubmitting"
@@ -55,6 +57,8 @@
             is-head-icon-shown
             size="big"
             is-emit-search-value-on-input
+            is-select-all-option-shown
+            :placeholder="$t('dashboard-page.token-placeholder')"
             :key="filters.networkTo"
             :value-options="tokensBuy"
             :disabled="isSubmitting"
@@ -91,27 +95,22 @@ import { useChainsStore, useTokensStore } from '@/store'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { TokenSelect } from '@/common'
 import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
+import { CHAIN_TYPES } from '@/enums'
 
 const { selectedChain, chainById, chains } = useChainsStore()
 const { tokensByChainId } = useTokensStore()
 const isMounted = ref(false)
 const isSubmitting = ref(false)
 
-const chainsOptions = computed(() =>
-  chains.map(i => ({
-    label: i.name,
-    value: i.id,
-    imageUrl: i.icon,
-  })),
-)
-
 const filters = reactive({
-  networkFrom: selectedChain?.id ?? chainsOptions.value[0].value,
-  networkTo: chainsOptions.value[0].value,
+  networkFrom: '',
+  networkTo: '',
   tokenSell: '',
   tokenBuy: '',
 })
 
+const networkFromChains = computed(() => getNetworkList(filters.networkTo))
+const networkToChains = computed(() => getNetworkList(filters.networkFrom))
 const tokensSell = computed(() =>
   tokensByChainId(filters.networkFrom).map(i => ({
     label: i.symbol,
@@ -130,6 +129,24 @@ const tokensBuy = computed(() =>
 const networkFrom = computed(() => chainById(filters.networkFrom))
 const networkTo = computed(() => chainById(filters.networkTo))
 
+const getNetworkList = (network: string) => {
+  const chainList = chains.map(i => ({
+    label: i.name,
+    value: i.id,
+    imageUrl: i.icon,
+    type: i.chain_params.chain_type,
+  }))
+  if (!network) return chainList
+  return chainList.filter(i => {
+    const networkInfo = chainById(network)
+
+    return (
+      i.type === CHAIN_TYPES.testnet ||
+      i.type !== networkInfo?.chain_params.chain_type
+    )
+  })
+}
+
 watch(
   () => filters.networkFrom,
   () => (filters.tokenSell = ''),
@@ -141,6 +158,8 @@ watch(
 )
 
 onMounted(() => {
+  filters.networkFrom = selectedChain?.id || networkFromChains.value[0].value
+  filters.networkTo = networkToChains.value[0].value
   isMounted.value = true
 })
 </script>
