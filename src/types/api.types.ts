@@ -56,7 +56,6 @@ export type TokenResponse = JsonApiRecordBase<'token'> & {
   icon: string
   name: string
   symbol: string
-  decimals: number
   token_type: string
   chains: TokenChain[]
 }
@@ -65,7 +64,6 @@ export type Token = JsonApiRecordBase<'token'> & {
   icon: string
   name: string
   symbol: string
-  decimals: number
   token_type: string
   chain: TokenChain
 }
