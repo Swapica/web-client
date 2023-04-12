@@ -1,4 +1,4 @@
-import { computed, UnwrapNestedRefs } from 'vue'
+import { computed, isRef, UnwrapNestedRefs } from 'vue'
 import useVuelidate, { ChildStateLeafs, ValidationArgs } from '@vuelidate/core'
 import { get } from 'lodash-es'
 
@@ -6,7 +6,7 @@ export const useFormValidation = (
   state: UnwrapNestedRefs<ChildStateLeafs>,
   rules: ValidationArgs,
 ) => {
-  const validationRules = computed(() => rules)
+  const validationRules = computed(() => (isRef(rules) ? rules.value : rules))
 
   const validationController = useVuelidate(validationRules, state)
 

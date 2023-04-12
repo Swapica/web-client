@@ -151,7 +151,12 @@ import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { TokenInfo, UseCreateOrderForm } from '@/types'
 import { computed, reactive, ref, toRef, toRefs, watch } from 'vue'
-import { required, amount, sameTokenInSameNetwork } from '@/validators'
+import {
+  required,
+  amount,
+  sameTokenInSameNetwork,
+  maxValue,
+} from '@/validators'
 import { useWindowSize } from '@vueuse/core'
 import { WINDOW_BREAKPOINTS } from '@/enums'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
@@ -163,7 +168,7 @@ import {
 } from '@/helpers'
 
 const { width: windowWidth } = useWindowSize()
-const { tokensByChainId } = useTokensStore()
+const { tokensByChainId, tokenByAddressAndChainId } = useTokensStore()
 const { provider } = useWeb3ProvidersStore()
 
 const props = defineProps<{
@@ -201,28 +206,49 @@ const tokensBuy = computed(() =>
   })),
 )
 
+const tokenSell = computed(() =>
+  tokenByAddressAndChainId(form.value.tokenSell, networkSell.value!.id!),
+)
+const tokenBuy = computed(() =>
+  tokenByAddressAndChainId(form.value.tokenBuy, networkBuy.value!.id!),
+)
+
+const rules = computed(() => ({
+  amountSell: {
+    required,
+    amount,
+    ...(tokenSell.value?.chain.max_amount && {
+      maxValue: maxValue(tokenSell.value?.chain.max_amount),
+    }),
+  },
+  amountBuy: {
+    required,
+    amount,
+    ...(tokenBuy.value?.chain.max_amount && {
+      maxValue: maxValue(tokenBuy.value?.chain.max_amount),
+    }),
+  },
+  tokenSell: {
+    required,
+    sameTokenInSameNetwork: sameTokenInSameNetwork(
+      networkBuy.value!,
+      networkSell.value!,
+      toRef(form.value, 'tokenBuy'),
+    ),
+  },
+  tokenBuy: {
+    required,
+    sameTokenInSameNetwork: sameTokenInSameNetwork(
+      networkBuy.value!,
+      networkSell.value!,
+      toRef(form.value, 'tokenSell'),
+    ),
+  },
+}))
+
 const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   form,
-  {
-    amountSell: { required, amount },
-    amountBuy: { required, amount },
-    tokenSell: {
-      required,
-      sameTokenInSameNetwork: sameTokenInSameNetwork(
-        networkBuy.value!,
-        networkSell.value!,
-        toRef(form.value, 'tokenBuy'),
-      ),
-    },
-    tokenBuy: {
-      required,
-      sameTokenInSameNetwork: sameTokenInSameNetwork(
-        networkBuy.value!,
-        networkSell.value!,
-        toRef(form.value, 'tokenSell'),
-      ),
-    },
-  },
+  rules,
 )
 
 const handleNext = () => {

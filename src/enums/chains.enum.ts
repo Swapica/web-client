@@ -15,5 +15,5 @@ export enum CHAIN_TYPES {
   evm = 'evm',
   solana = 'solana',
   testnet = 'testnet',
-  mainet = 'mainet',
+  mainnet = 'mainnet',
 }

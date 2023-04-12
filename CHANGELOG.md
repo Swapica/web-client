@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.18] - 2023-04-12
+#### Added
+- Max amount for tokens
+
 ## [1.0.0-rc.17] - 2023-04-11
 #### Changed
 - The ability to search for tokens is blocked
@@ -99,7 +103,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.17...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.18...main
+[1.0.0-rc.18]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.17...v1.0.0-rc.18
 [1.0.0-rc.17]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.16...v1.0.0-rc.17
 [1.0.0-rc.16]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.15...v1.0.0-rc.16
 [1.0.0-rc.15]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.14...v1.0.0-rc.15
