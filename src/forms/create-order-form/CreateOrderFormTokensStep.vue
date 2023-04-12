@@ -168,7 +168,7 @@ import {
 } from '@/helpers'
 
 const { width: windowWidth } = useWindowSize()
-const { tokensByChainId } = useTokensStore()
+const { tokensByChainId, tokenByAddressAndChainId } = useTokensStore()
 const { provider } = useWeb3ProvidersStore()
 
 const props = defineProps<{
@@ -206,28 +206,51 @@ const tokensBuy = computed(() =>
   })),
 )
 
+const tokenSell = tokenByAddressAndChainId(
+  form.value.tokenSell,
+  networkSell.value!.id!,
+)
+const tokenBuy = tokenByAddressAndChainId(
+  form.value.tokenBuy,
+  networkBuy.value!.id!,
+)
+
+const rules = computed(() => ({
+  amountSell: {
+    required,
+    amount,
+    ...(tokenSell?.chain.max_amount && {
+      maxValue: maxValue(tokenSell?.chain.max_amount),
+    }),
+  },
+  amountBuy: {
+    required,
+    amount,
+    ...(tokenBuy?.chain.max_amount && {
+      maxValue: maxValue(tokenBuy?.chain.max_amount),
+    }),
+  },
+  tokenSell: {
+    required,
+    sameTokenInSameNetwork: sameTokenInSameNetwork(
+      networkBuy.value!,
+      networkSell.value!,
+      toRef(form.value, 'tokenBuy'),
+    ),
+  },
+  tokenBuy: {
+    required,
+    sameTokenInSameNetwork: sameTokenInSameNetwork(
+      networkBuy.value!,
+      networkSell.value!,
+      toRef(form.value, 'tokenSell'),
+    ),
+  },
+}))
+
 const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   form,
-  {
-    amountSell: { required, amount, maxValue: maxValue(5) },
-    amountBuy: { required, amount, maxValue: maxValue(5) },
-    tokenSell: {
-      required,
-      sameTokenInSameNetwork: sameTokenInSameNetwork(
-        networkBuy.value!,
-        networkSell.value!,
-        toRef(form.value, 'tokenBuy'),
-      ),
-    },
-    tokenBuy: {
-      required,
-      sameTokenInSameNetwork: sameTokenInSameNetwork(
-        networkBuy.value!,
-        networkSell.value!,
-        toRef(form.value, 'tokenSell'),
-      ),
-    },
-  },
+  rules,
 )
 
 const handleNext = () => {

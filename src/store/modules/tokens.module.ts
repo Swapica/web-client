@@ -29,5 +29,11 @@ export const useTokensStore = defineStore('tokens-store', {
             })
           : acc
       }, []),
+    tokenByAddressAndChainId() {
+      return (address: string, chainId: string) => {
+        const tokens = this.tokensByChainId(chainId)
+        return tokens.find(i => i.chain.contract_address === address)
+      }
+    },
   },
 })

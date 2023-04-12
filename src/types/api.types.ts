@@ -50,6 +50,7 @@ export type TokenChain = {
   token_id: string
   token_type: string
   contract_address: string
+  max_amount: string
 }
 
 export type TokenResponse = JsonApiRecordBase<'token'> & {
