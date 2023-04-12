@@ -206,28 +206,26 @@ const tokensBuy = computed(() =>
   })),
 )
 
-const tokenSell = tokenByAddressAndChainId(
-  form.value.tokenSell,
-  networkSell.value!.id!,
+const tokenSell = computed(() =>
+  tokenByAddressAndChainId(form.value.tokenSell, networkSell.value!.id!),
 )
-const tokenBuy = tokenByAddressAndChainId(
-  form.value.tokenBuy,
-  networkBuy.value!.id!,
+const tokenBuy = computed(() =>
+  tokenByAddressAndChainId(form.value.tokenBuy, networkBuy.value!.id!),
 )
 
 const rules = computed(() => ({
   amountSell: {
     required,
     amount,
-    ...(tokenSell?.chain.max_amount && {
-      maxValue: maxValue(tokenSell?.chain.max_amount),
+    ...(tokenSell.value?.chain.max_amount && {
+      maxValue: maxValue(tokenSell.value?.chain.max_amount),
     }),
   },
   amountBuy: {
     required,
     amount,
-    ...(tokenBuy?.chain.max_amount && {
-      maxValue: maxValue(tokenBuy?.chain.max_amount),
+    ...(tokenBuy.value?.chain.max_amount && {
+      maxValue: maxValue(tokenBuy.value?.chain.max_amount),
     }),
   },
   tokenSell: {
