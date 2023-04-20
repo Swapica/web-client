@@ -312,6 +312,7 @@ watch(
   align-items: center;
   max-width: toRem(564);
   width: 100%;
+  min-height: toRem(327);
 }
 
 .create-order-form-tokens-step__title {
@@ -338,6 +339,8 @@ watch(
   width: 100%;
   gap: toRem(32);
   max-width: toRem(366);
+  flex: 1;
+  align-items: flex-end;
 
   @include respond-to(tablet) {
     margin-top: toRem(12);
