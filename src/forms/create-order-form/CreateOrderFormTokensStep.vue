@@ -15,7 +15,6 @@
         placeholder="0.0000"
         :error-message="getFieldErrorMessage('amountSell')"
         :disabled="isDisabled"
-        :is-error-message-shown="false"
         @blur="touchField('amountSell')"
       />
       <input-field
@@ -24,7 +23,6 @@
         class="create-order-form-tokens-step__input"
         placeholder="0.0000"
         :error-message="getFieldErrorMessage('amountBuy')"
-        :is-error-message-shown="false"
         :disabled="isDisabled"
         @blur="touchField('amountBuy')"
       />
@@ -61,6 +59,13 @@
             @blur="touchField('tokenSell')"
           />
         </div>
+
+        <field-error-message
+          :error-message="
+            (!isSmallWidth && amountSellErrorMessage) || tokenSellErrorMessage
+          "
+        />
+
         <p class="create-order-form-tokens-step__token-network">
           {{
             $t('create-order-form-tokens-step.token-network', {
@@ -116,6 +121,11 @@
             @blur="touchField('tokenBuy')"
           />
         </div>
+        <field-error-message
+          :error-message="
+            (!isSmallWidth && amountBuyErrorMessage) || tokenBuyErrorMessage
+          "
+        />
         <p class="create-order-form-tokens-step__token-network">
           {{
             $t('create-order-form-tokens-step.token-network', {
@@ -146,7 +156,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AppButton, TokenSelect } from '@/common'
+import { AppButton, TokenSelect, FieldErrorMessage } from '@/common'
 import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { TokenInfo, UseCreateOrderForm } from '@/types'
@@ -188,6 +198,13 @@ let tokenSellInfo = reactive<TokenInfo>({} as TokenInfo)
 const isSmallWidth = computed(
   () => windowWidth.value < WINDOW_BREAKPOINTS.small,
 )
+const amountSellErrorMessage = computed(() =>
+  getFieldErrorMessage('amountSell'),
+)
+const tokenSellErrorMessage = computed(() => getFieldErrorMessage('tokenSell'))
+
+const amountBuyErrorMessage = computed(() => getFieldErrorMessage('amountBuy'))
+const tokenBuyErrorMessage = computed(() => getFieldErrorMessage('tokenBuy'))
 
 const { form, networkBuy, networkSell } = toRefs(props.former)
 const tokensSell = computed(() =>
@@ -363,6 +380,7 @@ watch(
   font-size: toRem(14);
   line-height: 1.2;
   color: var(--text-primary-dark);
+  margin-top: toRem(8);
 
   @include respond-to(tablet) {
     font-size: toRem(12);
@@ -397,7 +415,7 @@ watch(
   align-items: center;
   grid-template-columns: toRem(60) minmax(toRem(100), 1fr);
   width: calc(100% + #{toRem(3)});
-  margin: toRem(8) 0;
+  margin-top: toRem(8);
   gap: toRem(12);
 
   @include respond-to(tablet) {
