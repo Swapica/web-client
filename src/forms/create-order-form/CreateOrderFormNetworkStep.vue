@@ -10,7 +10,6 @@
       class="create-order-form-network-step__sell-network-select"
       v-model="form.networkSell"
       scheme="primary"
-      :is-error-message-shown="false"
       :label="$t('create-order-form-network-step.network-to-sell-lbl')"
       :value-options="networkSellChains"
       :disabled="isDisabled"
@@ -20,7 +19,6 @@
     <select-field
       v-model="form.networkBuy"
       scheme="primary"
-      :is-error-message-shown="false"
       :value-options="networkBuyChains"
       :disabled="isDisabled"
       :label="$t('create-order-form-network-step.network-to-buy-lbl')"

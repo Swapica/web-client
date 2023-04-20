@@ -102,7 +102,7 @@
   },
   "create-order-form-tokens-step": {
     "title": "Create Order",
-    "description": "To create your order select the token you want to sell and the token you want to receive and its amount. Custom tokens are available too.",
+    "description": "To create your order select the token you want to sell and the token you want to receive together with their amounts.",
     "back-btn": "Back",
     "next-btn": "Confirm",
     "token-to-sell-lbl": "Token to sell",
