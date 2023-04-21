@@ -111,6 +111,7 @@ const handleNext = () => {
   align-items: center;
   max-width: toRem(368);
   width: 100%;
+  min-height: toRem(358);
 }
 
 .create-order-form-network-step__title {
@@ -131,6 +132,7 @@ const handleNext = () => {
 
 .create-order-form-network-step__sell-network-select {
   margin-bottom: toRem(16);
+  flex: none;
 }
 
 .create-order-form-network-step__actions {
@@ -139,6 +141,8 @@ const handleNext = () => {
   grid-template-columns: 1fr 1fr;
   width: 100%;
   gap: toRem(32);
+  flex: 1;
+  align-items: flex-end;
 
   @include respond-to(tablet) {
     gap: toRem(16);
