@@ -157,7 +157,8 @@
     "match-btn": "Match",
     "address": "({address})",
     "tooltip-title": "Connect wallet",
-    "tooltip-msg": "you haven’t connected your wallet, you will be able to match orders after connection."
+    "tooltip-msg": "you haven’t connected your wallet, you will be able to match orders after connection.",
+    "network": "{from}/{to}"
   },
   "change-network-step": {
     "title": "Change Network",
@@ -231,7 +232,7 @@
     "cancel-order-btn": "Cancel order",
     "cancel-btn": "Cancel",
     "address": "({address})",
-    "network": "{from}/{to}"
+    "network": "{to}/{from}"
   },
   "select-field": {
     "all-lbl": "All"
