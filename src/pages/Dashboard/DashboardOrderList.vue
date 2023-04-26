@@ -84,10 +84,10 @@ import { useWindowSize } from '@vueuse/core'
 import { callers } from '@/api'
 
 const props = defineProps<{
-  networkSell: ChainResposne
-  matchNetwork: ChainResposne
-  tokenBuy: string
-  tokenSell: string
+  networkSell?: ChainResposne
+  matchNetwork?: ChainResposne
+  tokenBuy?: string
+  tokenSell?: string
   isSubmitting?: boolean
 }>()
 
@@ -118,8 +118,13 @@ const loadList = async () => {
       '/integrations/order-aggregator/orders',
       {
         params: {
-          'filter[src_chain]': props.networkSell.chain_params.chain_id,
-          'filter[destination_chain]': props.matchNetwork.chain_params.chain_id,
+          ...(props.networkSell && {
+            'filter[src_chain]': props.networkSell.chain_params.chain_id,
+          }),
+          ...(props.matchNetwork && {
+            'filter[destination_chain]':
+              props.matchNetwork.chain_params.chain_id,
+          }),
           ...(props.tokenBuy && { 'filter[token_to_buy]': props.tokenBuy }),
           ...(props.tokenSell && { 'filter[token_to_sell]': props.tokenSell }),
           'filter[state]': OrderStatus.awaitingMatch,

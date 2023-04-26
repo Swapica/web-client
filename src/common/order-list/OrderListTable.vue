@@ -358,9 +358,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 .order-list-table__body-item-network {
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   padding: toRem(8) toRem(16);
 }
 
@@ -368,9 +366,9 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   font-size: toRem(16);
   line-height: 1;
   color: var(--text-primary-dark);
-  text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+
+  @include text-scroll-animation;
 }
 
 .order-list-table__body-item-cancel-btn {

@@ -2,14 +2,21 @@
 <template>
   <div class="dashboard-order-list-table">
     <div class="dashboard-order-list-table__head">
-      <div class="dashboard-order-list-table__head-item">
-        <span class="dashboard-order-list-table__head-title">
-          {{ $t('dashboard-order-list-table.sell-lbl') }}
-        </span>
+      <div class="dashboard-order-list-table__head-items-wrp">
+        <div class="dashboard-order-list-table__head-item">
+          <span class="dashboard-order-list-table__head-title">
+            {{ $t('dashboard-order-list-table.sell-lbl') }}
+          </span>
+        </div>
+        <div class="dashboard-order-list-table__head-item">
+          <span class="dashboard-order-list-table__head-title">
+            {{ $t('dashboard-order-list-table.buy-lbl') }}
+          </span>
+        </div>
       </div>
-      <div class="dashboard-order-list-table__head-item">
+      <div v-if="!isTablet" class="dashboard-order-list-table__head-item">
         <span class="dashboard-order-list-table__head-title">
-          {{ $t('dashboard-order-list-table.buy-lbl') }}
+          {{ $t('dashboard-order-list-table.network-lbl') }}
         </span>
       </div>
     </div>
@@ -49,9 +56,7 @@
             >
               {{
                 $t('dashboard-order-list-table.address', {
-                  address: isMediumWidth
-                    ? cropAddress(i.token_to_sell.address)
-                    : cropAddress(i.token_to_sell.address, 7, 12),
+                  address: cropAddress(i.token_to_sell.address, 4, 3),
                 })
               }}
             </copy-button>
@@ -97,9 +102,7 @@
             >
               {{
                 $t('dashboard-order-list-table.address', {
-                  address: isMediumWidth
-                    ? cropAddress(i.token_to_buy.address)
-                    : cropAddress(i.token_to_buy.address, 7, 12),
+                  address: cropAddress(i.token_to_buy.address, 4, 3),
                 })
               }}
             </copy-button>
@@ -114,6 +117,24 @@
               :icon-left="$icons.link"
             />
           </div>
+        </div>
+        <div class="dashboard-order-list-table__body-item-network">
+          <span
+            class="dashboard-order-list-table__body-item-network-text"
+            :title="
+              $t('dashboard-order-list-table.network', {
+                from: i.src_chain?.name,
+                to: i.destination_chain?.name,
+              })
+            "
+          >
+            {{
+              $t('dashboard-order-list-table.network', {
+                from: i.src_chain?.name,
+                to: i.destination_chain?.name,
+              })
+            }}
+          </span>
         </div>
         <tooltip
           class="dashboard-order-list-table__tooltip"
@@ -167,9 +188,6 @@ const emit = defineEmits<{
 const { width: windowWidth } = useWindowSize()
 const { provider } = useWeb3ProvidersStore()
 
-const isMediumWidth = computed(
-  () => windowWidth.value < WINDOW_BREAKPOINTS.medium,
-)
 const isTablet = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.tablet)
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 </script>
@@ -201,10 +219,20 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .dashboard-order-list-table__head {
   display: grid;
-  grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
+  grid-template-columns: minmax(toRem(100), 1fr) toRem(154);
   grid-area: head;
+  gap: toRem(32);
+
+  @include respond-to(xmedium) {
+    gap: toRem(16);
+  }
+
+  @include respond-to(tablet) {
+    grid-template-columns: minmax(toRem(100), 1fr);
+  }
 }
 
+.dashboard-order-list-table__head-items-wrp,
 .dashboard-order-list-table__body-item-info-wrp {
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
@@ -218,9 +246,14 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .dashboard-order-list-table__body {
   display: grid;
-  grid-template-columns: minmax(toRem(100), 1fr) toRem(95);
+  grid-template-columns: minmax(toRem(100), 1fr) toRem(154) toRem(95);
   align-items: center;
   gap: toRem(32);
+
+  @include respond-to(xmedium) {
+    grid-template-columns: minmax(toRem(100), 1fr) toRem(154) toRem(110);
+    gap: toRem(16);
+  }
 
   @include respond-to(tablet) {
     grid-template-columns: minmax(toRem(100), 1fr);
@@ -247,19 +280,15 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: toRem(8);
+  gap: toRem(4);
   width: calc(100% + #{toRem(3)});
-
-  @include respond-to(medium) {
-    justify-content: center;
-  }
 
   @include respond-to(tablet) {
     width: calc(100% + #{toRem(5)});
+    justify-content: center;
   }
 
   @include respond-to(small) {
-    gap: toRem(4);
     width: calc(100% + #{toRem(1)});
   }
 }
@@ -268,7 +297,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   font-size: toRem(18);
   line-height: 1;
   color: var(--text-primary-dark);
-  width: toRem(45);
+  width: toRem(55);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -316,7 +345,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   background: url('/backgrounds/order-2-bg.svg') no-repeat;
   background-size: 100% 100%;
   position: relative;
-  padding: toRem(8) toRem(16) toRem(8) toRem(29);
+  padding: toRem(8) toRem(18);
   left: toRem(-3);
 
   @include respond-to(tablet) {
@@ -331,8 +360,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .dashboard-order-list-table__body-item-info-sell {
   background: url('/backgrounds/order-1-bg.svg') no-repeat;
-  background-size: 100% 100%;
-  padding: toRem(8) toRem(29) toRem(8) toRem(16);
+  padding: toRem(8) toRem(24) toRem(8) toRem(12);
 
   @include respond-to(small) {
     padding: toRem(8) toRem(4.45) toRem(8) toRem(5);
@@ -376,5 +404,21 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
       left: 35%;
     }
   }
+}
+
+.dashboard-order-list-table__body-item-network {
+  background: url('/backgrounds/network-bg.svg') no-repeat;
+  background-size: 100% 100%;
+  overflow: hidden;
+  padding: toRem(8) toRem(16);
+}
+
+.dashboard-order-list-table__body-item-network-text {
+  font-size: toRem(16);
+  line-height: 1;
+  color: var(--text-primary-dark);
+  white-space: nowrap;
+
+  @include text-scroll-animation;
 }
 </style>
