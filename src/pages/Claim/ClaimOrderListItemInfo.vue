@@ -256,9 +256,7 @@ const isMatch = computed(
 .claim-order-list-item-info__body-item-network {
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   padding: toRem(8) toRem(16);
 }
 
@@ -267,9 +265,9 @@ const isMatch = computed(
   line-height: 1;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
   color: rgba(var(--primary-dark-rgb), 0.3);
-  text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+
+  @include text-scroll-animation;
 }
 
 .claim-order-list-item-info__network-lbl {
