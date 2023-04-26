@@ -14,6 +14,7 @@
           <select-field
             v-model="filters.networkFrom"
             scheme="primary"
+            is-need-all-option
             :label="$t('dashboard-page.network-from-lbl')"
             :value-options="networkFromChains"
             :disabled="isSubmitting"
@@ -21,6 +22,7 @@
           <select-field
             v-model="filters.networkTo"
             scheme="primary"
+            is-need-all-option
             :label="$t('dashboard-page.network-to-lbl')"
             :value-options="networkToChains"
             :disabled="isSubmitting"
@@ -77,10 +79,9 @@
       </div>
       <div class="dashboard-page__content">
         <dashboard-order-list
-          v-if="isMounted"
           v-model:is-submitting="isSubmitting"
-          :network-sell="networkFrom!"
-          :match-network="networkTo!"
+          :network-sell="networkFrom"
+          :match-network="networkTo"
           :token-buy="filters.tokenBuy"
           :token-sell="filters.tokenSell"
         />
@@ -92,14 +93,13 @@
 <script lang="ts" setup>
 import { SelectField } from '@/fields'
 import { useChainsStore, useTokensStore } from '@/store'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { TokenSelect } from '@/common'
 import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
 import { CHAIN_TYPES } from '@/enums'
 
-const { selectedChain, chainById, chains } = useChainsStore()
+const { chainById, chains } = useChainsStore()
 const { tokensByChainId } = useTokensStore()
-const isMounted = ref(false)
 const isSubmitting = ref(false)
 
 const filters = reactive({
@@ -156,12 +156,6 @@ watch(
   () => filters.networkTo,
   () => (filters.tokenBuy = ''),
 )
-
-onMounted(() => {
-  filters.networkFrom = selectedChain?.id || networkFromChains.value[0].value
-  filters.networkTo = networkToChains.value[0].value
-  isMounted.value = true
-})
 </script>
 <style lang="scss" scoped>
 .dashboard-page__head {

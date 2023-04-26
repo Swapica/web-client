@@ -231,7 +231,7 @@
     "cancel-order-btn": "Cancel order",
     "cancel-btn": "Cancel",
     "address": "({address})",
-    "network": "{to}/{from}"
+    "network": "{from}/{to}"
   },
   "select-field": {
     "all-lbl": "All"
