@@ -33,6 +33,7 @@ const props = withDefaults(
     errorMessage?: string
     isErrorMessageShown?: boolean
     isNeedAllOption?: boolean
+    allOptionIcon?: ICON_NAMES
   }>(),
   {
     scheme: 'primary',
@@ -44,6 +45,7 @@ const props = withDefaults(
     errorMessage: '',
     isErrorMessageShown: true,
     isNeedAllOption: false,
+    allOptionIcon: undefined,
   },
 )
 
@@ -77,7 +79,13 @@ const isLabelActive = computed(() => isDropdownOpen.value || !!props.modelValue)
 
 const options = computed(() => [
   ...(props.isNeedAllOption
-    ? [{ value: '', label: t('select-field.all-lbl') }]
+    ? [
+        {
+          value: '',
+          label: t('select-field.all-lbl'),
+          ...(props.allOptionIcon && { icon: props.allOptionIcon }),
+        },
+      ]
     : []),
   ...props.valueOptions,
 ])

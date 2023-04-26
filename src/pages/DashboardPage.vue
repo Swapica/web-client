@@ -15,6 +15,7 @@
             v-model="filters.networkFrom"
             scheme="primary"
             is-need-all-option
+            :all-option-icon="$icons.user"
             :label="$t('dashboard-page.network-from-lbl')"
             :value-options="networkFromChains"
             :disabled="isSubmitting"
@@ -23,6 +24,7 @@
             v-model="filters.networkTo"
             scheme="primary"
             is-need-all-option
+            :all-option-icon="$icons.user"
             :label="$t('dashboard-page.network-to-lbl')"
             :value-options="networkToChains"
             :disabled="isSubmitting"

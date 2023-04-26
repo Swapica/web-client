@@ -2,14 +2,21 @@
 <template>
   <div class="dashboard-order-list-table">
     <div class="dashboard-order-list-table__head">
-      <div class="dashboard-order-list-table__head-item">
-        <span class="dashboard-order-list-table__head-title">
-          {{ $t('dashboard-order-list-table.sell-lbl') }}
-        </span>
+      <div class="dashboard-order-list-table__head-items-wrp">
+        <div class="dashboard-order-list-table__head-item">
+          <span class="dashboard-order-list-table__head-title">
+            {{ $t('dashboard-order-list-table.sell-lbl') }}
+          </span>
+        </div>
+        <div class="dashboard-order-list-table__head-item">
+          <span class="dashboard-order-list-table__head-title">
+            {{ $t('dashboard-order-list-table.buy-lbl') }}
+          </span>
+        </div>
       </div>
-      <div class="dashboard-order-list-table__head-item">
+      <div v-if="!isTablet" class="dashboard-order-list-table__head-item">
         <span class="dashboard-order-list-table__head-title">
-          {{ $t('dashboard-order-list-table.buy-lbl') }}
+          {{ $t('dashboard-order-list-table.network-lbl') }}
         </span>
       </div>
     </div>
@@ -212,10 +219,20 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 
 .dashboard-order-list-table__head {
   display: grid;
-  grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);
+  grid-template-columns: minmax(toRem(100), 1fr) toRem(154);
   grid-area: head;
+  gap: toRem(32);
+
+  @include respond-to(xmedium) {
+    gap: toRem(16);
+  }
+
+  @include respond-to(tablet) {
+    grid-template-columns: minmax(toRem(100), 1fr);
+  }
 }
 
+.dashboard-order-list-table__head-items-wrp,
 .dashboard-order-list-table__body-item-info-wrp {
   display: grid;
   grid-template-columns: minmax(toRem(100), 1fr) minmax(toRem(100), 1fr);

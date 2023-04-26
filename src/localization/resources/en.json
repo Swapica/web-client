@@ -158,7 +158,8 @@
     "address": "({address})",
     "tooltip-title": "Connect wallet",
     "tooltip-msg": "you haven’t connected your wallet, you will be able to match orders after connection.",
-    "network": "{from}/{to}"
+    "network": "{from}/{to}",
+    "network-lbl": "Network"
   },
   "change-network-step": {
     "title": "Change Network",
