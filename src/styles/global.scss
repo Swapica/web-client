@@ -18,7 +18,6 @@ body, #app {
   flex: 1;
   background: url('/backgrounds/app-bg.svg') repeat var(--background-primary-main);
   background-position: toRem(15);
-  background-attachment: fixed;
   color: var(--text-primary-main);
 
   @include respond-to(tablet) {

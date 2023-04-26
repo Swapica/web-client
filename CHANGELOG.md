@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.22] - 2023-04-26
+#### Fixed
+- A bug with a freeze on scroll
+
 ## [1.0.0-rc.21] - 2023-04-26
 #### Added
 - Show all orders on dashboard
@@ -116,7 +120,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.21...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.22...main
+[1.0.0-rc.22]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.21...v1.0.0-rc.22
 [1.0.0-rc.21]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.20...v1.0.0-rc.21
 [1.0.0-rc.20]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.19...v1.0.0-rc.20
 [1.0.0-rc.19]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.18...v1.0.0-rc.19
