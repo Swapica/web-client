@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.21] - 2023-04-26
+#### Added
+- Show all orders on dashboard
+- Animating network in table
+
 ## [1.0.0-rc.20] - 2023-04-21
 #### Fixed
 - Error messages
@@ -111,7 +116,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.20...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.21...main
+[1.0.0-rc.21]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.20...v1.0.0-rc.21
 [1.0.0-rc.20]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.19...v1.0.0-rc.20
 [1.0.0-rc.19]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.18...v1.0.0-rc.19
 [1.0.0-rc.18]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.17...v1.0.0-rc.18
