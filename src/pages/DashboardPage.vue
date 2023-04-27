@@ -20,6 +20,12 @@
             :value-options="networkFromChains"
             :disabled="isSubmitting"
           />
+          <app-button
+            class="dashboard-page__switch-btn"
+            scheme="icon"
+            :icon-left="$icons.switch"
+            @click="toogleNetworks"
+          />
           <select-field
             v-model="filters.networkTo"
             scheme="primary"
@@ -96,7 +102,7 @@
 import { SelectField } from '@/fields'
 import { useChainsStore, useTokensStore } from '@/store'
 import { computed, reactive, ref, watch } from 'vue'
-import { TokenSelect } from '@/common'
+import { TokenSelect, AppButton } from '@/common'
 import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
 import { CHAIN_TYPES } from '@/enums'
 
@@ -149,6 +155,13 @@ const getNetworkList = (network: string) => {
   })
 }
 
+const toogleNetworks = () => {
+  ;[filters.networkFrom, filters.networkTo] = [
+    filters.networkTo,
+    filters.networkFrom,
+  ]
+}
+
 watch(
   () => filters.networkFrom,
   () => (filters.tokenSell = ''),
@@ -185,6 +198,7 @@ watch(
   gap: toRem(20);
   display: flex;
   flex-direction: column;
+  position: relative;
 
   @include respond-to(small) {
     padding: toRem(24) toRem(16.96) toRem(32.92) toRem(28.13);
@@ -241,5 +255,15 @@ watch(
     padding: toRem(17) toRem(10) toRem(26) toRem(21);
     min-height: toRem(210);
   }
+}
+
+.dashboard-page__switch-btn {
+  --button-icon-size: #{toRem(20)};
+
+  position: absolute;
+  top: toRem(100);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-index-default);
 }
 </style>
