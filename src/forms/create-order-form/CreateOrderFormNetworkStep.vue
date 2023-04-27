@@ -6,25 +6,33 @@
     <p class="create-order-form-network-step__desc">
       {{ $t('create-order-form-network-step.description') }}
     </p>
-    <select-field
-      class="create-order-form-network-step__sell-network-select"
-      v-model="form.networkSell"
-      scheme="primary"
-      :label="$t('create-order-form-network-step.network-to-sell-lbl')"
-      :value-options="networkSellChains"
-      :disabled="isDisabled"
-      :error-message="getFieldErrorMessage('networkSell')"
-      @blur="touchField('networkSell')"
-    />
-    <select-field
-      v-model="form.networkBuy"
-      scheme="primary"
-      :value-options="networkBuyChains"
-      :disabled="isDisabled"
-      :label="$t('create-order-form-network-step.network-to-buy-lbl')"
-      :error-message="getFieldErrorMessage('networkBuy')"
-      @blur="touchField('networkBuy')"
-    />
+    <div class="create-order-form-network-step__networks">
+      <select-field
+        class="create-order-form-network-step__sell-network-select"
+        v-model="form.networkSell"
+        scheme="primary"
+        :label="$t('create-order-form-network-step.network-to-sell-lbl')"
+        :value-options="networkSellChains"
+        :disabled="isDisabled"
+        :error-message="getFieldErrorMessage('networkSell')"
+        @blur="touchField('networkSell')"
+      />
+      <app-button
+        class="create-order-form-network-step__switch-btn"
+        scheme="icon"
+        :icon-left="$icons.switch"
+        @click="toogleNetworks"
+      />
+      <select-field
+        v-model="form.networkBuy"
+        scheme="primary"
+        :value-options="networkBuyChains"
+        :disabled="isDisabled"
+        :label="$t('create-order-form-network-step.network-to-buy-lbl')"
+        :error-message="getFieldErrorMessage('networkBuy')"
+        @blur="touchField('networkBuy')"
+      />
+    </div>
 
     <div class="create-order-form-network-step__actions">
       <app-button
@@ -102,6 +110,13 @@ const handleNext = () => {
   if (!isFormValid()) return
   emit('next')
 }
+
+const toogleNetworks = () => {
+  ;[form.value.networkSell, form.value.networkBuy] = [
+    form.value.networkBuy,
+    form.value.networkSell,
+  ]
+}
 </script>
 
 <style lang="scss" scoped>
@@ -151,5 +166,20 @@ const handleNext = () => {
 
 .create-order-form-network-step__action {
   width: 100%;
+}
+
+.create-order-form-network-step__networks {
+  position: relative;
+  width: 100%;
+}
+
+.create-order-form-network-step__switch-btn {
+  --button-icon-size: #{toRem(20)};
+
+  position: absolute;
+  top: toRem(75);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-index-default);
 }
 </style>

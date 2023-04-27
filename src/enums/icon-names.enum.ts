@@ -16,4 +16,5 @@ export enum ICON_NAMES {
   cry = 'cry',
   metamask = 'metamask',
   walletConnect = 'wallet-connect',
+  switch = 'switch',
 }
