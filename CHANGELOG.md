@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Please check our [developers guide](https://gitlab.com/tokend/developers-guide)
 for further information about branching and tagging conventions.
 
+## [1.0.0-rc.24] - 2023-05-17
+#### Fixed
+- Typo
+
 ## [1.0.0-rc.23] - 2023-04-27
 #### Added
 - Toggle network on dashboard and create an order form
@@ -124,7 +128,8 @@ for further information about branching and tagging conventions.
 #### Under the hood changes
 - Initiated and setup project
 
-[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.23...main
+[Unreleased]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.24...main
+[1.0.0-rc.24]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.23...v1.0.0-rc.24
 [1.0.0-rc.23]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.22...v1.0.0-rc.23
 [1.0.0-rc.22]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.21...v1.0.0-rc.22
 [1.0.0-rc.21]: https://github.com/Swapica/web-client/compare/v1.0.0-rc.20...v1.0.0-rc.21

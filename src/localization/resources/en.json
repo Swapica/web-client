@@ -167,14 +167,14 @@
     "cancel-btn": "Cancel"
   },
   "match-order-form": {
-    "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will bw able to call the action and match this order.",
+    "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will be able to call the action and match this order.",
     "approve-msg-token": "ERC20 Token",
     "approve-msg": "To match this order {token} needs to be approved. By approving this token, you are allowing Swapica to access your funds. Unless you won’t be able to match any orders containing this token.",
     "approve-confirmation-title": "Approve Token",
     "match-confirmation-title": "Match Order",
     "cancel-btn": "Cancel",
     "matched-msg": "Order successfuly matched.",
-    "change-claim-network-msg": "The order is listed on {network}. To claim this order you need to change your network to {networkBold}. After this step you will bw able to call the action and claim this order.",
+    "change-claim-network-msg": "The order is listed on {network}. To claim this order you need to change your network to {networkBold}. After this step you will be able to call the action and claim this order.",
     "claim-confirmation-title": "Claim Tokens",
     "approve-confirmation-desc": "You’re approving the token. The transaction is processing, it may take some time. Thank you for your patience.",
     "match-confirmation-desc": "You’re matching the order. The transaction is processing, it may take some time. Thank you for your patience.",
