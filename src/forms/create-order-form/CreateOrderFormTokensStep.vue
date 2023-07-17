@@ -110,6 +110,16 @@
       </div>
     </div>
 
+    <div class="create-order-form-tokens-step__claim">
+      <div class="create-order-form-tokens-step__claim-tick"></div>
+      <!-- <div class="create-order-form-tokens-step__claim-price">
+        <p class="create-order-form-tokens-step__claim-price-native">
+          0.00159752 WETH
+        </p>
+        <p class="create-order-form-tokens-step__claim-price-usd">~ 2 USD</p>
+      </div> -->
+    </div>
+
     <div class="create-order-form-tokens-step__actions">
       <app-button
         class="create-order-form-tokens-step__action"
