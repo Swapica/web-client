@@ -12,6 +12,7 @@ import {
 import { useRouter } from '@/router'
 import { onClickOutside } from '@vueuse/core'
 import { ICON_NAMES } from '@/enums'
+import { useI18n } from 'vue-i18n'
 
 type SCHEMES = 'primary'
 type SIZES = 'medium' | 'default'
@@ -31,6 +32,8 @@ const props = withDefaults(
     placeholder?: string
     errorMessage?: string
     isErrorMessageShown?: boolean
+    isNeedAllOption?: boolean
+    allOptionIcon?: ICON_NAMES
   }>(),
   {
     scheme: 'primary',
@@ -41,6 +44,8 @@ const props = withDefaults(
     placeholder: ' ',
     errorMessage: '',
     isErrorMessageShown: true,
+    isNeedAllOption: false,
+    allOptionIcon: undefined,
   },
 )
 
@@ -49,6 +54,7 @@ const emit = defineEmits<{
 }>()
 
 const attrs = useAttrs()
+const { t } = useI18n({ useScope: 'global' })
 
 const selectElement = ref<HTMLDivElement>()
 
@@ -71,8 +77,21 @@ const isReadonly = computed(() =>
 
 const isLabelActive = computed(() => isDropdownOpen.value || !!props.modelValue)
 
+const options = computed(() => [
+  ...(props.isNeedAllOption
+    ? [
+        {
+          value: '',
+          label: t('select-field.all-lbl'),
+          ...(props.allOptionIcon && { icon: props.allOptionIcon }),
+        },
+      ]
+    : []),
+  ...props.valueOptions,
+])
+
 const selectedOption = computed(() =>
-  props.valueOptions.find(i => i.value === props.modelValue),
+  options.value.find(i => i.value === props.modelValue),
 )
 
 const selectFieldClasses = computed(() => ({
@@ -138,7 +157,10 @@ watch(
 </script>
 
 <template>
-  <div :class="selectFieldClasses">
+  <div
+    :class="selectFieldClasses"
+    :title="errorMessage && !isErrorMessageShown ? errorMessage : ''"
+  >
     <label
       v-if="label"
       class="select-field__label"
@@ -166,7 +188,7 @@ watch(
             />
           </template>
           <template v-else>
-            <template v-if="modelValue">
+            <template v-if="modelValue || isNeedAllOption">
               <div class="select-field__select-head-value">
                 <icon
                   v-if="selectedOption?.icon"
@@ -219,7 +241,7 @@ watch(
                 }"
               />
             </template>
-            <template v-else-if="valueOptions.length">
+            <template v-else-if="options.length">
               <button
                 :class="[
                   'select-field__select-dropdown-item',
@@ -229,7 +251,7 @@ watch(
                   },
                 ]"
                 type="button"
-                v-for="(option, idx) in valueOptions"
+                v-for="(option, idx) in options"
                 :key="`[${idx}] ${option.value}`"
                 @click="select(option.value)"
               >

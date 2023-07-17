@@ -49,11 +49,12 @@ import ClaimOrderListTable from '@/pages/Claim/ClaimOrderListTable.vue'
 import { TxResposne, MatchOrder } from '@/types'
 import { callers } from '@/api'
 import { useI18n } from 'vue-i18n'
+import { OrderStatus } from '@/enums'
 
 const PAGE_LIMIT = 5
 
 const props = defineProps<{
-  chainId: number
+  chainId: number | string
 }>()
 
 const emit = defineEmits<{
@@ -80,7 +81,7 @@ const loadList = async () => {
       {
         params: {
           'filter[creator]': provider.selectedAddress,
-          'filter[src_chain]': props.chainId,
+          ...(Boolean(props.chainId) && { 'filter[src_chain]': props.chainId }),
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,
           include:
@@ -107,7 +108,8 @@ const claimOrderOrMatch = async (item: MatchOrder) => {
   isSubmitting.value = true
   try {
     const response =
-      item.origin_order?.creator === provider.selectedAddress
+      item.origin_order?.creator === provider.selectedAddress &&
+      item.origin_order?.state === OrderStatus.executed
         ? await getClaimMatch(item)
         : await getClaimOrder(item)
     await provider.signAndSendTx(response.tx_body)

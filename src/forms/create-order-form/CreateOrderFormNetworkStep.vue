@@ -6,27 +6,33 @@
     <p class="create-order-form-network-step__desc">
       {{ $t('create-order-form-network-step.description') }}
     </p>
-    <select-field
-      class="create-order-form-network-step__sell-network-select"
-      v-model="form.networkSell"
-      scheme="primary"
-      :is-error-message-shown="false"
-      :label="$t('create-order-form-network-step.network-to-sell-lbl')"
-      :value-options="chains"
-      :disabled="isDisabled"
-      :error-message="getFieldErrorMessage('networkSell')"
-      @blur="touchField('networkSell')"
-    />
-    <select-field
-      v-model="form.networkBuy"
-      scheme="primary"
-      :is-error-message-shown="false"
-      :value-options="chains"
-      :disabled="isDisabled"
-      :label="$t('create-order-form-network-step.network-to-buy-lbl')"
-      :error-message="getFieldErrorMessage('networkBuy')"
-      @blur="touchField('networkBuy')"
-    />
+    <div class="create-order-form-network-step__networks">
+      <select-field
+        class="create-order-form-network-step__sell-network-select"
+        v-model="form.networkSell"
+        scheme="primary"
+        :label="$t('create-order-form-network-step.network-to-sell-lbl')"
+        :value-options="networkSellChains"
+        :disabled="isDisabled"
+        :error-message="getFieldErrorMessage('networkSell')"
+        @blur="touchField('networkSell')"
+      />
+      <app-button
+        class="create-order-form-network-step__switch-btn"
+        scheme="icon"
+        :icon-left="$icons.switch"
+        @click="toogleNetworks"
+      />
+      <select-field
+        v-model="form.networkBuy"
+        scheme="primary"
+        :value-options="networkBuyChains"
+        :disabled="isDisabled"
+        :label="$t('create-order-form-network-step.network-to-buy-lbl')"
+        :error-message="getFieldErrorMessage('networkBuy')"
+        @blur="touchField('networkBuy')"
+      />
+    </div>
 
     <div class="create-order-form-network-step__actions">
       <app-button
@@ -55,6 +61,7 @@ import { useChainsStore } from '@/store'
 import { UseCreateOrderForm } from '@/types'
 import { computed, toRefs } from 'vue'
 import { required } from '@/validators'
+import { CHAIN_TYPES } from '@/enums'
 
 const props = defineProps<{
   former: UseCreateOrderForm
@@ -76,18 +83,39 @@ const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
   },
 )
 
-const chainStore = useChainsStore()
-const chains = computed(() =>
-  chainStore.chains.map(i => ({
+const { chains, chainById } = useChainsStore()
+
+const networkSellChains = computed(() => getNetworkList(form.value.networkBuy))
+const networkBuyChains = computed(() => getNetworkList(form.value.networkSell))
+
+const getNetworkList = (network: string) => {
+  const chainList = chains.map(i => ({
     label: i.name,
     value: i.id,
     imageUrl: i.icon,
-  })),
-)
+    type: i.chain_params.chain_type,
+  }))
+
+  return chainList.filter(i => {
+    const networkInfo = chainById(network)
+
+    return (
+      i.type === CHAIN_TYPES.testnet ||
+      i.type !== networkInfo?.chain_params.chain_type
+    )
+  })
+}
 
 const handleNext = () => {
   if (!isFormValid()) return
   emit('next')
+}
+
+const toogleNetworks = () => {
+  ;[form.value.networkSell, form.value.networkBuy] = [
+    form.value.networkBuy,
+    form.value.networkSell,
+  ]
 }
 </script>
 
@@ -98,6 +126,7 @@ const handleNext = () => {
   align-items: center;
   max-width: toRem(368);
   width: 100%;
+  min-height: toRem(358);
 }
 
 .create-order-form-network-step__title {
@@ -118,6 +147,7 @@ const handleNext = () => {
 
 .create-order-form-network-step__sell-network-select {
   margin-bottom: toRem(16);
+  flex: none;
 }
 
 .create-order-form-network-step__actions {
@@ -126,6 +156,8 @@ const handleNext = () => {
   grid-template-columns: 1fr 1fr;
   width: 100%;
   gap: toRem(32);
+  flex: 1;
+  align-items: flex-end;
 
   @include respond-to(tablet) {
     gap: toRem(16);
@@ -134,5 +166,20 @@ const handleNext = () => {
 
 .create-order-form-network-step__action {
   width: 100%;
+}
+
+.create-order-form-network-step__networks {
+  position: relative;
+  width: 100%;
+}
+
+.create-order-form-network-step__switch-btn {
+  --button-icon-size: #{toRem(20)};
+
+  position: absolute;
+  top: toRem(75);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-index-default);
 }
 </style>

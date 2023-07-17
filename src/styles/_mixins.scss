@@ -73,8 +73,8 @@ $media-breakpoints: (
 @mixin field-error {
   overflow: hidden;
   color: var(--field-error);
-  font-size: toRem(10);
-  line-height: 1.4;
+  font-size: toRem(11);
+  line-height: 1.2;
   transition: var(--field-transition-duration) ease;
   transition-property: opacity, color, font-size, transform;
   margin-top: toRem(4);
@@ -94,5 +94,28 @@ $media-breakpoints: (
   &::-webkit-scrollbar-thumb {
     background: var(--primary-main);
     border-radius: toRem(50);
+  }
+}
+
+@mixin text-scroll-animation {
+  display: inline-block;
+  position: relative;
+  min-width: 100%;
+  box-sizing: border-box;
+  animation: 3s linear 0s infinite alternate move;
+  text-align: center;
+
+  @keyframes move {
+    0%,
+    25% {
+      transform: translateX(0%);
+      left: 0%;
+    }
+
+    75%,
+    100% {
+      transform: translateX(-100%);
+      left: 100%;
+    }
   }
 }

@@ -4,7 +4,7 @@
     <!-- eslint-disable max-len -->
     <div
       class="claim-order-list-item-info__body-item-info claim-order-list-item-info__body-item-info-buy"
-      :class="{ 'claim-order-list-item-info__body-item-info--disabled': !isMatch }"
+      :class="{ 'claim-order-list-item-info__body-item-info--disabled': isMatch }"
     >
       <span
         class="claim-order-list-item-info__body-item-amount"
@@ -52,7 +52,7 @@
     </div>
     <div
       class="claim-order-list-item-info__body-item-info claim-order-list-item-info__body-item-info-sell"
-      :class="{ 'claim-order-list-item-info__body-item-info--disabled': isMatch }"
+      :class="{ 'claim-order-list-item-info__body-item-info--disabled': !isMatch }"
     >
       <span
         class="claim-order-list-item-info__body-item-amount"
@@ -110,7 +110,7 @@
       <template #from>
         <span
           class="claim-order-list-item-info__network-lbl"
-          :class="{'claim-order-list-item-info__network-lbl--bold': !isMatch }"
+          :class="{'claim-order-list-item-info__network-lbl--bold': isMatch }"
         >
           {{ item.origin_order?.destination_chain?.name }}
         </span>
@@ -118,7 +118,7 @@
       <template #to>
         <span
           class="claim-order-list-item-info__network-lbl"
-          :class="{'claim-order-list-item-info__network-lbl--bold': isMatch }"
+          :class="{'claim-order-list-item-info__network-lbl--bold': !isMatch }"
         >
           {{ item.origin_order?.src_chain?.name }}
         </span>
@@ -130,7 +130,7 @@
 import { AppButton, CopyButton } from '@/common'
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { WINDOW_BREAKPOINTS } from '@/enums'
+import { OrderStatus, WINDOW_BREAKPOINTS } from '@/enums'
 import { MatchOrder } from '@/types'
 import { cropAddress, formatWeiAmount } from '@/helpers'
 import { useWeb3ProvidersStore } from '@/store'
@@ -144,7 +144,9 @@ const { provider } = useWeb3ProvidersStore()
 
 const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
 const isMatch = computed(
-  () => props.item.origin_order?.creator !== provider.selectedAddress,
+  () =>
+    props.item.origin_order?.creator === provider.selectedAddress &&
+    props.item.origin_order?.state === OrderStatus.executed,
 )
 </script>
 <style lang="scss" scoped>
@@ -254,9 +256,7 @@ const isMatch = computed(
 .claim-order-list-item-info__body-item-network {
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   padding: toRem(8) toRem(16);
 }
 
@@ -265,9 +265,9 @@ const isMatch = computed(
   line-height: 1;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
   color: rgba(var(--primary-dark-rgb), 0.3);
-  text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+
+  @include text-scroll-animation;
 }
 
 .claim-order-list-item-info__network-lbl {

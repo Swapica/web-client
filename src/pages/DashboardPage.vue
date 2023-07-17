@@ -14,15 +14,25 @@
           <select-field
             v-model="filters.networkFrom"
             scheme="primary"
+            is-need-all-option
+            :all-option-icon="$icons.user"
             :label="$t('dashboard-page.network-from-lbl')"
-            :value-options="chainsOptions"
+            :value-options="networkFromChains"
             :disabled="isSubmitting"
+          />
+          <app-button
+            class="dashboard-page__switch-btn"
+            scheme="icon"
+            :icon-left="$icons.switch"
+            @click="toogleNetworks"
           />
           <select-field
             v-model="filters.networkTo"
             scheme="primary"
+            is-need-all-option
+            :all-option-icon="$icons.user"
             :label="$t('dashboard-page.network-to-lbl')"
-            :value-options="chainsOptions"
+            :value-options="networkToChains"
             :disabled="isSubmitting"
           />
         </div>
@@ -43,6 +53,9 @@
             v-model="filters.tokenSell"
             is-head-icon-shown
             size="big"
+            is-emit-search-value-on-input
+            is-select-all-option-shown
+            :placeholder="$t('dashboard-page.token-placeholder')"
             :key="filters.networkFrom"
             :value-options="tokensSell"
             :disabled="isSubmitting"
@@ -53,6 +66,9 @@
             v-model="filters.tokenBuy"
             is-head-icon-shown
             size="big"
+            is-emit-search-value-on-input
+            is-select-all-option-shown
+            :placeholder="$t('dashboard-page.token-placeholder')"
             :key="filters.networkTo"
             :value-options="tokensBuy"
             :disabled="isSubmitting"
@@ -71,10 +87,9 @@
       </div>
       <div class="dashboard-page__content">
         <dashboard-order-list
-          v-if="isMounted"
           v-model:is-submitting="isSubmitting"
-          :network-sell="networkFrom!"
-          :match-network="networkTo!"
+          :network-sell="networkFrom"
+          :match-network="networkTo"
           :token-buy="filters.tokenBuy"
           :token-sell="filters.tokenSell"
         />
@@ -86,30 +101,24 @@
 <script lang="ts" setup>
 import { SelectField } from '@/fields'
 import { useChainsStore, useTokensStore } from '@/store'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { TokenSelect } from '@/common'
+import { computed, reactive, ref, watch } from 'vue'
+import { TokenSelect, AppButton } from '@/common'
 import DashboardOrderList from '@/pages/Dashboard/DashboardOrderList.vue'
+import { CHAIN_TYPES } from '@/enums'
 
-const { selectedChain, chainById, chains } = useChainsStore()
+const { chainById, chains } = useChainsStore()
 const { tokensByChainId } = useTokensStore()
-const isMounted = ref(false)
 const isSubmitting = ref(false)
 
-const chainsOptions = computed(() =>
-  chains.map(i => ({
-    label: i.name,
-    value: i.id,
-    imageUrl: i.icon,
-  })),
-)
-
 const filters = reactive({
-  networkFrom: selectedChain?.id ?? chainsOptions.value[0].value,
-  networkTo: chainsOptions.value[0].value,
+  networkFrom: '',
+  networkTo: '',
   tokenSell: '',
   tokenBuy: '',
 })
 
+const networkFromChains = computed(() => getNetworkList(filters.networkTo))
+const networkToChains = computed(() => getNetworkList(filters.networkFrom))
 const tokensSell = computed(() =>
   tokensByChainId(filters.networkFrom).map(i => ({
     label: i.symbol,
@@ -128,21 +137,40 @@ const tokensBuy = computed(() =>
 const networkFrom = computed(() => chainById(filters.networkFrom))
 const networkTo = computed(() => chainById(filters.networkTo))
 
+const getNetworkList = (network: string) => {
+  const chainList = chains.map(i => ({
+    label: i.name,
+    value: i.id,
+    imageUrl: i.icon,
+    type: i.chain_params.chain_type,
+  }))
+  if (!network) return chainList
+  return chainList.filter(i => {
+    const networkInfo = chainById(network)
+
+    return (
+      i.type === CHAIN_TYPES.testnet ||
+      i.type !== networkInfo?.chain_params.chain_type
+    )
+  })
+}
+
+const toogleNetworks = () => {
+  ;[filters.networkFrom, filters.networkTo] = [
+    filters.networkTo,
+    filters.networkFrom,
+  ]
+}
+
 watch(
   () => filters.networkFrom,
-  () => (filters.tokenSell = tokensSell.value[0]?.value ?? ''),
-  { immediate: true },
+  () => (filters.tokenSell = ''),
 )
 
 watch(
   () => filters.networkTo,
-  () => (filters.tokenBuy = tokensBuy.value[0]?.value ?? ''),
-  { immediate: true },
+  () => (filters.tokenBuy = ''),
 )
-
-onMounted(() => {
-  isMounted.value = true
-})
 </script>
 <style lang="scss" scoped>
 .dashboard-page__head {
@@ -170,6 +198,7 @@ onMounted(() => {
   gap: toRem(20);
   display: flex;
   flex-direction: column;
+  position: relative;
 
   @include respond-to(small) {
     padding: toRem(24) toRem(16.96) toRem(32.92) toRem(28.13);
@@ -226,5 +255,15 @@ onMounted(() => {
     padding: toRem(17) toRem(10) toRem(26) toRem(21);
     min-height: toRem(210);
   }
+}
+
+.dashboard-page__switch-btn {
+  --button-icon-size: #{toRem(20)};
+
+  position: absolute;
+  top: toRem(100);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-index-default);
 }
 </style>

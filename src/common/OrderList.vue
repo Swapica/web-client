@@ -42,8 +42,8 @@
 
 <script lang="ts" setup>
 import { ErrorMessage, Loader, Pagination } from '@/common'
-import { ref, watch, computed } from 'vue'
-import { useChainsStore, useWeb3ProvidersStore } from '@/store'
+import { ref, watch } from 'vue'
+import { useWeb3ProvidersStore } from '@/store'
 import { Bus, ErrorHandler, switchNetwork } from '@/helpers'
 import OrderListTable from '@/common/order-list/OrderListTable.vue'
 import { Order, TxResposne } from '@/types'
@@ -54,7 +54,7 @@ import { OrderStatus } from '@/enums'
 const PAGE_LIMIT = 5
 
 const props = defineProps<{
-  chainId: number
+  chainId: number | string
 }>()
 
 const emit = defineEmits<{
@@ -64,10 +64,7 @@ const emit = defineEmits<{
 }>()
 
 const { provider } = useWeb3ProvidersStore()
-const { chainByChainId } = useChainsStore()
 const { t } = useI18n({ useScope: 'global' })
-
-const srcChain = computed(() => chainByChainId(props.chainId))
 
 const currentPage = ref(1)
 const isSubmitting = ref(false)
@@ -88,7 +85,7 @@ const loadList = async () => {
       {
         params: {
           'filter[creator]': provider.selectedAddress,
-          'filter[src_chain]': props.chainId,
+          ...(Boolean(props.chainId) && { 'filter[src_chain]': props.chainId }),
           'filter[state]': OrderStatus.awaitingMatch,
           'page[limit]': PAGE_LIMIT,
           'page[number]': currentPage.value - 1,
@@ -116,10 +113,10 @@ const loadList = async () => {
 const cancelOrder = async (item: Order) => {
   isSubmitting.value = true
   try {
-    await switchNetwork(srcChain.value!)
+    await switchNetwork(item.src_chain!)
     const { data } = await callers.post<TxResposne>('/v1/cancel/order', {
       data: {
-        src_chain: srcChain.value?.id,
+        src_chain: item.src_chain?.id,
         order_id: item.order_id,
         sender: provider.selectedAddress,
       },

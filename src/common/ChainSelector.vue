@@ -100,7 +100,7 @@ const switchChain = async (
   dropdown.close()
 }
 
-if (!provider.currentProvider) {
+if (!provider.isConnected) {
   chainStore.selectChain(chainStore.chains[0].chain_params.chain_id)
 }
 </script>
@@ -147,6 +147,13 @@ if (!provider.currentProvider) {
 .chain-selector__dropdown-list-icon {
   width: 100%;
   height: 100%;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+
+  .chain-selector__dropdown-item--selected &,
+  .chain-selector__dropdown-item:hover & {
+    opacity: 1;
+  }
 }
 
 .chain-selector__dropdown {

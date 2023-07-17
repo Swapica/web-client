@@ -1,7 +1,10 @@
 {
   "validations": {
     "field-error_required": "Please fill out this field",
-    "field-error_email": "Field must be a valid email"
+    "field-error_email": "Field must be a valid email",
+    "field-error_amount": "Amount must be a number, greater than 0",
+    "field-error_sameTokenInSameNetwork": "Tokens must be different in the same network",
+    "field-error_maxValue": "Max value: {max}"
   },
   "errors": {
     "default": "Oops... Something went wrong",
@@ -14,7 +17,6 @@
     "provider-invalid-request": "JSON is not a valid request object standard",
     "provider-method-not-found": "Method does not exist standard",
     "provider-invalid-params": "Invalid method parameters standard",
-    "provider-invalid-input": "Missing or invalid parameters non-standard",
     "provider-resource-not-found": "Requested resource not found non-standard",
     "provider-resource-unavailable": "Requested resource not available non-standard",
     "provider-transaction-rejected": "Transaction creation failed non-standard",
@@ -24,9 +26,14 @@
     "provider-wrapper-method-not-found": "provider not exist or hasn't this method",
     "metamask-provider-not-found": "Metamask provider not found"
   },
+  "provider-invalid-input-errors": {
+    "not-enough-balance": "Transfer amount exceeds balance",
+    "default": "Missing or invalid parameters non-standard"
+  },
   "provider-internal-errors": {
     "default": "Internal JSON-RPC error standard",
-    "not-enough-balance": "Transfer amount exceeds balance"
+    "not-enough-balance": "Transfer amount exceeds balance",
+    "insufficient-funds": "Transfer amount exceeds balance"
   },
   "notification": {
     "default-title-success": "Action Completed",
@@ -95,12 +102,14 @@
   },
   "create-order-form-tokens-step": {
     "title": "Create Order",
-    "description": "To create your order select the token you want to sell and the token you want to receive and its amount. Custom tokens are available too.",
+    "description": "To create your order select the token you want to sell and the token you want to receive together with their amounts.",
     "back-btn": "Back",
     "next-btn": "Confirm",
     "token-to-sell-lbl": "Token to sell",
     "token-to-buy-lbl": "Token to buy",
-    "token-network": "Network: {network}"
+    "token-network": "Network: {network}",
+    "token-balance": "Balance: {balance}",
+    "token-balance-loading-lbl": "loading"
   },
   "confirmation-step": {
     "title": "Confirmation",
@@ -132,7 +141,8 @@
     "network-to-lbl": "Match chain",
     "token-sell-lbl": "Order sells",
     "token-buy-lbl": "Order buys",
-    "title": "Available Orders"
+    "title": "Available Orders",
+    "token-placeholder": "All"
   },
   "dashboard-order-list": {
     "loading-error-msg": "Ooops, something went wrong, please reload the page or try again later.",
@@ -147,7 +157,9 @@
     "match-btn": "Match",
     "address": "({address})",
     "tooltip-title": "Connect wallet",
-    "tooltip-msg": "you haven’t connected your wallet, you will be able to match orders after connection."
+    "tooltip-msg": "you haven’t connected your wallet, you will be able to match orders after connection.",
+    "network": "{from}/{to}",
+    "network-lbl": "Network"
   },
   "change-network-step": {
     "title": "Change Network",
@@ -155,14 +167,14 @@
     "cancel-btn": "Cancel"
   },
   "match-order-form": {
-    "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will bw able to call the action and match this order.",
+    "change-match-network-msg": "The order is listed on {network}. To match this order you need to change your network to {networkBold}. After this step you will be able to call the action and match this order.",
     "approve-msg-token": "ERC20 Token",
     "approve-msg": "To match this order {token} needs to be approved. By approving this token, you are allowing Swapica to access your funds. Unless you won’t be able to match any orders containing this token.",
     "approve-confirmation-title": "Approve Token",
     "match-confirmation-title": "Match Order",
     "cancel-btn": "Cancel",
     "matched-msg": "Order successfuly matched.",
-    "change-claim-network-msg": "The order is listed on {network}. To claim this order you need to change your network to {networkBold}. After this step you will bw able to call the action and claim this order.",
+    "change-claim-network-msg": "The order is listed on {network}. To claim this order you need to change your network to {networkBold}. After this step you will be able to call the action and claim this order.",
     "claim-confirmation-title": "Claim Tokens",
     "approve-confirmation-desc": "You’re approving the token. The transaction is processing, it may take some time. Thank you for your patience.",
     "match-confirmation-desc": "You’re matching the order. The transaction is processing, it may take some time. Thank you for your patience.",
@@ -222,5 +234,11 @@
     "cancel-btn": "Cancel",
     "address": "({address})",
     "network": "{to}/{from}"
+  },
+  "select-field": {
+    "all-lbl": "All"
+  },
+  "token-select": {
+    "all-lbl": "All"
   }
 }

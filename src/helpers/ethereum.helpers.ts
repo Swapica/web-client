@@ -8,7 +8,7 @@ import { errors } from '@/errors'
 import { ethers } from 'ethers'
 import { EIP1193, EIP1193String, EIP1474 } from '@/enums'
 import { mapKeys, get } from 'lodash-es'
-import { sleep, toCamelCaseDeep } from '@/helpers'
+import { isMobile, sleep, toCamelCaseDeep } from '@/helpers'
 import { useErc20 } from '@/composables/use-erc20'
 import { useTokensStore, useWeb3ProvidersStore } from '@/store'
 import { config } from '@/config'
@@ -80,7 +80,9 @@ export function handleEthError(error: EthProviderRpcError) {
         cause: error,
       })
     case EIP1474.invalidInput:
-      throw new errors.ProviderInvalidInput(error.message)
+      throw new errors.ProviderInvalidInput(error.message, {
+        cause: error,
+      })
     case EIP1474.resourceNotFound:
       throw new errors.ProviderResourceNotFound(error.message)
     case EIP1474.resourceUnavailable:
@@ -153,6 +155,19 @@ export async function getTokenInfo(chain: ChainResposne, address: string) {
   }
 }
 
+export async function loadTokenBalance(rpcUrl: string, address: string) {
+  const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
+  const { provider } = useWeb3ProvidersStore()
+
+  if (address === config.NATIVE_TOKEN) {
+    const balance = await rpcProvider?.getBalance(provider.selectedAddress!)
+    return balance?.toString()
+  } else {
+    const erc20 = useErc20(rpcProvider, address)
+    return erc20.getBalanceOf(provider.selectedAddress!)
+  }
+}
+
 export async function switchNetwork(chain: ChainResposne) {
   const { provider } = useWeb3ProvidersStore()
 
@@ -162,12 +177,17 @@ export async function switchNetwork(chain: ChainResposne) {
     }
   } catch (error) {
     const e = error as EthProviderRpcError
-    if (e?.code === 4902 || e?.code === EIP1474.internalError) {
+
+    if (
+      e?.code === 4902 ||
+      e?.code === EIP1474.internalError ||
+      (isMobile() && !(e instanceof errors.ProviderUserRejectedRequest))
+    ) {
       try {
         await provider.addChain(
           chain.chain_params.chain_id,
           chain.name,
-          chain.chain_params.rpc,
+          chain.chain_params.public_rpc,
           chain.chain_params.native_symbol,
           chain.chain_params.native_symbol, // TODO add name
           chain.chain_params.native_decimals,

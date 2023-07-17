@@ -14,6 +14,7 @@
         v-model="networkId"
         scheme="primary"
         size="medium"
+        is-need-all-option
         :disabled="isLoading"
         :value-options="chains"
       />
@@ -86,10 +87,7 @@ const chains = computed(() =>
 const isLoading = ref(false)
 const isLoadFailed = ref(false)
 const isListEmpty = ref(false)
-const networkId = ref(
-  chainStore.selectedChain?.chain_params.chain_id ??
-    chainStore.chains[0].chain_params.chain_id,
-)
+const networkId = ref<string | number>('')
 </script>
 
 <style lang="scss" scoped>
