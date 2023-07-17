@@ -240,5 +240,9 @@
   },
   "token-select": {
     "all-lbl": "All"
+  },
+  "automatic-claim-block": {
+    "label": "Automatic Claim",
+    "description": "Pay with additional ETH and use a relayer."
   }
 }

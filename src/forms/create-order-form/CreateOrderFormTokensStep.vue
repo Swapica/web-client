@@ -139,7 +139,7 @@
     <automatic-claim-block
       class="create-order-form-tokens-step__claim"
       v-model="form.isAutomaticClaim"
-      :is-disabled="Boolean(!form.tokenBuy && !form.tokenSell)"
+      :is-disabled="Boolean(!form.tokenBuy || !form.tokenSell)"
     />
 
     <div class="create-order-form-tokens-step__actions">

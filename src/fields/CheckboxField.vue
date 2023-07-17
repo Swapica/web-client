@@ -91,9 +91,10 @@ const onChange = (event: Event) => {
 
 .checkbox-field__frame {
   display: flex;
-  width: 100%;
-  height: 100%;
+  width: toRem(40);
+  height: toRem(40);
   min-height: toRem(40);
+  min-width: toRem(40);
   background: url('/backgrounds/checkbox-bg.svg');
   background-size: 100% 100%;
 

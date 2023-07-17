@@ -1,19 +1,24 @@
 <!-- eslint-disable vue-i18n/no-raw-text -->
 <template>
-  <div class="automatic-claim-block">
+  <div
+    class="automatic-claim-block"
+    :class="{
+      'automatic-claim-block--disabled': isDisabled,
+    }"
+  >
     <checkbox-field
       :model-value="modelValue"
       :disabled="isDisabled"
-      label="Automatic Claim"
-      description="Pay with additional ETH and use a relayer."
+      :label="$t('automatic-claim-block.label')"
+      :description="$t('automatic-claim-block.description')"
       @update:model-value="emit('update:modelValue', $event)"
     />
     <div class="automatic-claim-block__claim-price">
       <p class="automatic-claim-block__claim-price-native">
-        {{ '0.00159752 WETH' }}
+        {{ `${formatAmount(0.00159752, 18)} WETH` }}
       </p>
       <p class="automatic-claim-block__claim-price-usd">
-        {{ '~ 2 USD' }}
+        {{ `~ ${formatAmount(2, 2)} USD` }}
       </p>
     </div>
   </div>
@@ -21,6 +26,7 @@
 
 <script lang="ts" setup>
 import { CheckboxField } from '@/fields'
+import { formatAmount } from '@/helpers'
 
 withDefaults(
   defineProps<{
@@ -43,13 +49,20 @@ const emit = defineEmits<{
   width: 100%;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: toRem(10);
 }
 
 .automatic-claim-block__claim-price {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  justify-content: flex-end;
   gap: toRem(2);
+
+  .automatic-claim-block--disabled & {
+    opacity: 0.5;
+  }
 }
 
 .automatic-claim-block__claim-price-native {
