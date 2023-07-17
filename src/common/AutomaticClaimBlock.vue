@@ -1,10 +1,13 @@
 <!-- eslint-disable vue-i18n/no-raw-text -->
 <template>
-  <div
+  <tooltip
     class="automatic-claim-block"
     :class="{
       'automatic-claim-block--disabled': isDisabled,
     }"
+    :title="$t('automatic-claim-block.tooltip-title')"
+    :message="$t('automatic-claim-block.tooltip-msg')"
+    :is-show-tooltip="isDisabled"
   >
     <checkbox-field
       :model-value="modelValue"
@@ -21,12 +24,13 @@
         {{ `~ ${formatAmount(2, 2)} USD` }}
       </p>
     </div>
-  </div>
+  </tooltip>
 </template>
 
 <script lang="ts" setup>
 import { CheckboxField } from '@/fields'
 import { formatAmount } from '@/helpers'
+import { Tooltip } from '@/common'
 
 withDefaults(
   defineProps<{
@@ -51,6 +55,12 @@ const emit = defineEmits<{
   justify-content: space-between;
   flex-wrap: wrap;
   gap: toRem(10);
+
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  :deep(.tooltip__content) {
+    left: 60%;
+    transform: translateX(-60%);
+  }
 }
 
 .automatic-claim-block__claim-price {
