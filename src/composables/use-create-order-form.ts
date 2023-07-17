@@ -19,6 +19,7 @@ export const useCreateOrderForm = () => {
     amountBuy: '',
     tokenSell: '',
     tokenBuy: '',
+    isAutomaticClaim: false,
   })
 
   const createOrder = async () => {

@@ -110,15 +110,11 @@
       </div>
     </div>
 
-    <div class="create-order-form-tokens-step__claim">
-      <div class="create-order-form-tokens-step__claim-tick"></div>
-      <!-- <div class="create-order-form-tokens-step__claim-price">
-        <p class="create-order-form-tokens-step__claim-price-native">
-          0.00159752 WETH
-        </p>
-        <p class="create-order-form-tokens-step__claim-price-usd">~ 2 USD</p>
-      </div> -->
-    </div>
+    <automatic-claim-block
+      class="create-order-form-tokens-step__claim"
+      v-model="form.isAutomaticClaim"
+      :is-disabled="Boolean(!form.tokenBuy && !form.tokenSell)"
+    />
 
     <div class="create-order-form-tokens-step__actions">
       <app-button
@@ -140,7 +136,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AppButton, TokenSelect } from '@/common'
+import { AppButton, AutomaticClaimBlock, TokenSelect } from '@/common'
 import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { UseCreateOrderForm } from '@/types'
@@ -321,5 +317,11 @@ const handleNext = () => {
   width: 100%;
   gap: toRem(4.5);
   margin-bottom: toRem(8);
+}
+
+.create-order-form-tokens-step__claim {
+  margin-top: toRem(26);
+  padding-top: toRem(16);
+  border-top: toRem(1) dashed var(--primary-main);
 }
 </style>
