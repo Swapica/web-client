@@ -25,6 +25,7 @@
     <match-order-form-match-step
       v-if="currentStep.name === STEPS.match"
       :order="order"
+      v-model:is-automatic-claim="isAutomaticClaim"
       @cancel="close"
       @confirm="onNext"
     />
@@ -136,12 +137,16 @@ const swapicaContract = useSwapica(provider)
 
 const { t } = useI18n({ useScope: 'global' })
 
+const approveTx = ref<TxResposne | null>(null)
+const isApproving = ref(false)
+const isAutomaticClaim = ref(false)
+
 const isValidChangeMatchNetwork = computed(
   () =>
     provider.chainId === props.order.destination_chain?.chain_params.chain_id,
 )
 
-const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
+const stepperSteps = computed(() => [
   {
     name: STEPS.matchChangeNetwork,
     isHidden: isValidChangeMatchNetwork.value,
@@ -149,16 +154,17 @@ const { currentStep, steps, currentIdx, forward, toStep } = useStepper([
   STEPS.match,
   { name: STEPS.approveBuyToken, isHidden: true },
   STEPS.confirmationMatch,
-  STEPS.claimChangeNetwork,
-  STEPS.claim,
-  STEPS.confirmationClaim,
+  ...(isAutomaticClaim.value
+    ? []
+    : [STEPS.claimChangeNetwork, STEPS.claim, STEPS.confirmationClaim]),
 ])
+
+const { currentStep, steps, currentIdx, forward, toStep } =
+  useStepper(stepperSteps)
 
 if (isValidChangeMatchNetwork.value) {
   toStep(STEPS.match)
 }
-const approveTx = ref<TxResposne | null>(null)
-const isApproving = ref(false)
 
 const onNext = () => {
   switch (currentStep.value.name) {
@@ -236,10 +242,17 @@ const matchOrder = async () => {
         order_id: props.order.order_id,
         src_chain: props.order.src_chain?.id,
         sender: provider.selectedAddress,
+        use_relayer: isAutomaticClaim.value,
       },
     })
     await provider.signAndSendTx(data.tx_body)
-    onNext()
+    if (isAutomaticClaim.value) {
+      Bus.emit(Bus.eventList.orderMatched)
+      Bus.success(t('match-order-form.matched-msg'))
+      emit('close')
+    } else {
+      onNext()
+    }
   } catch (e) {
     toStep(STEPS.match)
     throw e

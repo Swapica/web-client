@@ -40,6 +40,7 @@ export const useCreateOrderForm = () => {
           .toString(),
         dest_chain: form.networkBuy,
         sender: provider.selectedAddress,
+        use_relayer: form.isAutomaticClaim,
       },
     })
   }

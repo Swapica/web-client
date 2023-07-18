@@ -28,6 +28,12 @@
       </template>
     </i18n-t>
 
+    <automatic-claim-block
+      class="match-order-form-match-step__claim"
+      :model-value="isAutomaticClaim"
+      @update:model-value="emit('update:isAutomaticClaim', $event)"
+    />
+
     <div class="match-order-form-match-step__actions">
       <app-button
         class="match-order-form-match-step__action"
@@ -45,17 +51,19 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { AppButton } from '@/common'
+import { AppButton, AutomaticClaimBlock } from '@/common'
 import { Order } from '@/types'
 import { formatWeiAmount } from '@/helpers'
 
 defineProps<{
   order: Order
+  isAutomaticClaim: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'cancel'): void
   (e: 'confirm'): void
+  (e: 'update:isAutomaticClaim', value: boolean): void
 }>()
 </script>
 
@@ -100,5 +108,16 @@ const emit = defineEmits<{
 
 .match-order-form-match-step__desc-token-bold {
   color: var(--text-primary-dark);
+}
+
+.match-order-form-match-step__claim {
+  margin-top: toRem(26);
+  border-top: toRem(1) dashed var(--primary-main);
+  max-width: toRem(545);
+  padding: toRem(16) toRem(25) 0;
+
+  @include respond-to(tablet) {
+    padding: toRem(16) 0 0 0;
+  }
 }
 </style>
