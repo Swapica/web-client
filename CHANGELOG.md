@@ -11,7 +11,6 @@ for further information about branching and tagging conventions.
 #### Added
 - Relayer
 
-
 ## [1.0.0-rc.24] - 2023-05-17
 #### Fixed
 - Typo
