@@ -142,7 +142,7 @@
       :token-buy="form.tokenBuy"
       :network-buy="networkBuy!.id"
       :amount="form.amountBuy"
-      :is-disabled="Boolean(!form.tokenBuy || !form.tokenSell)"
+      :is-disabled="Boolean(!form.tokenBuy)"
     />
 
     <div class="create-order-form-tokens-step__actions">
