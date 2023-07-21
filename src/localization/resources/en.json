@@ -245,6 +245,7 @@
     "label": "Automatic Claim",
     "description": "Pay with additional ETH and use a relayer.",
     "tooltip-title": "Select Token",
-    "tooltip-msg": "u need to select token first to be able to enable automatic claim."
+    "tooltip-msg": "u need to select token first to be able to enable automatic claim.",
+    "failed-commision-msg": "Failed load commision"
   }
 }

@@ -31,6 +31,11 @@
     <automatic-claim-block
       class="match-order-form-match-step__claim"
       :model-value="isAutomaticClaim"
+      :token-buy="order.token_to_sell.address"
+      :network-buy="order.src_chain!.id"
+      :amount="order.amount_to_sell"
+      :symbol="order.token_to_sell.symbol"
+      :decimals="order.token_to_sell.decimals"
       @update:model-value="emit('update:isAutomaticClaim', $event)"
     />
 

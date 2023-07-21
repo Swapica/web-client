@@ -139,6 +139,9 @@
     <automatic-claim-block
       class="create-order-form-tokens-step__claim"
       v-model="form.isAutomaticClaim"
+      :token-buy="form.tokenBuy"
+      :network-buy="networkBuy!.id"
+      :amount="form.amountBuy"
       :is-disabled="Boolean(!form.tokenBuy || !form.tokenSell)"
     />
 
