@@ -136,6 +136,15 @@
       </div>
     </div>
 
+    <automatic-claim-block
+      class="create-order-form-tokens-step__claim"
+      v-model="form.isAutomaticClaim"
+      :token-buy="form.tokenBuy"
+      :network-buy="networkBuy!.id"
+      :amount="form.amountBuy"
+      :is-disabled="Boolean(!form.tokenBuy || !form.tokenSell)"
+    />
+
     <div class="create-order-form-tokens-step__actions">
       <app-button
         class="create-order-form-tokens-step__action"
@@ -156,7 +165,12 @@
 </template>
 
 <script lang="ts" setup>
-import { AppButton, TokenSelect, FieldErrorMessage } from '@/common'
+import {
+  AppButton,
+  TokenSelect,
+  FieldErrorMessage,
+  AutomaticClaimBlock,
+} from '@/common'
 import { InputField } from '@/fields'
 import { useFormValidation } from '@/composables'
 import { TokenInfo, UseCreateOrderForm } from '@/types'
@@ -444,6 +458,12 @@ watch(
   width: 100%;
   gap: toRem(4.5);
   margin-bottom: toRem(8);
+}
+
+.create-order-form-tokens-step__claim {
+  margin-top: toRem(26);
+  padding-top: toRem(16);
+  border-top: toRem(1) dashed var(--primary-main);
 }
 
 @keyframes dots {

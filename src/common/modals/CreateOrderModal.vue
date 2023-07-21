@@ -38,6 +38,10 @@ const close = () => emit('update:is-shown', false)
     @include respond-to(small) {
       padding: toRem(16) toRem(10) toRem(31) toRem(23);
     }
+
+    @include respond-to-height(500px) {
+      height: 100%;
+    }
   }
 }
 
