@@ -144,7 +144,6 @@ watch(
   display: flex;
   flex-direction: column;
   flex: 1;
-  justify-content: flex-end;
   gap: toRem(2);
 
   &--failed {
