@@ -119,22 +119,24 @@
           </div>
         </div>
         <div class="order-list-table__body-item-network">
-          <span
-            class="order-list-table__body-item-network-text"
-            :title="
-              $t('order-list-table.network', {
-                from: i.src_chain?.name,
-                to: i.destination_chain?.name,
-              })
-            "
-          >
-            {{
-              $t('order-list-table.network', {
-                from: i.src_chain?.name,
-                to: i.destination_chain?.name,
-              })
-            }}
-          </span>
+          <div class="order-list-table__body-item-network-text-wrp">
+            <span
+              class="order-list-table__body-item-network-text"
+              :title="
+                $t('order-list-table.network', {
+                  from: i.src_chain?.name,
+                  to: i.destination_chain?.name,
+                })
+              "
+            >
+              {{
+                $t('order-list-table.network', {
+                  from: i.src_chain?.name,
+                  to: i.destination_chain?.name,
+                })
+              }}
+            </span>
+          </div>
         </div>
         <app-button
           class="order-list-table__body-item-cancel-btn"
@@ -359,7 +361,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
-  padding: toRem(8) toRem(16);
+  padding: toRem(8) toRem(5);
 }
 
 .order-list-table__body-item-network-text {
@@ -388,5 +390,9 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   @include respond-to(tablet) {
     margin: toRem(6) auto toRem(16);
   }
+}
+
+.order-list-table__body-item-network-text-wrp {
+  overflow: hidden;
 }
 </style>

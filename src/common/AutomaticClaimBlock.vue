@@ -1,19 +1,21 @@
+<!-- eslint-disable prettier/prettier -->
 <!-- eslint-disable vue-i18n/no-raw-text -->
 <template>
-  <tooltip
+  <div
     class="automatic-claim-block"
     :class="{
       'automatic-claim-block--disabled': isDisabled,
     }"
-    :title="$t('automatic-claim-block.tooltip-title')"
-    :message="$t('automatic-claim-block.tooltip-msg')"
-    :is-show-tooltip="isDisabled"
   >
     <checkbox-field
       :model-value="modelValue"
       :disabled="isDisabled"
       :label="$t('automatic-claim-block.label')"
-      :description="$t('automatic-claim-block.description')"
+      :description="
+        description || $t('automatic-claim-block.description', {
+          token: symbol || tokenInfo?.symbol,
+        })
+      "
       @update:model-value="emit('update:modelValue', $event)"
     />
     <div
@@ -42,13 +44,13 @@
         </p>
       </template>
     </div>
-  </tooltip>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { CheckboxField } from '@/fields'
 import { ErrorHandler, formatAmount, getTokenInfo } from '@/helpers'
-import { Tooltip, Loader } from '@/common'
+import { Loader } from '@/common'
 import { api } from '@/api'
 import { useChainsStore } from '@/store'
 import { computed, ref, watch } from 'vue'
@@ -64,11 +66,13 @@ const props = withDefaults(
     amount: string
     decimals?: number
     symbol?: string
+    description?: string
   }>(),
   {
     isDisabled: false,
     decimals: undefined,
     symbol: '',
+    description: '',
   },
 )
 

@@ -119,22 +119,24 @@
           </div>
         </div>
         <div class="dashboard-order-list-table__body-item-network">
-          <span
-            class="dashboard-order-list-table__body-item-network-text"
-            :title="
-              $t('dashboard-order-list-table.network', {
-                from: i.src_chain?.name,
-                to: i.destination_chain?.name,
-              })
-            "
-          >
-            {{
-              $t('dashboard-order-list-table.network', {
-                from: i.src_chain?.name,
-                to: i.destination_chain?.name,
-              })
-            }}
-          </span>
+          <div class="dashboard-order-list-table__body-item-network-text-wrp">
+            <span
+              class="dashboard-order-list-table__body-item-network-text"
+              :title="
+                $t('dashboard-order-list-table.network', {
+                  from: i.src_chain?.name,
+                  to: i.destination_chain?.name,
+                })
+              "
+            >
+              {{
+                $t('dashboard-order-list-table.network', {
+                  from: i.src_chain?.name,
+                  to: i.destination_chain?.name,
+                })
+              }}
+            </span>
+          </div>
         </div>
         <tooltip
           class="dashboard-order-list-table__tooltip"
@@ -410,7 +412,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
-  padding: toRem(8) toRem(16);
+  padding: toRem(8) toRem(5);
 }
 
 .dashboard-order-list-table__body-item-network-text {
@@ -420,5 +422,9 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   white-space: nowrap;
 
   @include text-scroll-animation;
+}
+
+.dashboard-order-list-table__body-item-network-text-wrp {
+  overflow: hidden;
 }
 </style>

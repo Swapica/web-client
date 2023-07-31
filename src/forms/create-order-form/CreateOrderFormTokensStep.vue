@@ -142,7 +142,7 @@
       :token-buy="form.tokenBuy"
       :network-buy="networkBuy!.id"
       :amount="form.amountBuy"
-      :is-disabled="Boolean(!form.tokenBuy)"
+      :description="$t('create-order-form-tokens-step.automatic-claim-desc')"
     />
 
     <div class="create-order-form-tokens-step__actions">

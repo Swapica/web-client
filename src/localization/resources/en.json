@@ -109,7 +109,8 @@
     "token-to-buy-lbl": "Token to buy",
     "token-network": "Network: {network}",
     "token-balance": "Balance: {balance}",
-    "token-balance-loading-lbl": "loading"
+    "token-balance-loading-lbl": "loading",
+    "automatic-claim-desc": "Pay with \"Token to buy\" and use a relayer"
   },
   "confirmation-step": {
     "title": "Confirmation",
@@ -243,9 +244,7 @@
   },
   "automatic-claim-block": {
     "label": "Automatic Claim",
-    "description": "Pay with additional ETH and use a relayer.",
-    "tooltip-title": "Select Token",
-    "tooltip-msg": "u need to select token first to be able to enable automatic claim.",
+    "description": "Pay with additional {token} and use a relayer.",
     "failed-commision-msg": "Failed load commision"
   }
 }

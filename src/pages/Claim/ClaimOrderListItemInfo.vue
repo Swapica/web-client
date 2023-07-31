@@ -98,32 +98,34 @@
     </div>
   </div>
   <div class="claim-order-list-item-info__body-item-network">
-    <i18n-t
-      keypath="claim-order-list-item-info.network"
-      tag="p"
-      class="claim-order-list-item-info__body-item-network-text"
-      :title="$t('claim-order-list-item-info.network', {
-        to: item.origin_order?.src_chain?.name,
-        from: item.origin_order?.destination_chain?.name,
-      })"
-    >
-      <template #from>
-        <span
-          class="claim-order-list-item-info__network-lbl"
-          :class="{'claim-order-list-item-info__network-lbl--bold': isMatch }"
-        >
-          {{ item.origin_order?.destination_chain?.name }}
-        </span>
-      </template>
-      <template #to>
-        <span
-          class="claim-order-list-item-info__network-lbl"
-          :class="{'claim-order-list-item-info__network-lbl--bold': !isMatch }"
-        >
-          {{ item.origin_order?.src_chain?.name }}
-        </span>
-      </template>
-    </i18n-t>
+    <div class="claim-order-list-item-info__body-item-network-text-wrp">
+      <i18n-t
+        keypath="claim-order-list-item-info.network"
+        tag="p"
+        class="claim-order-list-item-info__body-item-network-text"
+        :title="$t('claim-order-list-item-info.network', {
+          to: item.origin_order?.src_chain?.name,
+          from: item.origin_order?.destination_chain?.name,
+        })"
+      >
+        <template #from>
+          <span
+            class="claim-order-list-item-info__network-lbl"
+            :class="{'claim-order-list-item-info__network-lbl--bold': isMatch }"
+          >
+            {{ item.origin_order?.destination_chain?.name }}
+          </span>
+        </template>
+        <template #to>
+          <span
+            class="claim-order-list-item-info__network-lbl"
+            :class="{'claim-order-list-item-info__network-lbl--bold': !isMatch }"
+          >
+            {{ item.origin_order?.src_chain?.name }}
+          </span>
+        </template>
+      </i18n-t>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -257,7 +259,7 @@ const isMatch = computed(
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
-  padding: toRem(8) toRem(16);
+  padding: toRem(8) toRem(5);
 }
 
 .claim-order-list-item-info__body-item-network-text {
@@ -277,5 +279,9 @@ const isMatch = computed(
   &--bold {
     color: var(--text-primary-dark);
   }
+}
+
+.claim-order-list-item-info__body-item-network-text-wrp {
+  overflow: hidden;
 }
 </style>
