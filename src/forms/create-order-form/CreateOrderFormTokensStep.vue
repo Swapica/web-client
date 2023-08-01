@@ -145,6 +145,10 @@
       :description="$t('create-order-form-tokens-step.automatic-claim-desc')"
     />
 
+    <p class="create-order-form-tokens-step__claim-desc">
+      {{ $t('create-order-form-tokens-step.claim-desc-warning') }}
+    </p>
+
     <div class="create-order-form-tokens-step__actions">
       <app-button
         class="create-order-form-tokens-step__action"
@@ -464,6 +468,13 @@ watch(
   margin-top: toRem(26);
   padding-top: toRem(16);
   border-top: toRem(1) dashed var(--primary-main);
+}
+
+.create-order-form-tokens-step__claim-desc {
+  margin-top: toRem(8);
+  color: var(--error-main);
+  font-size: toRem(14);
+  text-align: center;
 }
 
 @keyframes dots {

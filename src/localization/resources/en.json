@@ -110,7 +110,8 @@
     "token-network": "Network: {network}",
     "token-balance": "Balance: {balance}",
     "token-balance-loading-lbl": "loading",
-    "automatic-claim-desc": "Pay with \"Token to buy\" and use a relayer"
+    "automatic-claim-desc": "Pay with \"Token to buy\" and use a relayer",
+    "claim-desc-warning": "Small orders that can't pay for the commission won't be relayed"
   },
   "confirmation-step": {
     "title": "Confirmation",
