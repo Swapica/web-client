@@ -122,22 +122,24 @@
           </div>
         </div>
         <div class="expired-orders-list-table__body-item-network">
-          <span
-            class="expired-orders-list-table__body-item-network-text"
-            :title="
-              $t('expired-orders-list-table.network', {
-                from: i.origin_chain?.name,
-                to: i.src_chain?.name,
-              })
-            "
-          >
-            {{
-              $t('expired-orders-list-table.network', {
-                from: i.origin_chain?.name,
-                to: i.src_chain?.name,
-              })
-            }}
-          </span>
+          <div class="expired-orders-list-table__body-item-network-text-wrp">
+            <span
+              class="expired-orders-list-table__body-item-network-text"
+              :title="
+                $t('expired-orders-list-table.network', {
+                  from: i.origin_chain?.name,
+                  to: i.src_chain?.name,
+                })
+              "
+            >
+              {{
+                $t('expired-orders-list-table.network', {
+                  from: i.origin_chain?.name,
+                  to: i.src_chain?.name,
+                })
+              }}
+            </span>
+          </div>
         </div>
         <app-button
           class="expired-orders-list-table__body-item-cancel-btn"
@@ -362,7 +364,7 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   background: url('/backgrounds/network-bg.svg') no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
-  padding: toRem(8) toRem(16);
+  padding: toRem(8) toRem(5);
 }
 
 .expired-orders-list-table__body-item-network-text {
@@ -372,6 +374,10 @@ const isSmall = computed(() => windowWidth.value < WINDOW_BREAKPOINTS.small)
   white-space: nowrap;
 
   @include text-scroll-animation;
+}
+
+.expired-orders-list-table__body-item-network-text-wrp {
+  overflow: hidden;
 }
 
 .expired-orders-list-table__body-item-cancel-btn {

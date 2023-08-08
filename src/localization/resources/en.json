@@ -109,7 +109,9 @@
     "token-to-buy-lbl": "Token to buy",
     "token-network": "Network: {network}",
     "token-balance": "Balance: {balance}",
-    "token-balance-loading-lbl": "loading"
+    "token-balance-loading-lbl": "loading",
+    "automatic-claim-desc": "Pay with \"Token to buy\" and use a relayer",
+    "claim-desc-warning": "Small orders that can't pay for the commission won't be relayed"
   },
   "confirmation-step": {
     "title": "Confirmation",
@@ -240,5 +242,10 @@
   },
   "token-select": {
     "all-lbl": "All"
+  },
+  "automatic-claim-block": {
+    "label": "Automatic Claim",
+    "description": "Pay with additional {token} and use a relayer.",
+    "failed-commision-msg": "Failed load commision"
   }
 }

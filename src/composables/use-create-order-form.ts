@@ -19,6 +19,7 @@ export const useCreateOrderForm = () => {
     amountBuy: '',
     tokenSell: '',
     tokenBuy: '',
+    isAutomaticClaim: false,
   })
 
   const createOrder = async () => {
@@ -39,6 +40,7 @@ export const useCreateOrderForm = () => {
           .toString(),
         dest_chain: form.networkBuy,
         sender: provider.selectedAddress,
+        use_relayer: form.isAutomaticClaim,
       },
     })
   }

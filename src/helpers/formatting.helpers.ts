@@ -17,3 +17,8 @@ export function formatWeiAmount(amount: BnLike, decimals: number) {
   const number = new BN(amount).fromFraction(decimals).toFixed(decimals)
   return new BN(number).toDefaultFormat()
 }
+
+export function formatAmount(amount: BnLike, decimals: number) {
+  const number = new BN(amount).toFixed(decimals)
+  return new BN(number).toDefaultFormat()
+}
