@@ -472,7 +472,7 @@ watch(
 
 .create-order-form-tokens-step__claim-desc {
   margin-top: toRem(8);
-  color: var(--error-main);
+  color: var(--text-primary-dark);
   font-size: toRem(14);
   text-align: center;
 }
